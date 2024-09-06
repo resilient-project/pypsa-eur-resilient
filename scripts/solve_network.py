@@ -1160,6 +1160,13 @@ if __name__ == "__main__":
         co2_sequestration_potential=snakemake.params["co2_sequestration_potential"],
     )
 
+    # Temporal model reduction
+    nhours = 168
+    n.set_snapshots(n.snapshots[:nhours])
+    n.snapshot_weightings[:] = 8760.0 / nhours
+
+    print(f"\nManual temporal reduction: Solving network with {len(n.snapshots)} snapshots.\n")
+
     with memory_logger(
         filename=getattr(snakemake.log, "memory", None), interval=30.0
     ) as mem:
