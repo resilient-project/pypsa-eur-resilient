@@ -1161,7 +1161,7 @@ if __name__ == "__main__":
     )
 
     # Temporal model reduction
-    nhours = 168
+    nhours = 2920
     n.set_snapshots(n.snapshots[:nhours])
     n.snapshot_weightings[:] = 8760.0 / nhours
 
