@@ -130,6 +130,9 @@ electricity:
     enable: false
     by_country: false
 
+pci_pmi:
+  enable: true
+
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
 atlite:
   default_cutout: europe-2013-sarah3-era5

@@ -625,3 +625,75 @@ if config["enable"]["retrieve"] and (
                 "data/osm-raw/{country}/substations_relation.json",
                 country=config_provider("countries"),
             ),
+
+
+if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+
+    rule retrieve_pci_pmi_annex:
+        input:
+            storage(
+                "https://energy.ec.europa.eu/document/download/3db5e3d1-9989-4d10-93e3-67f5b9ad9103_en?filename=Annex PCI PMI list.pdf",
+                keep_local=True,
+            ),
+        output:
+            "data/pci-pmi/annex/Annex_PCI_PMI_list.pdf",
+        retries: 1
+        run:
+            move(input[0], output[0])
+
+
+if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+
+    checkpoint retrieve_pci_pmi_list:
+        input:
+            "data/pci-pmi/annex/Annex_PCI_PMI_list.pdf",
+        output:
+            "data/pci-pmi/annex/project_list.csv",
+        log:
+            "logs/retrieve_pci_pmi_list.log",
+        threads: 1
+        conda:
+            "../envs/retrieve.yaml"
+        script:
+            "../scripts/retrieve_pci_pmi_list.py"
+
+
+if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+
+    rule retrieve_pci_pmi_data:
+        output:
+            "data/pci-pmi/data/{pci_code}.json",
+        params:
+            pci_code="{pci_code}",
+        log:
+            "logs/retrieve_pci_pmi_data_{pci_code}.log",
+        threads: 1
+        conda:
+            "../envs/retrieve.yaml"
+        script:
+            "../scripts/retrieve_pci_pmi_data.py"
+
+
+if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+
+    def pci_pmi_input(w):
+        checkpoint_output = checkpoints.retrieve_pci_pmi_list.get().output[0]
+        with open(checkpoint_output, "r") as f:
+            # Read each line, strip whitespace and newlines, and return as a list
+            project_ids = [line.strip() for line in f.readlines()]
+        return expand("data/pci-pmi/data/{pci_code}.json", pci_code=project_ids)
+
+    rule retrieve_pci_pmi_data_all:
+        input:
+            pci_pmi_input,
+        log:
+            "logs/retrieve_pci_pmi_data_all.log",
+        shell:
+            """
+            for file in logs/retrieve_pci_pmi_data_*.log; do
+                if [ -f "$file" ]; then
+                    cat "$file" >> {log}
+                    rm "$file"
+                fi
+            done
+            """
