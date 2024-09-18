@@ -23,7 +23,7 @@ def _extract_tables_from_page(pdf_path, page_number):
     """
     Extracts tables from a specific page of a PDF file.
 
-    Args:
+    Parameters:
         pdf_path (str): The path to the PDF file.
         page_number (int): The page number to extract tables from.
     Returns:
@@ -61,7 +61,7 @@ def _extract_all_tables(pdf_path, page_numbers):
     fills the "pci_code" column and aggregates the "definition" column by
     concatenating the strings, if table is flowing over multiple pages.
 
-    Args:
+    Parameters:
     - pdf_path (str): The path to the PDF file.
     - page_numbers (list): A list of page numbers to extract tables from.
     Returns:
@@ -96,7 +96,7 @@ def _get_contained_projects(pci_code, definition):
     Get the list of contained projects/subprojects based on the given PCI code
     and definition.
 
-    Args:
+    Parameters:
         pci_code (str): The PCI code to match.
         definition (str): The definition string to search for matching numeric strings that start with the PCI code.
     Returns:

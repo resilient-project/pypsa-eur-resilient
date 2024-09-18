@@ -1130,3 +1130,36 @@ rule prepare_sector_network:
         "../envs/environment.yaml"
     script:
         "../scripts/prepare_sector_network.py"
+
+
+if config["pci_pmi"]["enable"]:
+
+    def input_build_pci_pmi_projects(w):
+        checkpoint_output = checkpoints.retrieve_pci_pmi_list.get().output[0]
+        with open(checkpoint_output, "r") as f:
+            # Read each line, strip whitespace and newlines, and return as a list
+            project_ids = [line.strip() for line in f.readlines()]
+        return expand("data/pci-pmi/data/{pci_code}.json", pci_code=project_ids)
+
+    rule build_pci_pmi_projects:
+        input:
+            input_build_pci_pmi_projects,
+        output:
+            co2_projects="data/pci-pmi/grouped/co2_projects.geojson",
+            electrolyser_projects="data/pci-pmi/grouped/electrolyser_projects.geojson",
+            gas_projects="data/pci-pmi/grouped/gas_projects.geojson",
+            hydrogen_projects="data/pci-pmi/grouped/hydrogen_projects.geojson",
+            electricity_onshore_projects="data/pci-pmi/grouped/electricity_onshore_projects.geojson",
+            electricity_offshore_projects="data/pci-pmi/grouped/electricity_offshore_projects.geojson",
+            smart_electricity_projects="data/pci-pmi/grouped/smart_electricity_projects.geojson",
+        log:
+            logs("build_pci_pmi_projects.log"),
+        benchmark:
+            benchmarks("build_pci_pmi_projects")
+        threads: 1
+        resources:
+            mem_mb=2000,
+        conda:
+            "../envs/environment.yaml"
+        script:
+            "../scripts/build_pci_pmi_projects.py"

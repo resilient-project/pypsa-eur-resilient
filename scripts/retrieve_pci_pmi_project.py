@@ -64,6 +64,22 @@ PCI_CODE_TYPES = dict(
 
 
 def _retrieve_project_data(pci_code):
+    """
+    Retrieve project data for a given PCI/PMI project code. This function
+    constructs a URL based on the provided PCI code and sends a POST request to
+    retrieve project data from a specified server. The response is expected to
+    be in JSON format and contain a "results" field.
+
+    Parameters:
+        pci_code (str): The PCI/PMI project code used to identify the project.
+
+    Returns:
+        data (dict): The JSON response from the server if data is found, otherwise None.
+
+    Raises:
+        requests.exceptions.HTTPError: If the HTTP request returned an unsuccessful status code.
+    """
+
     project_type = PCI_CODE_TYPES[pci_code.split(".")[0]]
     project_url = (
         TP_BASE_URL
@@ -103,7 +119,7 @@ if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("retrieve_pci_pmi_data", pci_code="5.2")
+        snakemake = mock_snakemake("retrieve_pci_pmi_project", pci_code="5.2")
 
     configure_logging(snakemake)
     set_scenario_config(snakemake)

@@ -660,37 +660,37 @@ if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
 
 if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
 
-    rule retrieve_pci_pmi_data:
+    rule retrieve_pci_pmi_project:
         output:
             "data/pci-pmi/data/{pci_code}.json",
         params:
             pci_code="{pci_code}",
         log:
-            "logs/retrieve_pci_pmi_data_{pci_code}.log",
+            "logs/retrieve_pci_pmi_project_{pci_code}.log",
         threads: 1
         conda:
             "../envs/retrieve.yaml"
         script:
-            "../scripts/retrieve_pci_pmi_data.py"
+            "../scripts/retrieve_pci_pmi_project.py"
 
 
 if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
 
-    def pci_pmi_input(w):
+    def input_retrieve_pci_pmi_projects(w):
         checkpoint_output = checkpoints.retrieve_pci_pmi_list.get().output[0]
         with open(checkpoint_output, "r") as f:
             # Read each line, strip whitespace and newlines, and return as a list
             project_ids = [line.strip() for line in f.readlines()]
         return expand("data/pci-pmi/data/{pci_code}.json", pci_code=project_ids)
 
-    rule retrieve_pci_pmi_data_all:
+    rule retrieve_pci_pmi_projects:
         input:
-            pci_pmi_input,
+            input_retrieve_pci_pmi_projects,
         log:
-            "logs/retrieve_pci_pmi_data_all.log",
+            "logs/retrieve_pci_pmi_projects.log",
         shell:
             """
-            for file in logs/retrieve_pci_pmi_data_*.log; do
+            for file in logs/retrieve_pci_pmi_project_*.log; do
                 if [ -f "$file" ]; then
                     cat "$file" >> {log}
                     rm "$file"
