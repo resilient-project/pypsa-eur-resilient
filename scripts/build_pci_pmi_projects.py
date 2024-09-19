@@ -307,7 +307,6 @@ if __name__ == "__main__":
     )  # Create Points, LineStrings, and Polygons
 
     projects = _clean_columns(projects)
-
     projects = _remove_redundant_components(
         projects
     )  # Remove redundant components such as 'Polygon' geometries
@@ -318,20 +317,11 @@ if __name__ == "__main__":
     )
     projects = gpd.GeoDataFrame(projects, crs=CRS_INPUT).to_crs(crs=CRS_OUTPUT)
 
-    # for i in df
-    for idx, row in df.iterrows():
-        build_year = row["build_year"]
-        build_year_new = row["build_year_new"]
-        print(f"{build_year} -> {build_year_new}")
-
-    project_types
-    hydrogen_pipeline = projects[projects.project_type == "hydrogen_pipeline"]
-
     # Export to correct output files depending on project_type
     total_count = 0
     for project_type in project_types:
         project_subset = projects[projects.project_type == project_type]
-        project_count = len(project_subset["PCI_CODE"].unique())
+        project_count = len(project_subset["pci_code"].unique())
         logger.info(
             f"Exporting {project_count} {project_type} projects to {snakemake.output[project_type]}"
         )
