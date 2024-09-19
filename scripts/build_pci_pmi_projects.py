@@ -11,11 +11,14 @@ https://ec.europa.eu/energy/infrastructure/transparency_platform/map-viewer/main
 
 import json
 import logging
+import re
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
 import tqdm
 from _helpers import configure_logging, set_scenario_config
+from dateutil import parser
 from shapely.geometry import LineString, MultiLineString, Point, Polygon
 from shapely.ops import linemerge
 
@@ -44,6 +47,24 @@ LAYER_MAPPING = dict(
         "Other hydrogen assets": "hydrogen_other",
         "Smart electricity grids": "smart_electricity_transmission",
         "Smart electricity grids substation": "smart_electricity_transmission",
+    }
+)
+CLEAN_COLUMNS = dict(
+    {
+        "PCI_CODE": "pci_code",
+        "COMMISSIONING_DATE": "build_year",
+        "CORRIDOR_CODE": "corridor",
+        "PROJECT_FICHE_SHORT_TITLE": "short_title",
+        "PROJECT_FULL_TITLE": "full_title",
+        "TECHNICAL_DESCR": "description",
+        "IMPLEMENTATION_STATUS_DESCR": "status",
+        "COUNTRY_CONCERNED": "countries",
+        "PROMOTERS": "promoters",
+        "CEF_ACTION_FICHES": "project_sheet",
+        "STUDIES_OR_WORKS": "studies_works",
+        "OBJECTID": "object_id",
+        "project_type": "project_type",
+        "geometry": "geometry",
     }
 )
 
@@ -193,6 +214,70 @@ def _remove_redundant_components(df):
     return df
 
 
+def _clean_columns(df):
+    """
+    Cleans columns.
+    """
+    df = df[CLEAN_COLUMNS.keys()].rename(columns=CLEAN_COLUMNS)
+
+    # Clean build_year column
+    df["build_year"] = df.apply(_clean_build_year, axis=1)
+
+    return df
+
+
+def _clean_build_year(row, build_year_fallback=2030):
+    """
+    Cleans and standardises the 'build_year' field in a given row of data.
+
+    This function handles various cases for the 'build_year' field:
+    - If 'build_year' is a string, it attempts to parse it as a date.
+      - If the month is December, it returns the next year.
+      - If parsing fails, it checks if the string is a 4-digit year.
+      - If the string is 'Null', it uses a manual correction based on 'pci_code' or a fallback year.
+    - If 'build_year' is an integer or float, it returns it as an integer.
+    - If all parsing attempts fail, it returns build_year_fallback.
+
+    Parameters:
+        row (pd.Series): A row containing 'build_year' and 'pci_code' columns.
+
+    Returns:
+        year (int): A single year as an integer.
+    """
+    # Manual corrections: https://acer.europa.eu/sites/default/files/documents/Publications_annex/2023_ACER_PCI_Report-AnnexI_Electricity.pdf
+    # PCI code
+    build_year_manual = {
+        "1.7.1": 2030,
+        "1.7.2": 2030,
+    }
+
+    # Handle case where 'build_year' is a string
+    if isinstance(row["build_year"], str):
+        try:
+            # Try to parse the date
+            parsed_date = parser.parse(row["build_year"], dayfirst=True, fuzzy=True)
+            year = parsed_date.year
+
+            # If the month is December, return next year
+            if parsed_date.month == 12:
+                return year + 1
+            return year
+        except (ValueError, parser.ParserError):
+            # Handle cases where parsing fails or format is unexpected
+            if row["build_year"].isdigit() and len(row["build_year"]) == 4:
+                return int(row["build_year"])
+            if row["build_year"] == "Null":
+                if row["pci_code"] in build_year_manual:
+                    return build_year_manual[row["pci_code"]]
+                return build_year_fallback
+
+    # Handle case where 'build_year' is an integer or float
+    try:
+        return int(row["build_year"])
+    except (ValueError, TypeError):
+        return build_year_fallback
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -214,11 +299,15 @@ if __name__ == "__main__":
     set_scenario_config(snakemake)
 
     json_files = snakemake.input
+    project_types = list(snakemake.output.keys())
 
     projects = _import_projects(json_files)  # Import projects from JSON files
     projects["geometry"] = projects.apply(
         _create_geometries, axis=1
     )  # Create Points, LineStrings, and Polygons
+
+    projects = _clean_columns(projects)
+
     projects = _remove_redundant_components(
         projects
     )  # Remove redundant components such as 'Polygon' geometries
@@ -229,9 +318,17 @@ if __name__ == "__main__":
     )
     projects = gpd.GeoDataFrame(projects, crs=CRS_INPUT).to_crs(crs=CRS_OUTPUT)
 
+    # for i in df
+    for idx, row in df.iterrows():
+        build_year = row["build_year"]
+        build_year_new = row["build_year_new"]
+        print(f"{build_year} -> {build_year_new}")
+
+    project_types
+    hydrogen_pipeline = projects[projects.project_type == "hydrogen_pipeline"]
+
     # Export to correct output files depending on project_type
     total_count = 0
-    project_types = list(snakemake.output.keys())
     for project_type in project_types:
         project_subset = projects[projects.project_type == project_type]
         project_count = len(project_subset["PCI_CODE"].unique())
