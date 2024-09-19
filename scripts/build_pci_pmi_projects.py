@@ -14,33 +14,36 @@ import logging
 
 import geopandas as gpd
 import pandas as pd
+import tqdm
 from _helpers import configure_logging, set_scenario_config
 from shapely.geometry import LineString, MultiLineString, Point, Polygon
 from shapely.ops import linemerge
 
+logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
 
-CRS_DATA = "EPSG:3857"  # Data is in Web Mercator projection
+CRS_INPUT = "EPSG:3857"  # Data is in Web Mercator projection
+CRS_OUTPUT = "EPSG:4326"  # Output is in WGS84 projection (as all other PyPSA-Eur data)
 LAYER_MAPPING = dict(
     {
-        "Baltic synchronisation": "electricity_offshore_projects",
-        "CO2 injection and surface facilities": "co2_projects",
-        "CO2 liquefaction and buffer storage": "co2_projects",
-        "CO2 pipeline": "co2_projects",
-        "CO2 shipping route": "co2_projects",
-        "Electricity line": "electricity_onshore_projects",
-        "Electricity storage": "electricity_onshore_projects",
-        "Electricity substation": "electricity_onshore_projects",
-        "Electrolyser": "electrolyser_projects",
-        "Gas pipeline": "gas_projects",
-        "Hydrogen pipeline": "hydrogen_projects",
-        "Hydrogen storage": "hydrogen_projects",
-        "Hydrogen terminal": "hydrogen_projects",
-        "Offshore grids": "electricity_offshore_projects",
-        "Other essential CO2 equipement": "co2_projects",
-        "Other hydrogen assets": "hydrogen_projects",
-        "Smart electricity grids": "smart_electricity_projects",
-        "Smart electricity grids substation": "smart_electricity_projects",
+        "Baltic synchronisation": "electricity_transmission",
+        "CO2 injection and surface facilities": "co2_sequestration",
+        "CO2 liquefaction and buffer storage": "co2_liquefaction_storage",
+        "CO2 pipeline": "co2_pipeline",
+        "CO2 shipping route": "co2_shipping",
+        "Electricity line": "electricity_transmission",  # contains both onshore and offshore projects, split in import
+        "Electricity storage": "electricity_storage",
+        "Electricity substation": "electricity_transmission",  # contains both onshore and offshore projects, split in import
+        "Electrolyser": "electrolyser",
+        "Gas pipeline": "gas_pipeline",
+        "Hydrogen pipeline": "hydrogen_pipeline",
+        "Hydrogen storage": "hydrogen_storage",
+        "Hydrogen terminal": "hydrogen_terminal",
+        "Offshore grids": "offshore_grids",
+        "Other essential CO2 equipement": "co2_other",
+        "Other hydrogen assets": "hydrogen_other",
+        "Smart electricity grids": "smart_electricity_transmission",
+        "Smart electricity grids substation": "smart_electricity_transmission",
     }
 )
 
@@ -57,9 +60,9 @@ def _import_projects(filepaths):
     Returns:
         df_all (pd.DataFrame): A DataFrame containing consolidated project data including their original attributes, geometry, and project type.
     """
+    logger.info(f"Importing {len(filepaths)} PCI/PMI projects.")
     df_all = pd.DataFrame()
-    # Assuming list_of_projects contains the PCI codes
-    for filepath in filepaths:
+    for filepath in tqdm.tqdm(filepaths):
         with open(filepath, "r") as f:
             # Load the JSON data and append it to the list
             data = json.load(f)
@@ -82,8 +85,29 @@ def _import_projects(filepaths):
 
         df_all = pd.concat([df_all, df], ignore_index=True)
 
-    # add value of layer mapping based on layerName to df_all["project_type"]
+    # Add value of layer mapping based on layerName to df_all["project_type"]
     df_all["project_type"] = df_all["layerName"].map(LAYER_MAPPING)
+
+    # Split projects of type "electricity_projects" into "electricity_onshore_projects" and "electricity_offshore_projects"
+    # Logic: If the PCI_CODE appears in already "electricity_offshore_projects", their corresponding elements in "electricity_projects" need to be "electricity_offshore_projects", accordingly.
+    # Otherwise, they are "electricity_onshore_projects".
+
+    pci_offshore_grids = df_all[df_all["project_type"] == "offshore_grids"][
+        "PCI_CODE"
+    ].unique()
+    bool_electricity_transmission = df_all["project_type"] == "electricity_transmission"
+    bool_offshore_grids = df_all["PCI_CODE"].isin(pci_offshore_grids)
+
+    df_all.loc[bool_electricity_transmission & bool_offshore_grids, "project_type"] = (
+        "offshore_grids"
+    )
+    df_all.loc[bool_electricity_transmission & ~bool_offshore_grids, "project_type"] = (
+        "electricity_transmission"
+    )
+
+    df_all = df_all[
+        df_all["project_type"] != "other"
+    ]  # Remove projects with project_type "other" (Components appear in other hydrogen and CO2 components)
 
     return df_all
 
@@ -103,19 +127,17 @@ def _create_geometries(row):
     Returns:
         shapely.geometry.base.BaseGeometry: A Shapely geometry object (MultiLineString, Point, or Polygon) based on the input geometry type.
     """
-    # Handle polyline (LineString)
+    # Handle esriGeometryPolyline (LineString)
     if row["geometryType"] == "esriGeometryPolyline":
         lines = [LineString(path) for path in row["geometry"]["paths"]]
-
-        # Create a MultiLineString directly from the list of LineString objects
         row_geom = linemerge(lines)
 
-    # Handle point (Point)
+    # Handle esriGeometryPoint (Point)
     elif row["geometryType"] == "esriGeometryPoint":
         point = Point(row["geometry"]["x"], row["geometry"]["y"])
         row_geom = point
 
-    # Handle polygon (Polygon)
+    # Handle esriGeometryPolygon (Polygon)
     elif row["geometryType"] == "esriGeometryPolygon":
         for ring in row["geometry"]["rings"]:
             row_geom = Polygon(ring)
@@ -156,6 +178,21 @@ def _split_multilinestring(row):
         return pd.DataFrame([row])
 
 
+def _remove_redundant_components(df):
+    """
+    Remove redundant components, such as entries with 'Polygon' geometries.
+
+    Parameters:
+        df (pd.DataFrame): The input DataFrame containing a 'geometry' column.
+
+    Returns:
+        df (pd.DataFrame): The cleaned DataFrame with redundant components removed.
+    """
+    df = df[df.geometry.apply(lambda x: x.geom_type != "Polygon")]
+
+    return df
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -170,28 +207,32 @@ if __name__ == "__main__":
             # Read each line, strip whitespace and newlines, and return as a list
             project_ids = [line.strip() for line in f.readlines()]
             snakemake.input = [
-                f"{input_dir}/data/{project_id}.json" for project_id in project_ids
+                f"{input_dir}/json/{project_id}.json" for project_id in project_ids
             ]
 
     configure_logging(snakemake)
     set_scenario_config(snakemake)
 
-    projects = _import_projects(snakemake.input)
+    json_files = snakemake.input
 
-    projects["geometry"] = projects.apply(_create_geometries, axis=1)
-    projects = gpd.GeoDataFrame(projects, geometry="geometry", crs=CRS_DATA)
+    projects = _import_projects(json_files)  # Import projects from JSON files
+    projects["geometry"] = projects.apply(
+        _create_geometries, axis=1
+    )  # Create Points, LineStrings, and Polygons
+    projects = _remove_redundant_components(
+        projects
+    )  # Remove redundant components such as 'Polygon' geometries
+
+    # Split MultiLineStrings, create GeoDataFrame, and convert to WGS84 projection
     projects = pd.concat(
         projects.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
     )
-    projects = gpd.GeoDataFrame(projects, crs=CRS_DATA)
-    # convert to WGS84
-    projects = projects.to_crs("EPSG:4326")
+    projects = gpd.GeoDataFrame(projects, crs=CRS_INPUT).to_crs(crs=CRS_OUTPUT)
 
-    projects.explore()
-
-    total_count = 0
     # Export to correct output files depending on project_type
-    for project_type in projects.project_type.unique():
+    total_count = 0
+    project_types = list(snakemake.output.keys())
+    for project_type in project_types:
         project_subset = projects[projects.project_type == project_type]
         project_count = len(project_subset["PCI_CODE"].unique())
         logger.info(
@@ -199,6 +240,40 @@ if __name__ == "__main__":
         )
         project_subset.to_file(snakemake.output[project_type], driver="GeoJSON")
         total_count += project_count
+    logger.info(
+        f"Exported a total of {total_count} projects. Note that some PCI/PMI project codes contain multiple project types."
+    )
 
-    logger.info(f"In total {total_count} projects")
-    # Fix bug number of projects not correct
+
+# %% Debugging
+# import folium
+# import branca
+
+# colors = branca.colormap.LinearColormap(
+#     colors=["red", "blue", "green", "purple", "orange", "brown"],
+#     vmin=0,
+#     vmax=len(project_types)-1,
+# )
+# colormap = {ptype: colors(i) for i, ptype in enumerate(project_types)}
+
+# map = folium.Map(location=[50, 10], zoom_start=5)
+
+# # Iterate over project types and add them to the map
+# for i, project_type in enumerate(projects.project_type.unique()):
+#     project_subset = projects[projects.project_type == project_type]
+
+#     # Add each project's geometry to the map with customized tooltips
+#     map = project_subset.explore(
+#         color=colormap[project_type],
+#         m=map,
+#         name=project_type,
+#         tooltip_kwds=dict(
+#             style="max-width: 300px; word-wrap: break-word;"
+#         )
+#     )
+
+# # Add the LayerControl
+# folium.LayerControl(position='topright', collapsed=False).add_to(map)
+
+# # Display the map
+# map

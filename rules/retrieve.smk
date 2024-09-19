@@ -662,7 +662,7 @@ if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
 
     rule retrieve_pci_pmi_project:
         output:
-            "data/pci-pmi/data/{pci_code}.json",
+            "data/pci-pmi/json/{pci_code}.json",
         params:
             pci_code="{pci_code}",
         log:
@@ -681,7 +681,7 @@ if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
         with open(checkpoint_output, "r") as f:
             # Read each line, strip whitespace and newlines, and return as a list
             project_ids = [line.strip() for line in f.readlines()]
-        return expand("data/pci-pmi/data/{pci_code}.json", pci_code=project_ids)
+        return expand("data/pci-pmi/json/{pci_code}.json", pci_code=project_ids)
 
     rule retrieve_pci_pmi_projects:
         input:

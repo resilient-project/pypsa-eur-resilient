@@ -1139,19 +1139,25 @@ if config["pci_pmi"]["enable"]:
         with open(checkpoint_output, "r") as f:
             # Read each line, strip whitespace and newlines, and return as a list
             project_ids = [line.strip() for line in f.readlines()]
-        return expand("data/pci-pmi/data/{pci_code}.json", pci_code=project_ids)
+        return expand("data/pci-pmi/json/{pci_code}.json", pci_code=project_ids)
 
     rule build_pci_pmi_projects:
         input:
             input_build_pci_pmi_projects,
         output:
-            co2_projects="data/pci-pmi/grouped/co2_projects.geojson",
-            electrolyser_projects="data/pci-pmi/grouped/electrolyser_projects.geojson",
-            gas_projects="data/pci-pmi/grouped/gas_projects.geojson",
-            hydrogen_projects="data/pci-pmi/grouped/hydrogen_projects.geojson",
-            electricity_onshore_projects="data/pci-pmi/grouped/electricity_onshore_projects.geojson",
-            electricity_offshore_projects="data/pci-pmi/grouped/electricity_offshore_projects.geojson",
-            smart_electricity_projects="data/pci-pmi/grouped/smart_electricity_projects.geojson",
+            co2_liquefaction_storage="data/pci-pmi/projects/co2_liquefaction_storage.geojson",
+            co2_pipeline="data/pci-pmi/projects/co2_pipeline.geojson",
+            co2_sequestration="data/pci-pmi/projects/co2_sequestration.geojson",
+            co2_shipping="data/pci-pmi/projects/co2_shipping.geojson",
+            electricity_storage="data/pci-pmi/projects/electricity_storage.geojson",
+            electricity_transmission="data/pci-pmi/projects/electricity_transmission.geojson",
+            electrolyser="data/pci-pmi/projects/electrolyser.geojson",
+            gas_pipeline="data/pci-pmi/projects/gas_pipeline.geojson",
+            hydrogen_pipeline="data/pci-pmi/projects/hydrogen_pipeline.geojson",
+            hydrogen_storage="data/pci-pmi/projects/hydrogen_storage.geojson",
+            hydrogen_terminal="data/pci-pmi/projects/hydrogen_terminal.geojson",
+            offshore_grids="data/pci-pmi/projects/offshore_grids.geojson",
+            smart_electricity_transmission="data/pci-pmi/projects/smart_electricity_transmission.geojson",
         log:
             logs("build_pci_pmi_projects.log"),
         benchmark:
