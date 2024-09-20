@@ -1135,38 +1135,41 @@ rule prepare_sector_network:
 
 if config["pci_pmi"]["enable"]:
 
-    def input_build_pci_pmi_projects(w):
+    def input_clean_pci_pmi_projects(w):
         checkpoint_output = checkpoints.retrieve_pci_pmi_list.get().output[0]
         with open(checkpoint_output, "r") as f:
             # Read each line, strip whitespace and newlines, and return as a list
             project_ids = [line.strip() for line in f.readlines()]
         return expand("data/pci-pmi/json/{pci_code}.json", pci_code=project_ids)
 
-    rule build_pci_pmi_projects:
+    rule clean_pci_pmi_projects:
         input:
-            input_build_pci_pmi_projects,
+            input_clean_pci_pmi_projects,
         output:
-            co2_liquefaction_storage="data/pci-pmi/projects/co2_liquefaction_storage.geojson",
-            co2_pipeline="data/pci-pmi/projects/co2_pipeline.geojson",
-            co2_sequestration="data/pci-pmi/projects/co2_sequestration.geojson",
-            co2_shipping="data/pci-pmi/projects/co2_shipping.geojson",
-            electricity_storage="data/pci-pmi/projects/electricity_storage.geojson",
-            electricity_transmission="data/pci-pmi/projects/electricity_transmission.geojson",
-            electrolyser="data/pci-pmi/projects/electrolyser.geojson",
-            gas_pipeline="data/pci-pmi/projects/gas_pipeline.geojson",
-            hydrogen_pipeline="data/pci-pmi/projects/hydrogen_pipeline.geojson",
-            hydrogen_storage="data/pci-pmi/projects/hydrogen_storage.geojson",
-            hydrogen_terminal="data/pci-pmi/projects/hydrogen_terminal.geojson",
-            offshore_grids="data/pci-pmi/projects/offshore_grids.geojson",
-            smart_electricity_transmission="data/pci-pmi/projects/smart_electricity_transmission.geojson",
+            storage_units_co2_liquefaction="data/pci-pmi/projects/storage_units_co2_liquefaction.geojson",
+            links_co2_pipeline="data/pci-pmi/projects/links_co2_pipeline.geojson",
+            stores_co2_sequestration="data/pci-pmi/projects/stores_co2_sequestration.geojson",
+            links_co2_shipping="data/pci-pmi/projects/links_co2_shipping.geojson",
+            storage_units_electricity="data/pci-pmi/projects/storage_units_electricity.geojson",
+            buses_electricity_transmission="data/pci-pmi/projects/buses_electricity_transmission.geojson",
+            lines_electricity_transmission="data/pci-pmi/projects/lines_electricity_transmission.geojson",
+            links_electricity_transmission="data/pci-pmi/projects/links_electricity_transmission.geojson",
+            links_electrolyser="data/pci-pmi/projects/links_electrolyser.geojson",
+            links_gas_pipeline="data/pci-pmi/projects/links_gas_pipeline.geojson",
+            links_hydrogen_pipeline="data/pci-pmi/projects/links_hydrogen_pipeline.geojson",
+            storage_units_hydrogen="data/pci-pmi/projects/storage_units_hydrogen.geojson",
+            generators_hydrogen_terminal="data/pci-pmi/projects/generators_hydrogen_terminal.geojson",
+            buses_offshore_grids="data/pci-pmi/projects/buses_offshore_grids.geojson",
+            links_offshore_grids="data/pci-pmi/projects/links_offshore_grids.geojson",
+            buses_smart_electricity_transmission="data/pci-pmi/projects/buses_smart_electricity_transmission.geojson",
         log:
-            logs("build_pci_pmi_projects.log"),
+            logs("clean_pci_pmi_projects.log"),
         benchmark:
-            benchmarks("build_pci_pmi_projects")
+            benchmarks("clean_pci_pmi_projects")
         threads: 1
         resources:
             mem_mb=2000,
         conda:
             "../envs/environment.yaml"
         script:
-            "../scripts/build_pci_pmi_projects.py"
+            "../scripts/clean_pci_pmi_projects.py"
