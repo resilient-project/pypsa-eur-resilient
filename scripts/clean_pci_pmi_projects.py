@@ -11,6 +11,7 @@ https://ec.europa.eu/energy/infrastructure/transparency_platform/map-viewer/main
 
 import json
 import logging
+import re
 
 import geopandas as gpd
 import pandas as pd
@@ -23,46 +24,14 @@ from shapely.ops import linemerge
 logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
 
+CRS_DISTANCE = "EPSG:3035"
 CRS_INPUT = "EPSG:3857"  # Data is in Web Mercator projection
-CRS_OUTPUT = "EPSG:4326"  # Output is in WGS84 projection (as all other PyPSA-Eur data)
-LAYER_MAPPING = {
-    "Baltic synchronisation": "links_electricity_transmission",
-    "CO2 injection and surface facilities": "stores_co2_sequestration",
-    "CO2 liquefaction and buffer storage": "storage_units_co2_liquefaction",
-    "CO2 pipeline": "links_co2_pipeline",
-    "CO2 shipping route": "links_co2_shipping",
-    "Electricity line": "lines_electricity_transmission",  # contains both onshore and offshore projects, split in import; contains links and lines, split later
-    "Electricity storage": "storage_units_electricity",
-    "Electricity substation": "buses_electricity_transmission",  # contains both onshore and offshore projects, split in import
-    "Electrolyser": "links_electrolyser",
-    "Gas pipeline": "links_gas_pipeline",
-    "Hydrogen pipeline": "links_hydrogen_pipeline",
-    "Hydrogen storage": "storage_units_hydrogen",
-    "Hydrogen terminal": "generators_hydrogen_terminal",
-    "Offshore grids": "links_offshore_grids",
-    "Other essential CO2 equipement": "other",  # arbitrary assignment to mark for dropping later
-    "Other hydrogen assets": "other",  # arbitrary assignment to mark for dropping later
-    "Smart electricity grids": "lines_smart_electricity_transmission",
-    "Smart electricity grids substation": "buses_smart_electricity_transmission",
-}
+CRS_OUTPUT = "EPSG:4326"  # Output is in WGS84 projection (as all other PyPSA-Eur data
 
-RENAME_COLUMNS = {
-    "PCI_CODE": "pci_code",
-    "COMMISSIONING_DATE": "build_year",
-    "CORRIDOR_CODE": "corridor",
-    "PROJECT_FICHE_SHORT_TITLE": "short_title",
-    "PROJECT_FULL_TITLE": "full_title",
-    "TECHNICAL_DESCR": "description",
-    "IMPLEMENTATION_STATUS_DESCR": "project_status",
-    "COUNTRY_CONCERNED": "countries",
-    "PROMOTERS": "promoters",
-    "CEF_ACTION_FICHES": "project_sheet",
-    "STUDIES_OR_WORKS": "studies_works",
-    "OBJECTID": "object_id",
-    "layerName": "layer_name",
-    "geometry": "geometry",
-    "geometryType": "geometry_type",
-}
+V_NOM_AC_DEFAULT_CONTINENTAL = 380  # kV
+V_NOM_AC_DEFAULT_BALTICS = 330  # kV
+V_NOM_DC_DEFAULT = 525  # kV
+P_NOM_ELECTRICITY = 2000  # MW
 
 COLUMNS_BUSES = [
     "project_status",
@@ -89,6 +58,7 @@ COLUMNS_LINES = [
     "length",
     "build_year",
     "underground",
+    "s_nom",
     "v_nom",
     "num_parallel",
     "tags",
@@ -131,6 +101,46 @@ COLUMNS_STORES = [
     "y",
     "geometry",
 ]
+
+RENAME_COLUMNS = {
+    "PCI_CODE": "pci_code",
+    "COMMISSIONING_DATE": "build_year",
+    "CORRIDOR_CODE": "corridor",
+    "PROJECT_FICHE_SHORT_TITLE": "short_title",
+    "PROJECT_FULL_TITLE": "full_title",
+    "TECHNICAL_DESCR": "description",
+    "IMPLEMENTATION_STATUS_DESCR": "project_status",
+    "COUNTRY_CONCERNED": "countries",
+    "PROMOTERS": "promoters",
+    "CEF_ACTION_FICHES": "project_sheet",
+    "STUDIES_OR_WORKS": "studies_works",
+    "OBJECTID": "object_id",
+    "layerName": "layer_name",
+    "geometry": "geometry",
+    "geometryType": "geometry_type",
+}
+
+LAYER_MAPPING = {
+    "Baltic synchronisation": "links_electricity_transmission",
+    "CO2 injection and surface facilities": "stores_co2_sequestration",
+    "CO2 liquefaction and buffer storage": "storage_units_co2_liquefaction",
+    "CO2 pipeline": "links_co2_pipeline",
+    "CO2 shipping route": "links_co2_shipping",
+    "Electricity line": "lines_electricity_transmission",  # contains both onshore and offshore projects, split in import; contains links and lines, split later
+    "Electricity storage": "storage_units_electricity",
+    "Electricity substation": "buses_electricity_transmission",  # contains both onshore and offshore projects, split in import
+    "Electrolyser": "links_electrolyser",
+    "Gas pipeline": "links_gas_pipeline",
+    "Hydrogen pipeline": "links_hydrogen_pipeline",
+    "Hydrogen storage": "storage_units_hydrogen",
+    "Hydrogen terminal": "generators_hydrogen_terminal",
+    "Offshore grids": "links_offshore_grids",
+    "Other essential CO2 equipement": "other",  # arbitrary assignment to mark for dropping later
+    "Other hydrogen assets": "other",  # arbitrary assignment to mark for dropping later
+    "Smart electricity grids": "lines_smart_electricity_transmission",
+    "Smart electricity grids substation": "buses_smart_electricity_transmission",
+}
+
 COMPONENTS_MAPPING = {
     "buses_electricity_transmission": COLUMNS_BUSES,
     "buses_offshore_grids": COLUMNS_BUSES,
@@ -149,6 +159,29 @@ COMPONENTS_MAPPING = {
     "storage_units_electricity": COLUMNS_STORAGE_UNITS,
     "storage_units_hydrogen": COLUMNS_STORAGE_UNITS,
     "stores_co2_sequestration": COLUMNS_STORES,
+}
+
+UNDERGROUND_MAPPING = {  # "t" for true (underground), "f" for false (overground)
+    "lines_electricity_transmission": "f",
+    "links_electricity_transmission": "t",
+    "links_co2_pipeline": "t",
+    "links_co2_shipping": "f",
+    "links_electricity_transmission": "t",
+    "links_electrolyser": "f",
+    "links_gas_pipeline": "t",
+    "links_hydrogen_pipeline": "t",
+    "links_offshore_grids": "t",
+}
+
+CARRIER_MAPPING = {
+    "generators_hydrogen_terminal": "H2",
+    "links_co2_pipeline": "CO2",
+    "links_co2_shipping": "CO2",
+    "links_electricity_transmission": "AC",
+    "links_electrolyser": "H2",
+    "links_gas_pipeline": "gas",
+    "links_hydrogen_pipeline": "H2",
+    "links_offshore_grids": "AC",
 }
 
 
@@ -490,6 +523,276 @@ def _columns_to_tags(
     return df
 
 
+def _create_components_dict(projects, project_types):
+    """
+    Create a dictionary of GeoDataFrames/components for specified project
+    types.
+
+    This function filters the input DataFrame based on the project types and
+    maps the filtered data to a new DataFrame with columns specified in the
+    COMPONENTS_MAPPING. The resulting DataFrame is then converted to a
+    GeoDataFrame and reprojected to the desired coordinate reference system.
+
+    Parameters:
+        projects (pd.DataFrame): The input DataFrame containing project data.
+        project_types (list): A list of project types to filter and process.
+
+    Returns:
+        components (dict): A dictionary where keys are project types and values are
+              GeoDataFrames containing the filtered and processed project data.
+    """
+    logger.info("")
+    logger.info("Creating components.")
+    components = {}
+    subset = sorted(
+        set.intersection(set(project_types), set(COMPONENTS_MAPPING.keys()))
+    )
+    for component in subset:
+        # Filter the projects DataFrame based on project_type corresponding to the component
+        filtered_projects = projects[projects["project_type"] == component]
+        columns = COMPONENTS_MAPPING[component]
+
+        # Create an empty DataFrame with the respective columns and the filtered index
+        df = pd.DataFrame(index=filtered_projects.index, columns=columns)
+        filtered_projects = filtered_projects.reindex(df.index)  # ensure alignment
+
+        # Assign values from filtered_projects where the columns exist in both DataFrames
+        for col in df.columns:
+            if col in filtered_projects.columns:
+                # Assign values using .loc to ensure correct index alignment
+                df[col] = filtered_projects.loc[df.index, col]
+
+        df = gpd.GeoDataFrame(df, crs=CRS_INPUT, geometry="geometry").to_crs(
+            crs=CRS_OUTPUT
+        )  # Convert to GeoDataFrame and reproject
+        df_meters = df[["geometry"]].to_crs(CRS_DISTANCE)
+
+        # Initiate x, y, x0, y0, x1, y1 columns based on geometry
+        if all(col in df.columns for col in ["x", "y"]):
+            df[["x", "y"]] = df.apply(
+                lambda row: (
+                    (row["geometry"].x, row["geometry"].y)
+                    if row["geometry"] is not None
+                    else (None, None)
+                ),
+                axis=1,
+                result_type="expand",
+            )
+        elif all(col in df.columns for col in ["x0", "y0", "x1", "y1"]):
+            df[["x0", "y0", "x1", "y1"]] = df.apply(
+                lambda row: (
+                    (
+                        row["geometry"].coords[0][0],
+                        row["geometry"].coords[0][1],
+                        row["geometry"].coords[-1][0],
+                        row["geometry"].coords[-1][1],
+                    )
+                    if row["geometry"] is not None
+                    else (None, None, None, None)
+                ),
+                axis=1,
+                result_type="expand",
+            )
+            df["length"] = df_meters.length.round(1)  # Calculate length in meters
+
+        # Initiate 'underground' column based on type
+        if component in UNDERGROUND_MAPPING and "underground" in df.columns:
+            df["underground"] = UNDERGROUND_MAPPING[component]
+
+        # Store the DataFrame in the dictionary
+        components[component] = df
+
+        # Initiate 'carrier' column based on type
+        if component in CARRIER_MAPPING and "carrier" in df.columns:
+            df["carrier"] = CARRIER_MAPPING[component]
+
+    return components
+
+
+def _set_electrical_params(components):
+    logger.info("Setting electrical parameters.")
+    dc_projects = list(
+        set(
+            components["links_electricity_transmission"]["tags"].apply(
+                lambda x: x["pci_code"]
+            )
+        )
+        | (
+            set(
+                components["links_offshore_grids"]["tags"].apply(
+                    lambda x: x["pci_code"]
+                )
+            )
+        )
+    )
+
+    logger.info(" - Setting bus types")
+    for component, df in components.items():
+        # Determine bus types (AC/DC)
+        if "buses" in component:
+            # if "description" contains DC or converter
+            dc_bus_indicator = [
+                "dc",
+                "converter",
+                "vsc",
+                "multiterminal",
+                "bipolar",
+                "hub",
+            ]
+            df["dc"] = df["tags"].apply(
+                lambda row: any(
+                    [dc in row["description"].lower() for dc in dc_bus_indicator]
+                )
+            )
+            df["dc"] = df["dc"].apply(lambda x: "t" if x else "f")
+            # Overwrite bus type if df["tags"]["pci_code"] is in dc projects
+            df["dc"] = df.apply(
+                lambda x: "t" if x["tags"]["pci_code"] in dc_projects else x["dc"],
+                axis=1,
+            )
+
+    logger.info(" - Extracting and setting voltage levels")
+    for component, df in components.items():
+        # Extract voltage levels
+        if "v_nom" in df.columns:
+            df["v_nom"] = df["tags"].apply(
+                lambda x: (
+                    x["description"].split("kV")[0].split()[-1]
+                    if "kV" in x["description"]
+                    else None
+                )
+            )
+            # EXTRACT ONLY NUMERIC STRING
+            df["v_nom"] = df["v_nom"].apply(
+                lambda x: x if x is None else "".join(filter(str.isdigit, x))[0:3]
+            )
+
+            # Set default fallback values if v_nom is None
+            if "dc" in df.columns:
+                df.loc[df["v_nom"].isna() & (df["dc"] == "t"), "v_nom"] = (
+                    V_NOM_DC_DEFAULT
+                )
+
+                baltics_indicator = ["estonia", "latvia", "lithuania", "bemip"]
+                bool_baltics = df["tags"].apply(
+                    lambda x: any(
+                        [
+                            country in x["description"].lower()
+                            for country in baltics_indicator
+                        ]
+                    )
+                ) | (
+                    df["tags"].apply(
+                        lambda x: any(
+                            [
+                                corridor in x["corridor"].lower()
+                                for corridor in baltics_indicator
+                            ]
+                        )
+                    )
+                )
+                df.loc[
+                    df["v_nom"].isna() & (df["dc"] == "f") & bool_baltics, "v_nom"
+                ] = V_NOM_AC_DEFAULT_BALTICS
+
+                # Last fallback, remaining AC to continental default
+                df.loc[df["v_nom"].isna() & (df["dc"] == "f"), "v_nom"] = (
+                    V_NOM_AC_DEFAULT_CONTINENTAL
+                )
+
+            df.loc[df["v_nom"].isna(), "v_nom"] = V_NOM_AC_DEFAULT_CONTINENTAL
+            df["v_nom"] = df["v_nom"].astype(int)
+
+    return components
+
+
+def _extract_params(text, units):
+    """
+    Extracts a numerical value followed by a unit from the given text.
+
+    Parameters:
+        text (str): The text to search for the pattern.
+        units (list of str): A list of units to match after the numerical value.
+
+    Returns:
+        str or None: The matched string containing the number and unit if found, otherwise None.
+    """
+    # Create a regex pattern to match a number (with optional decimal: . or ,) followed by any unit in the list
+    pattern = r"\b[\d]+[.,]?[\d]*\s*({})".format("|".join(units))
+
+    # Search for the pattern in the given text
+    match = re.search(pattern, text)
+
+    # If a match is found, replace ',' with '.' and return the matched string
+    return match.group(0).replace(",", ".") if match else None
+
+
+def _set_p_nom_elec(value):
+    """
+    Sets the nominal power for electricity based on the provided value.
+
+    Parameters:
+        value (str or None): The input value representing the nominal power.
+            It can be a string containing a number with units
+            (e.g., 'GW', 'MW', 'MVA') or None.
+
+    Returns:
+        float: The nominal power in MW. If the input value is in GW, it is
+            converted to MW by multiplying by 1000. If the input value is
+            None or an empty string, a default value (P_NOM_ELECTRICITY)
+            is returned.
+    """
+    if value is None:
+        return P_NOM_ELECTRICITY
+    else:
+        # Check if the value contains 'GW'
+        if "GW" in value:
+            # Multiply by 1000 and drop the unit
+            return float(value.replace("GW", "").strip()) * 1000
+        else:
+            # Drop spaces and any units (MW, MVA)
+            cleaned_value = (
+                value.replace("MW", "").replace("MVA", "").replace(" ", "").strip()
+            )
+            return float(cleaned_value) if cleaned_value else P_NOM_ELECTRICITY
+
+
+def _set_params_links_electricity(df):
+    """
+    Sets the nominal power (p_nom) for electricity transmission and offshore
+    grid links based on tags and manual corrections.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing links data.
+
+    Returns:
+        df (pd.DataFrame): Updated DataFrame with nominal power (p_nom) set for each link.
+        The function performs the following steps:
+        1. Extracts the relevant components for electricity transmission and offshore grids.
+        2. Sets the nominal power (p_nom) based on the tags' descriptions.
+        3. Applies manual corrections for specific projects.
+    """
+    df["p_nom"] = df["tags"].apply(
+        lambda x: _extract_params(x["description"], ["MW", "MVA", "GW"])
+    )
+    df["p_nom"] = df["p_nom"].apply(_set_p_nom_elec)
+    # Manual corrections
+    # NSWPH, index containing "4.1", set p_nom to 2000
+    df.loc[df["tags"].apply(lambda x: "4.1" in x["pci_code"]), "p_nom"] = 2000
+
+    # Bornholm Energy Island, Longer line to DK, p_nom is 1200 MW, shorter line to DE, p_nom is 2000 MW
+    df.loc[
+        (df["tags"].apply(lambda x: "5.2" in x["pci_code"])) & (df["length"] < 150000),
+        "p_nom",
+    ] = 2000
+    df.loc[
+        (df["tags"].apply(lambda x: "5.2" in x["pci_code"])) & (df["length"] > 150000),
+        "p_nom",
+    ] = 1200
+
+    return df
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -536,34 +839,45 @@ if __name__ == "__main__":
         projects
     )  # Create unique IDs, dataframe is indexed by ID
 
-    projects = _columns_to_tags(projects)
+    projects = _columns_to_tags(
+        projects
+    )  # Move columns with additional information to tags
 
-    # Create a dictionary to hold the empty DataFrames
-    components = {}
-    for component, columns in COMPONENTS_MAPPING.items():
-        # Filter the projects DataFrame based on project_type corresponding to the component
-        filtered_projects = projects[projects["project_type"] == component]
+    # Create a dictionary to type-specific GeoDataFrames
+    components = _create_components_dict(projects, project_types)
+    components = _set_electrical_params(components)  # bus types, voltage levels
 
-        # Create an empty DataFrame with the respective columns and the filtered index
-        df = pd.DataFrame(index=filtered_projects.index, columns=columns)
+    components["links_electricity_transmission"] = _set_params_links_electricity(
+        components["links_electricity_transmission"]
+    )
+    components["links_offshore_grids"] = _set_params_links_electricity(
+        components["links_offshore_grids"]
+    )
 
-        # Ensure alignment by reindexing the filtered_projects based on the empty df's index
-        filtered_projects = filtered_projects.reindex(df.index)
+    # remove all non-numeric characters, dots are allowed, letters are allowed, using rege
 
-        # Assign values from filtered_projects where the columns exist in both DataFrames
-        for col in df.columns:
-            if col in filtered_projects.columns:
-                # Assign values using .loc to ensure correct index alignment
-                df[col] = filtered_projects.loc[df.index, col]
+    components["buses_electricity_transmission"]["tags"].apply(
+        lambda x: "kV" in x["description"]
+    ).sum()
 
-        df = gpd.GeoDataFrame(df, crs=CRS_INPUT, geometry="geometry").to_crs(
-            crs=CRS_OUTPUT
-        )  # Convert to GeoDataFrame and reproject
+    # Check list
+    # components['buses_electricity_transmission']          # clean
+    # components['buses_offshore_grids']                    # clean
+    # components['buses_smart_electricity_transmission']    # clean
+    # components['links_electricity_transmission']          # clean
+    # components['links_offshore_grids']                    # clean
 
-        # Store the DataFrame in the dictionary
-        components[component] = df
-
-    # projects.tags.apply(lambda x: x.keys())
+    # components['generators_hydrogen_terminal']            # p_nom missing
+    # components['lines_electricity_transmission']          # s_nom, num_parallel missing
+    # components['links_co2_pipeline']                      # p_nom missing
+    # components['links_co2_shipping']                      # p_nom missing
+    # components['links_electrolyser']                      # p_nom missing
+    # components['links_gas_pipeline']                      # p_nom missing
+    # components['links_hydrogen_pipeline']                 # p_nom missing
+    # components['storage_units_co2_liquefaction']          # p_nom, max_hours missing
+    # components['storage_units_electricity']               # p_nom, max_hours missing
+    # components['storage_units_hydrogen']                  # p_nom, max_hours missing
+    # components['stores_co2_sequestration']                # e_nom missing
 
     # Export to correct output files depending on project_type
     total_count = 0
