@@ -256,8 +256,9 @@ def _assign_project_types(df):
     df.loc[
         (df["project_type"] == "lines_electricity_transmission")
         & (
-            df["description"].str.contains("DC")
-            | df["description"].str.contains("converter")
+            df["description"].str.lower().str.contains("dc")
+            | df["description"].str.lower().str.contains("converter")
+            | df["description"].str.lower().str.contains("vsc")
         ),
         "project_type",
     ] = "links_electricity_transmission"
@@ -593,7 +594,7 @@ def _create_components_dict(projects, project_types):
                 axis=1,
                 result_type="expand",
             )
-            df["length"] = df_meters.length.round(1)  # Calculate length in meters
+            df["length"] = (df_meters.length / 1e3).round(1)  # Calculate length in km
 
         # Initiate 'underground' column based on type
         if component in UNDERGROUND_MAPPING and "underground" in df.columns:
@@ -782,13 +783,90 @@ def _set_params_links_electricity(df):
 
     # Bornholm Energy Island, Longer line to DK, p_nom is 1200 MW, shorter line to DE, p_nom is 2000 MW
     df.loc[
-        (df["tags"].apply(lambda x: "5.2" in x["pci_code"])) & (df["length"] < 150000),
+        (df["tags"].apply(lambda x: "5.2" in x["pci_code"])) & (df["length"] < 150),
         "p_nom",
     ] = 2000
     df.loc[
-        (df["tags"].apply(lambda x: "5.2" in x["pci_code"])) & (df["length"] > 150000),
+        (df["tags"].apply(lambda x: "5.2" in x["pci_code"])) & (df["length"] > 150),
         "p_nom",
     ] = 1200
+
+    return df
+
+
+def _set_s_nom_elec(value):
+    """
+    Sets the nominal power for electricity based on the provided value.
+
+    Parameters:
+        value (str or None): The input value representing the nominal power.
+            It can be a string containing a number with units
+            (e.g., 'GW', 'MW', 'MVA') or None.
+
+    Returns:
+        float: The nominal power in MW. If the input value is in GW, it is
+            converted to MW by multiplying by 1000.
+    """
+    if value is None:
+        return None
+    else:
+        # Check if the value contains 'GW'
+        if "GW" in value:
+            # Multiply by 1000 and drop the unit
+            return float(value.replace("GW", "").strip()) * 1000
+        else:
+            # Drop spaces and any units (MW, MVA)
+            cleaned_value = (
+                value.replace("MW", "").replace("MVA", "").replace(" ", "").strip()
+            )
+            return float(cleaned_value) if cleaned_value else None
+
+
+def _set_params_lines_electricity(df):
+    """
+    Sets the nominal power (s_nom) for electricity transmission lines based on
+    tags and manual corrections.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing links data.
+
+    Returns:
+        df (pd.DataFrame): Updated DataFrame with nominal power (s_nom) set for each link.
+        The function performs the following steps:
+        1. Extracts the relevant components for electricity transmission and offshore grids.
+        2. Sets the nominal power (s_nom) based on the tags' descriptions.
+        3. Applies manual corrections for specific projects.
+    """
+    df["s_nom"] = df["tags"].apply(
+        lambda x: _extract_params(x["description"], ["MW", "MVA", "GW"])
+    )
+    df["s_nom"] = df["s_nom"].apply(_set_s_nom_elec)
+
+    circuit_mapping = {
+        "single circuit": 1,
+        "single-circuit": 1,
+        "1 circuit": 1,
+        "1-circuit": 1,
+        "double circuit": 2,
+        "double-circuit": 2,
+        "2 circuit": 2,
+        "2-circuit": 2,
+    }
+
+    # Determine number of parallel circuits
+    df["num_parallel"] = df["tags"].apply(
+        lambda x: next(
+            (
+                circuit_mapping[circuit]
+                for circuit in circuit_mapping
+                if circuit in x["description"].lower()
+            ),
+            None,
+        )
+    )
+    df.loc[df["num_parallel"].isna(), "num_parallel"] = (
+        1  # Set default value to 1 if not found
+    )
 
     return df
 
@@ -853,13 +931,19 @@ if __name__ == "__main__":
     components["links_offshore_grids"] = _set_params_links_electricity(
         components["links_offshore_grids"]
     )
+    components["lines_electricity_transmission"] = _set_params_lines_electricity(
+        components["lines_electricity_transmission"]
+    )
+
+    components["generators_hydrogen_terminal"]
+
+    test = _set_params_lines_electricity(components["lines_electricity_transmission"])
+
+    test["tags"].apply(lambda x: x["pci_code"])
+
+    #
 
     # remove all non-numeric characters, dots are allowed, letters are allowed, using rege
-
-    components["buses_electricity_transmission"]["tags"].apply(
-        lambda x: "kV" in x["description"]
-    ).sum()
-
     # Check list
     # components['buses_electricity_transmission']          # clean
     # components['buses_offshore_grids']                    # clean
@@ -867,13 +951,16 @@ if __name__ == "__main__":
     # components['links_electricity_transmission']          # clean
     # components['links_offshore_grids']                    # clean
 
-    # components['generators_hydrogen_terminal']            # p_nom missing
-    # components['lines_electricity_transmission']          # s_nom, num_parallel missing
     # components['links_co2_pipeline']                      # p_nom missing
     # components['links_co2_shipping']                      # p_nom missing
+    # components['links_hydrogen_pipeline']                 # p_nom missing
+
+    # components['generators_hydrogen_terminal']            # p_nom missing
+    # components['lines_electricity_transmission']          # s_nom, num_parallel missing
+
     # components['links_electrolyser']                      # p_nom missing
     # components['links_gas_pipeline']                      # p_nom missing
-    # components['links_hydrogen_pipeline']                 # p_nom missing
+
     # components['storage_units_co2_liquefaction']          # p_nom, max_hours missing
     # components['storage_units_electricity']               # p_nom, max_hours missing
     # components['storage_units_hydrogen']                  # p_nom, max_hours missing
