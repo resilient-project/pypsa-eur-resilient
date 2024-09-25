@@ -130,8 +130,12 @@ electricity:
     enable: false
     by_country: false
 
-pci_pmi:
+pci-pmi-projects:
   enable: true
+  haversine_distance: true
+  include:
+    lines_electricity_transmission: true
+
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
 atlite:

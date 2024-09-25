@@ -632,7 +632,7 @@ if config["enable"]["retrieve"] and (
             ),
 
 
-if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+if config["enable"]["retrieve"] and config["pci-pmi-projects"]["enable"]:
 
     rule retrieve_pci_pmi_annex:
         input:
@@ -647,7 +647,7 @@ if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
             move(input[0], output[0])
 
 
-if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+if config["enable"]["retrieve"] and config["pci-pmi-projects"]["enable"]:
 
     checkpoint retrieve_pci_pmi_list:
         input:
@@ -663,7 +663,7 @@ if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
             "../scripts/retrieve_pci_pmi_list.py"
 
 
-if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+if config["enable"]["retrieve"] and config["pci-pmi-projects"]["enable"]:
 
     rule retrieve_pci_pmi_project:
         output:
@@ -679,7 +679,7 @@ if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
             "../scripts/retrieve_pci_pmi_project.py"
 
 
-if config["enable"]["retrieve"] and config["pci_pmi"]["enable"]:
+if config["enable"]["retrieve"] and config["pci-pmi-projects"]["enable"]:
 
     def input_retrieve_pci_pmi_projects(w):
         checkpoint_output = checkpoints.retrieve_pci_pmi_list.get().output[0]

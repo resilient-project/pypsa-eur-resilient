@@ -14,7 +14,9 @@ import logging
 import re
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
+import pypsa
 import tqdm
 from _helpers import configure_logging, set_scenario_config
 from dateutil import parser
@@ -61,6 +63,8 @@ COLUMNS_LINES = [
     "s_nom",
     "v_nom",
     "num_parallel",
+    "carrier",
+    "type",
     "tags",
     "x0",
     "y0",
@@ -175,6 +179,7 @@ UNDERGROUND_MAPPING = {  # "t" for true (underground), "f" for false (overground
 
 CARRIER_MAPPING = {
     "generators_hydrogen_terminal": "H2",
+    "lines_electricity_transmission": "AC",
     "links_co2_pipeline": "CO2",
     "links_co2_shipping": "CO2",
     "links_electricity_transmission": "AC",
@@ -182,6 +187,14 @@ CARRIER_MAPPING = {
     "links_gas_pipeline": "gas",
     "links_hydrogen_pipeline": "H2",
     "links_offshore_grids": "AC",
+}
+
+LINE_TYPES_MAPPING = {
+    220: "Al/St 240/40 2-bundle 220.0",
+    300: "Al/St 240/40 3-bundle 300.0",
+    330: "Al/St 240/40 3-bundle 300.0",
+    380: "Al/St 490/64 4-bundle 380.0",  # assuming newer cable type
+    400: "Al/St 490/64 4-bundle 380.0",  # assuming newer cable type
 }
 
 
@@ -868,6 +881,17 @@ def _set_params_lines_electricity(df):
         1  # Set default value to 1 if not found
     )
 
+    # Set line types based on voltage levels
+    df["type"] = df["v_nom"].apply(lambda x: LINE_TYPES_MAPPING.get(x, None))
+
+    # Set default s_nom for missing values
+    df.loc[df["s_nom"].isna(), "s_nom"] = (
+        np.sqrt(3)
+        * df.loc[df["s_nom"].isna(), "type"].map(pypsa.Network().line_types["i_nom"])
+        * df.loc[df["s_nom"].isna(), "v_nom"]
+        * df.loc[df["s_nom"].isna(), "num_parallel"]
+    ).round(0)
+
     return df
 
 
@@ -935,14 +959,6 @@ if __name__ == "__main__":
         components["lines_electricity_transmission"]
     )
 
-    components["generators_hydrogen_terminal"]
-
-    test = _set_params_lines_electricity(components["lines_electricity_transmission"])
-
-    test["tags"].apply(lambda x: x["pci_code"])
-
-    #
-
     # remove all non-numeric characters, dots are allowed, letters are allowed, using rege
     # Check list
     # components['buses_electricity_transmission']          # clean
@@ -950,13 +966,13 @@ if __name__ == "__main__":
     # components['buses_smart_electricity_transmission']    # clean
     # components['links_electricity_transmission']          # clean
     # components['links_offshore_grids']                    # clean
+    # components['lines_electricity_transmission']          # clean, s_nom need to be added in build_pci_pmi_projects for missing ones, linetypes missing
 
     # components['links_co2_pipeline']                      # p_nom missing
     # components['links_co2_shipping']                      # p_nom missing
     # components['links_hydrogen_pipeline']                 # p_nom missing
 
     # components['generators_hydrogen_terminal']            # p_nom missing
-    # components['lines_electricity_transmission']          # s_nom, num_parallel missing
 
     # components['links_electrolyser']                      # p_nom missing
     # components['links_gas_pipeline']                      # p_nom missing
