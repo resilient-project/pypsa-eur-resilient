@@ -131,11 +131,15 @@ electricity:
     by_country: false
 
 pci-pmi-projects:
-  enable: true
+  enable: false
   haversine_distance: true
   include:
     lines_electricity_transmission: true
-
+  lines:
+    s_max_pu: 0.7
+    s_nom_max: .inf
+    s_nom_extendable: true
+    max_extension: 20000 #MW
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
 atlite:

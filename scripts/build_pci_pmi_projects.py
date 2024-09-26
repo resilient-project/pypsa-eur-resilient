@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 COLUMNS_LINES = [
     "bus0",
     "bus1",
-    "project_status",
     "length",
     "build_year",
     "underground",

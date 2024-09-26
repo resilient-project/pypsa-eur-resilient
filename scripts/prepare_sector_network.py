@@ -4526,6 +4526,68 @@ def add_enhanced_geothermal(n, egs_potentials, egs_overlap, costs):
             )
 
 
+### PCI/PMI projects
+def add_pci_pmi_projects(
+    n: pypsa.Network,
+    pci_pmi_projects: dict,
+    investment_year: int,
+    input_files: list[str],
+    costs: pd.DataFrame,
+) -> None:
+    logger.info(f"Adding PCI/PMI projects built by {investment_year}:")
+
+    if pci_pmi_projects.get("include", {}).get("lines_electricity_transmission", False):
+        _attach_pci_pmi_lines(
+            n,
+            pci_pmi_projects,
+            investment_year,
+            input_files["lines_electricity_transmission"],
+            costs,
+        )
+
+
+def _attach_pci_pmi_lines(
+    n: pypsa.Network,
+    pci_pmi_projects,
+    investment_year: int,
+    path: str,
+    costs: pd.DataFrame,
+) -> None:
+    logger.info(" - electricity transmission lines.")
+    projects = pd.read_csv(path, index_col=0, dtype={"bus0": str, "bus1": str})
+
+    # Only add projects that are built before / up until the investment year
+    projects = projects[projects["build_year"] <= investment_year]
+    n.madd("Line", projects.index, **projects)
+
+    # Set additional line params:
+
+    # capital_cost
+    n.lines["capital_cost"] = n.lines["length"] * costs.at["HVAC overhead", "fixed"]
+
+    # s_max_pu, s_nom_extendable
+    n.lines.loc[projects.index, "s_max_pu"] = pci_pmi_projects.get("lines", {}).get(
+        "s_max_pu", 1
+    )
+    n.lines.loc[projects.index, "s_nom_extendable"] = pci_pmi_projects.get(
+        "lines", {}
+    ).get("s_nom_extendable", False)
+
+    # s_nom_max
+    s_nom_max_set = pci_pmi_projects.get("lines", {}).get("s_nom_max", np.inf)
+    s_nom_max_ext = pci_pmi_projects.get("lines", {}).get("max_extension", np.inf)
+
+    if np.isfinite(s_nom_max_ext) and s_nom_max_ext > 0:
+        logger.info(f"   .. limiting PCI/PMI line extensions to {s_nom_max_ext} MW")
+        n.lines.loc[projects.index, "s_nom_max"] = (
+            n.lines.loc[projects.index, "s_nom"] + s_nom_max_ext
+        )
+
+    n.lines.loc[projects.index, "s_nom_max"] = n.lines.loc[
+        projects.index, "s_nom_max"
+    ].clip(upper=s_nom_max_set)
+
+
 # %%
 if __name__ == "__main__":
     if "snakemake" not in globals():
@@ -4547,6 +4609,7 @@ if __name__ == "__main__":
 
     options = snakemake.params.sector
     cf_industry = snakemake.params.industry
+    pci_pmi_projects = snakemake.params.pci_pmi_projects
 
     investment_year = int(snakemake.wildcards.planning_horizons)
 
@@ -4561,6 +4624,13 @@ if __name__ == "__main__":
         snakemake.params.costs,
         nyears,
     )
+
+    ### add PCI projects
+    if pci_pmi_projects.get("enable", False):
+        input_files = snakemake.input
+        add_pci_pmi_projects(n, pci_pmi_projects, investment_year, input_files, costs)
+
+    ### end
 
     pop_weighted_energy_totals = (
         pd.read_csv(snakemake.input.pop_weighted_energy_totals, index_col=0) * nyears
@@ -4709,3 +4779,5 @@ if __name__ == "__main__":
     sanitize_locations(n)
 
     n.export_to_netcdf(snakemake.output[0])
+
+# %%
