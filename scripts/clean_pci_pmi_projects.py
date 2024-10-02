@@ -182,11 +182,11 @@ CARRIER_MAPPING = {
     "lines_electricity_transmission": "AC",
     "links_co2_pipeline": "CO2",
     "links_co2_shipping": "CO2",
-    "links_electricity_transmission": "AC",
+    "links_electricity_transmission": "DC",
     "links_electrolyser": "H2",
     "links_gas_pipeline": "gas",
     "links_hydrogen_pipeline": "H2",
-    "links_offshore_grids": "AC",
+    "links_offshore_grids": "DC",
 }
 
 LINE_TYPES_MAPPING = {

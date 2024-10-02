@@ -4545,6 +4545,15 @@ def add_pci_pmi_projects(
             costs,
         )
 
+    if pci_pmi_projects.get("include", {}).get("links_electricity_transmission", False):
+        _attach_pci_pmi_links(
+            n,
+            pci_pmi_projects,
+            investment_year,
+            input_files["links_electricity_transmission"],
+            costs,
+        )
+
 
 def _attach_pci_pmi_lines(
     n: pypsa.Network,
@@ -4563,7 +4572,9 @@ def _attach_pci_pmi_lines(
     # Set additional line params:
 
     # capital_cost
-    n.lines["capital_cost"] = n.lines["length"] * costs.at["HVAC overhead", "fixed"]
+    n.lines.loc[projects.index, "capital_cost"] = (
+        n.lines.loc[projects.index, "length"] * costs.at["HVAC overhead", "fixed"]
+    )
 
     # s_max_pu, s_nom_extendable
     n.lines.loc[projects.index, "s_max_pu"] = pci_pmi_projects.get("lines", {}).get(
@@ -4586,6 +4597,57 @@ def _attach_pci_pmi_lines(
     n.lines.loc[projects.index, "s_nom_max"] = n.lines.loc[
         projects.index, "s_nom_max"
     ].clip(upper=s_nom_max_set)
+
+
+def _attach_pci_pmi_links(
+    n: pypsa.Network,
+    pci_pmi_projects,
+    investment_year: int,
+    path: str,
+    costs: pd.DataFrame,
+) -> None:
+    logger.info(" - electricity transmission links.")
+    projects = pd.read_csv(path, index_col=0, dtype={"bus0": str, "bus1": str})
+
+    # Only add projects that are built before / up until the investment year
+    projects = projects[projects["build_year"] <= investment_year]
+    n.madd("Link", projects.index, **projects)
+
+    # Set additional link params:
+
+    if not n.links.loc[projects.index].empty:
+        n.links.loc[projects.index, "capital_cost"] = (
+            n.links.loc[projects.index, "length"]
+            * (
+                (1.0 - n.links.loc[projects.index, "underwater_fraction"])
+                * costs.at["HVDC overhead", "fixed"]
+                + n.links.loc[projects.index, "underwater_fraction"]
+                * costs.at["HVDC submarine", "fixed"]
+            )
+            + costs.at["HVDC inverter pair", "fixed"]
+        )
+
+    # p_max_pu, p_nom_extendable
+    n.links.loc[projects.index, "p_max_pu"] = pci_pmi_projects.get("links", {}).get(
+        "p_max_pu", 1
+    )
+    n.links.loc[projects.index, "p_nom_extendable"] = pci_pmi_projects.get(
+        "links", {}
+    ).get("p_nom_extendable", False)
+
+    # p_nom_max
+    p_nom_max_set = pci_pmi_projects.get("links", {}).get("p_nom_max", np.inf)
+    p_nom_max_ext = pci_pmi_projects.get("links", {}).get("max_extension", np.inf)
+
+    if np.isfinite(p_nom_max_ext) and p_nom_max_ext > 0:
+        logger.info(f"   .. limiting PCI/PMI line extensions to {p_nom_max_ext} MW")
+        n.links.loc[projects.index, "p_nom_max"] = (
+            n.links.loc[projects.index, "p_nom"] + p_nom_max_ext
+        )
+
+    n.links.loc[projects.index, "p_nom_max"] = n.links.loc[
+        projects.index, "p_nom_max"
+    ].clip(upper=p_nom_max_set)
 
 
 # %%

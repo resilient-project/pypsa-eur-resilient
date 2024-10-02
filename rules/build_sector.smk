@@ -997,9 +997,11 @@ def input_add_pci_pmi_projects(w):
     pci_pmi_projects = config_provider("pci-pmi-projects")(w)
     if pci_pmi_projects["enable"]:
         return {
-            "lines_electricity_transmission": resources(
-                "pci-pmi-projects/lines_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
+            project_type: resources(
+                f"pci-pmi-projects/{project_type}" + "_s_{clusters}_l{ll}_{opts}.csv"
             )
+            for project_type in pci_pmi_projects["include"]
+            if pci_pmi_projects["include"][project_type]
         }
     return {}
 
@@ -1208,6 +1210,9 @@ if config["pci-pmi-projects"]["enable"]:
         output:
             lines_electricity_transmission=resources(
                 "pci-pmi-projects/lines_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
+            ),
+            links_electricity_transmission=resources(
+                "pci-pmi-projects/links_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
             ),
         log:
             logs("build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}.log"),
