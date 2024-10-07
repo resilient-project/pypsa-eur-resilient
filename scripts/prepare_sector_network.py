@@ -4526,43 +4526,16 @@ def add_enhanced_geothermal(n, egs_potentials, egs_overlap, costs):
             )
 
 
-### PCI/PMI projects
-def add_pci_pmi_projects(
-    n: pypsa.Network,
-    pci_pmi_projects: dict,
-    investment_year: int,
-    input_files: list[str],
-    costs: pd.DataFrame,
-) -> None:
-    logger.info(f"Adding PCI/PMI projects built by {investment_year}:")
-
-    if pci_pmi_projects.get("include", {}).get("lines_electricity_transmission", False):
-        _attach_pci_pmi_lines(
-            n,
-            pci_pmi_projects,
-            investment_year,
-            input_files["lines_electricity_transmission"],
-            costs,
-        )
-
-    if pci_pmi_projects.get("include", {}).get("links_electricity_transmission", False):
-        _attach_pci_pmi_links(
-            n,
-            pci_pmi_projects,
-            investment_year,
-            input_files["links_electricity_transmission"],
-            costs,
-        )
-
-
-def _attach_pci_pmi_lines(
+def _add_pci_pmi_lines(
     n: pypsa.Network,
     pci_pmi_projects,
     investment_year: int,
     path: str,
     costs: pd.DataFrame,
 ) -> None:
-    logger.info(" - electricity transmission lines.")
+    logger.info(
+        f"Adding PCI/PMI electricity transmission lines commissioned by {investment_year}."
+    )
     projects = pd.read_csv(path, index_col=0, dtype={"bus0": str, "bus1": str})
 
     # Only add projects that are built before / up until the investment year
@@ -4589,7 +4562,7 @@ def _attach_pci_pmi_lines(
     s_nom_max_ext = pci_pmi_projects.get("lines", {}).get("max_extension", np.inf)
 
     if np.isfinite(s_nom_max_ext) and s_nom_max_ext > 0:
-        logger.info(f"   .. limiting PCI/PMI line extensions to {s_nom_max_ext} MW")
+        logger.info(f"- limiting PCI/PMI line extensions to {s_nom_max_ext} MW")
         n.lines.loc[projects.index, "s_nom_max"] = (
             n.lines.loc[projects.index, "s_nom"] + s_nom_max_ext
         )
@@ -4599,14 +4572,16 @@ def _attach_pci_pmi_lines(
     ].clip(upper=s_nom_max_set)
 
 
-def _attach_pci_pmi_links(
+def _add_pci_pmi_links_electricity(
     n: pypsa.Network,
     pci_pmi_projects,
     investment_year: int,
     path: str,
     costs: pd.DataFrame,
 ) -> None:
-    logger.info(" - electricity transmission links.")
+    logger.info(
+        f"Adding PCI/PMI electricity transmission lines commissioned by {investment_year}."
+    )
     projects = pd.read_csv(path, index_col=0, dtype={"bus0": str, "bus1": str})
 
     # Only add projects that are built before / up until the investment year
@@ -4640,7 +4615,58 @@ def _attach_pci_pmi_links(
     p_nom_max_ext = pci_pmi_projects.get("links", {}).get("max_extension", np.inf)
 
     if np.isfinite(p_nom_max_ext) and p_nom_max_ext > 0:
-        logger.info(f"   .. limiting PCI/PMI line extensions to {p_nom_max_ext} MW")
+        logger.info(f"- limiting PCI/PMI link extensions to {p_nom_max_ext} MW")
+        n.links.loc[projects.index, "p_nom_max"] = (
+            n.links.loc[projects.index, "p_nom"] + p_nom_max_ext
+        )
+
+    n.links.loc[projects.index, "p_nom_max"] = n.links.loc[
+        projects.index, "p_nom_max"
+    ].clip(upper=p_nom_max_set)
+
+
+def _add_pci_pmi_links_hydrogen(
+    n: pypsa.Network,
+    pci_pmi_projects,
+    investment_year: int,
+    path: str,
+    costs: pd.DataFrame,
+) -> None:
+    logger.info(
+        f"Adding PCI/PMI electricity transmission lines commissioned by {investment_year}."
+    )
+    projects = pd.read_csv(path, index_col=0, dtype={"bus0": str, "bus1": str})
+
+    # Only add projects that are built before / up until the investment year
+    projects = projects[projects["build_year"] <= investment_year]
+    n.madd(
+        "Link",
+        projects.index,
+        bus0=projects.bus0.values + " H2",
+        bus1=projects.bus1.values + " H2",
+        p_nom=projects.p_nom.values,
+        p_min_pu=-1,  # allow all PCI/PMI projects to be used in both directions
+        length=projects.length.values,
+        capital_cost=costs.at["H2 (g) pipeline", "fixed"] * projects.length.values,
+        carrier=projects.carrier.values,
+        underwater_fraction=projects.underwater_fraction.values,
+        lifetime=costs.at["H2 (g) pipeline", "lifetime"],
+    )
+
+    # p_max_pu, p_nom_extendable
+    n.links.loc[projects.index, "p_max_pu"] = pci_pmi_projects.get("links", {}).get(
+        "p_max_pu", 1
+    )
+    n.links.loc[projects.index, "p_nom_extendable"] = pci_pmi_projects.get(
+        "links", {}
+    ).get("p_nom_extendable", False)
+
+    # p_nom_max
+    p_nom_max_set = pci_pmi_projects.get("links", {}).get("p_nom_max", np.inf)
+    p_nom_max_ext = pci_pmi_projects.get("links", {}).get("max_extension", np.inf)
+
+    if np.isfinite(p_nom_max_ext) and p_nom_max_ext > 0:
+        logger.info(f"- limiting PCI/PMI pipeline extensions to {p_nom_max_ext} MW")
         n.links.loc[projects.index, "p_nom_max"] = (
             n.links.loc[projects.index, "p_nom"] + p_nom_max_ext
         )
@@ -4688,11 +4714,27 @@ if __name__ == "__main__":
     )
 
     ### add PCI projects
-    if pci_pmi_projects.get("enable", False):
-        input_files = snakemake.input
-        add_pci_pmi_projects(n, pci_pmi_projects, investment_year, input_files, costs)
+    if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get(
+        "include", {}
+    ).get("lines_electricity_transmission", False):
+        _add_pci_pmi_lines(
+            n,
+            pci_pmi_projects,
+            investment_year,
+            snakemake.input["lines_electricity_transmission"],
+            costs,
+        )
 
-    ### end
+    if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get(
+        "include", {}
+    ).get("links_electricity_transmission", False):
+        _add_pci_pmi_links_electricity(
+            n,
+            pci_pmi_projects,
+            investment_year,
+            snakemake.input["links_electricity_transmission"],
+            costs,
+        )
 
     pop_weighted_energy_totals = (
         pd.read_csv(snakemake.input.pop_weighted_energy_totals, index_col=0) * nyears
@@ -4762,6 +4804,17 @@ if __name__ == "__main__":
 
     if not options["H2_network"]:
         remove_h2_network(n)
+
+    if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get(
+        "include", {}
+    ).get("links_hydrogen_pipeline", False):
+        _add_pci_pmi_links_hydrogen(
+            n,
+            pci_pmi_projects,
+            investment_year,
+            snakemake.input["links_hydrogen_pipeline"],
+            costs,
+        )
 
     if options["co2network"]:
         add_co2_network(n, costs)

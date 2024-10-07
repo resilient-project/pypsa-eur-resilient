@@ -34,6 +34,7 @@ V_NOM_AC_DEFAULT_CONTINENTAL = 380  # kV
 V_NOM_AC_DEFAULT_BALTICS = 330  # kV
 V_NOM_DC_DEFAULT = 525  # kV
 P_NOM_ELECTRICITY = 2000  # MW
+LHV_H2 = 33.33  # kWh/kg
 
 COLUMNS_BUSES = [
     "project_status",
@@ -185,7 +186,7 @@ CARRIER_MAPPING = {
     "links_electricity_transmission": "DC",
     "links_electrolyser": "H2",
     "links_gas_pipeline": "gas",
-    "links_hydrogen_pipeline": "H2",
+    "links_hydrogen_pipeline": "H2 pipeline",
     "links_offshore_grids": "DC",
 }
 
@@ -722,23 +723,31 @@ def _set_electrical_params(components):
 
 def _extract_params(text, units):
     """
-    Extracts a numerical value followed by a unit from the given text.
+    Extracts all numerical values followed by a unit from the given text.
 
     Parameters:
-        text (str): The text to search for the pattern.
+        text (str): The text to search for the patterns.
         units (list of str): A list of units to match after the numerical value.
 
     Returns:
-        str or None: The matched string containing the number and unit if found, otherwise None.
+        list of str: A list of matched strings containing the numbers and units.
     """
-    # Create a regex pattern to match a number (with optional decimal: . or ,) followed by any unit in the list
-    pattern = r"\b[\d]+[.,]?[\d]*\s*({})".format("|".join(units))
+    # Create a regex pattern to match a number (with optional decimal: . or ,)
+    # followed by any unit in the list, allowing for an optional space before the unit
+    units_pattern = r"(?:{})\b".format(
+        "|".join(units)
+    )  # Word boundary only on the right side
 
-    # Search for the pattern in the given text
-    match = re.search(pattern, text)
+    # The main pattern includes optional spaces before the units
+    pattern = r"[\d]+[.,]?[\d]*\s*{}|[\d]+[.,]?[\d]*{}".format(
+        units_pattern, units_pattern
+    )
 
-    # If a match is found, replace ',' with '.' and return the matched string
-    return match.group(0).replace(",", ".") if match else None
+    # Find all matches of the pattern in the given text
+    matches = re.findall(pattern, text)
+
+    # Replace ',' with '.' for each match and return the list of results
+    return [match.replace(",", ".") for match in matches if match]
 
 
 def _set_p_nom_elec(value):
@@ -787,9 +796,13 @@ def _set_params_links_electricity(df):
         3. Applies manual corrections for specific projects.
     """
     df["p_nom"] = df["tags"].apply(
-        lambda x: _extract_params(x["description"], ["MW", "MVA", "GW"])
+        lambda x: max(
+            _extract_params(x["description"], ["MW", "MVA", "GW"]), default=None
+        )
     )
-    df["p_nom"] = df["p_nom"].apply(_set_p_nom_elec)
+    df["p_nom"] = df["p_nom"].apply(_convert_to_mw)
+    df["p_nom"] = df["p_nom"].fillna(P_NOM_ELECTRICITY)
+
     # Manual corrections
     # NSWPH, index containing "4.1", set p_nom to 2000
     df.loc[df["tags"].apply(lambda x: "4.1" in x["pci_code"]), "p_nom"] = 2000
@@ -805,34 +818,6 @@ def _set_params_links_electricity(df):
     ] = 1200
 
     return df
-
-
-def _set_s_nom_elec(value):
-    """
-    Sets the nominal power for electricity based on the provided value.
-
-    Parameters:
-        value (str or None): The input value representing the nominal power.
-            It can be a string containing a number with units
-            (e.g., 'GW', 'MW', 'MVA') or None.
-
-    Returns:
-        float: The nominal power in MW. If the input value is in GW, it is
-            converted to MW by multiplying by 1000.
-    """
-    if value is None:
-        return None
-    else:
-        # Check if the value contains 'GW'
-        if "GW" in value:
-            # Multiply by 1000 and drop the unit
-            return float(value.replace("GW", "").strip()) * 1000
-        else:
-            # Drop spaces and any units (MW, MVA)
-            cleaned_value = (
-                value.replace("MW", "").replace("MVA", "").replace(" ", "").strip()
-            )
-            return float(cleaned_value) if cleaned_value else None
 
 
 def _set_params_lines_electricity(df):
@@ -851,9 +836,11 @@ def _set_params_lines_electricity(df):
         3. Applies manual corrections for specific projects.
     """
     df["s_nom"] = df["tags"].apply(
-        lambda x: _extract_params(x["description"], ["MW", "MVA", "GW"])
+        lambda x: max(
+            _extract_params(x["description"], ["MW", "MVA", "GW"]), default=None
+        )
     )
-    df["s_nom"] = df["s_nom"].apply(_set_s_nom_elec)
+    df["s_nom"] = df["s_nom"].apply(_convert_to_mw)
 
     circuit_mapping = {
         "single circuit": 1,
@@ -895,6 +882,139 @@ def _set_params_lines_electricity(df):
     return df
 
 
+def _mtpy_to_mw(mt_per_year: float) -> float:
+    """
+    Convert million tonnes per year (Mt/y) of hydrogen to megawatts (MW).
+
+    Parameters:
+        mt_per_year (float): The amount of hydrogen in million tonnes per year (Mt/y).
+
+    Returns:
+        float: The equivalent power in megawatts (MW).
+    """
+    kg_per_year = mt_per_year * 1e9  # kg/y
+    energy_kwh_per_year = kg_per_year * LHV_H2  # kWh/y
+    energy_mwh_per_year = energy_kwh_per_year / 1e3  # MWh/y
+    capacity_mw = energy_mwh_per_year / 8760  # MW
+
+    return capacity_mw
+
+
+def _gwhpd_to_mw(gwh_per_day: float) -> float:
+    """
+    Convert gigawatt-hours per day (GWh/d) to megawatts (MW).
+
+    Parameters:
+        gwh_per_day (float): The amount of energy in gigawatt-hours per day (GWh/d).
+
+    Returns:
+        float: The equivalent power in megawatts (MW).
+    """
+    capacity_mw = gwh_per_day * 1e3 / 24  # MW
+
+    return capacity_mw
+
+
+def _convert_to_mw(value: str) -> float:
+    """
+    Converts a given string including units to MW and returns a float.
+
+    Parameters:
+        value (str): The input value representing the nominal power.
+            It can be a string containing a number with units
+            (e.g., 'GWh/d', 'Mt/y', 'GW', 'MW') or None.
+
+    Returns
+        float: The equivalent value in MW
+    """
+    if value is None:
+        return None
+    else:
+        if "MVA" in value:
+            return float(value.replace("MVA", "").strip())
+        if "GWh/day" in value:
+            return _gwhpd_to_mw(float(value.replace("GWh/day", "").strip()))
+        if "GWh/d" in value:
+            return _gwhpd_to_mw(float(value.replace("GWh/d", "").strip()))
+        if "Mt/y" in value:
+            # Convert million tonnes per year (Mt/y) of hydrogen to megawatts (MW)
+            return _mtpy_to_mw(float(value.replace("Mt/y", "").strip()))
+        if "MW" in value:
+            # Remove 'MW' and convert to float
+            return float(value.replace("MW", "").strip())
+        if "GW" in value:  # needs to be checked last, otherwise issues with GWh/d occur
+            # Multiply by 1000 to convert to MW
+            return float(value.replace("GW", "").strip()) * 1000
+        else:
+            return None
+
+
+def _convert_array_to_mw(array: np.ndarray) -> np.ndarray:
+    """
+    Converts an array of strings including units to MW and returns a float
+    array.
+
+    Parameters:
+        array (np.ndarray): The input array containing values representing the nominal power.
+            Each value can be a string containing a number with units
+            (e.g., 'GWh/d', 'Mt/y', 'GW', 'MW') or None.
+
+    Returns:
+        np.ndarray: The equivalent array in MW.
+    """
+    if len(array) == 0:
+        return np.array([])
+    return np.array([_convert_to_mw(value) for value in array])
+
+
+def _set_params_links_hydrogen(df):
+    """
+    Sets the nominal power (p_nom) for hydrogen pipelines.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing links data.
+
+    Returns:
+        df (pd.DataFrame): Updated DataFrame with nominal power (p_nom) set for each link.
+        The function performs the following steps:
+        1. Extracts the relevant components for hydrogen pipelines.
+        2. Sets the nominal power (p_nom) based on the tags' descriptions and converts units like GWh/d and Mt/y to equivalent MW.
+        3. Applies manual corrections for specific projects.
+    """
+    # Extract relevant values first, if GWh/d exists, use this value first (provides most accurate p_nom)
+    df["p_nom"] = df["tags"].apply(
+        lambda x: _extract_params(x["description"], ["GWh/d", "GWh/day"])
+    )
+
+    # Try again with Mt/y if p_nom list is empty
+    no_p_nom = df["p_nom"].apply(lambda x: len(x) == 0)
+    df.loc[no_p_nom, "p_nom"] = df.loc[no_p_nom, "tags"].apply(
+        lambda x: _extract_params(x["description"], ["Mt/y"])
+    )
+
+    # Try again with MW and GW if p_nom list is still empty
+    no_p_nom = df["p_nom"].apply(lambda x: len(x) == 0)
+    df.loc[no_p_nom, "p_nom"] = df.loc[no_p_nom, "tags"].apply(
+        lambda x: _extract_params(x["description"], ["MW", "GW"])
+    )
+
+    # Convert extracted values to equivalent MW
+    df["p_nom"] = df["p_nom"].apply(_convert_array_to_mw)
+    # Keep the maximum of all extracted values
+    df["p_nom"] = df["p_nom"].apply(lambda x: max(x, default=None))
+
+    # Manual corrections:
+    # PCI 10.4, source: https://ehb.eu/page/european-hydrogen-backbone-maps
+    df.loc[df["tags"].apply(lambda x: "10.4" in x["pci_code"]), "p_nom"] = _gwhpd_to_mw(
+        144
+    )
+
+    # Round p_nom
+    df["p_nom"] = df["p_nom"].round(0)
+
+    return df
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -932,6 +1052,7 @@ if __name__ == "__main__":
     projects = _remove_redundant_components(
         projects
     )  # Remove redundant components such as 'Polygon' geometries or already commissioned projects
+
     projects = pd.concat(
         projects.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
     )  # Split MultiLineStrings into LineStrings
@@ -959,6 +1080,10 @@ if __name__ == "__main__":
         components["lines_electricity_transmission"]
     )
 
+    components["links_hydrogen_pipeline"] = _set_params_links_hydrogen(
+        components["links_hydrogen_pipeline"]
+    )
+
     # remove all non-numeric characters, dots are allowed, letters are allowed, using rege
     # Check list
     # components['buses_electricity_transmission']          # clean
@@ -967,10 +1092,10 @@ if __name__ == "__main__":
     # components['links_electricity_transmission']          # clean
     # components['links_offshore_grids']                    # clean
     # components['lines_electricity_transmission']          # clean, s_nom need to be added in build_pci_pmi_projects for missing ones, linetypes missing
+    # components['links_hydrogen_pipeline']                 # clean
 
     # components['links_co2_pipeline']                      # p_nom missing
     # components['links_co2_shipping']                      # p_nom missing
-    # components['links_hydrogen_pipeline']                 # p_nom missing
 
     # components['generators_hydrogen_terminal']            # p_nom missing
 

@@ -21,13 +21,15 @@ from _helpers import configure_logging, set_scenario_config
 from base_network import _set_links_underwater_fraction
 from dateutil import parser
 from pypsa.geo import haversine_pts  # to recalculate crow-flies distance
-from shapely.geometry import LineString, MultiLineString, Point, Polygon
+from shapely.geometry import LineString, MultiLineString, MultiPolygon, Point, Polygon
 from shapely.ops import linemerge
 
 logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
 
 CRS_DISTANCE = "EPSG:3035"
+CRS_WGS84 = "EPSG:4326"
+MAX_DISTANCE = 3000
 
 COLUMNS_LINES = [
     "bus0",
@@ -54,27 +56,38 @@ COLUMNS_LINKS = [
 ]
 
 
-def _map_lines_links_to_buses(n, lines, regions_onshore):
+def _map_endpoints_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE, coords=0):
+    gdf_points = gdf.geometry.apply(lambda x: Point(x.coords[coords]))
 
-    # only keep regions_onshore that are in the network n
-    regions_onshore = regions_onshore[regions_onshore.index.isin(n.buses.index)]
+    gdf_points = gpd.GeoDataFrame(geometry=gdf_points, crs=CRS_WGS84)
+    # Spatial join nearest with regions
 
-    gdf_bus0 = gpd.GeoDataFrame(
-        geometry=lines.apply(lambda row: Point(row["x0"], row["y0"]), axis=1),
-        crs=lines.crs,
+    # Find nearest region index
+    regions = regions.to_crs(CRS_DISTANCE)
+    gdf_points = gdf_points.to_crs(CRS_DISTANCE)
+
+    gdf_points = gpd.sjoin_nearest(gdf_points, regions, how="left")
+    gdf_points = gdf_points.join(
+        regions, on="name", lsuffix="_point", rsuffix="_region"
     )
-    gdf_bus1 = gpd.GeoDataFrame(
-        geometry=lines.apply(lambda row: Point(row["x1"], row["y1"]), axis=1),
-        crs=lines.crs,
+    gdf_points["distance"] = gdf_points.apply(
+        lambda x: x.geometry_point.distance(x.geometry_region), axis=1
     )
 
-    gdf_bus0 = gpd.sjoin(gdf_bus0, regions_onshore, how="left", predicate="within")
-    gdf_bus1 = gpd.sjoin(gdf_bus1, regions_onshore, how="left", predicate="within")
+    bool_too_far = gdf_points["distance"] > MAX_DISTANCE
+    gdf_points.loc[bool_too_far, "name"] = None
 
-    lines["bus0"] = gdf_bus0.loc[lines.index, "name"]
-    lines["bus1"] = gdf_bus1.loc[lines.index, "name"]
+    return gdf_points["name"]
 
-    return lines
+
+def _map_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE):
+    gdf = gdf.copy()
+    gdf["bus0"] = _map_endpoints_to_closest_region(gdf, regions, max_distance, coords=0)
+    gdf["bus1"] = _map_endpoints_to_closest_region(
+        gdf, regions, max_distance, coords=-1
+    )
+
+    return gdf
 
 
 def _simplify_lines_to_380(lines, linetype):
@@ -170,10 +183,12 @@ if __name__ == "__main__":
         components[component].set_index("id", inplace=True)
         components[component]["tags"] = components[component]["tags"].apply(json.loads)
 
-    # Electricity transmission lines
+    ### Electricity transmission lines
     lines_electricity_transmission = components["lines_electricity_transmission"].copy()
-    lines_electricity_transmission = _map_lines_links_to_buses(
-        n, components["lines_electricity_transmission"], regions_onshore
+    lines_electricity_transmission = _map_to_closest_region(
+        lines_electricity_transmission,
+        regions_onshore,
+        max_distance=MAX_DISTANCE,
     )
     lines_electricity_transmission = _drop_redundant_lines_links(
         lines_electricity_transmission
@@ -185,15 +200,12 @@ if __name__ == "__main__":
         lines_electricity_transmission, linetype_380
     )
 
-    regions_onshore_buffer = gpd.GeoDataFrame(
-        regions_onshore,
-        geometry=regions_onshore.to_crs("EPSG:3035").buffer(500).to_crs("EPSG:4326"),
-    )
-
-    # Electricity transmission links
+    ### Electricity transmission links
     links_electricity_transmission = components["links_electricity_transmission"].copy()
-    links_electricity_transmission = _map_lines_links_to_buses(
-        n, components["links_electricity_transmission"], regions_onshore_buffer
+    links_electricity_transmission = _map_to_closest_region(
+        links_electricity_transmission,
+        regions_onshore,
+        max_distance=MAX_DISTANCE,
     )
     links_electricity_transmission = _drop_redundant_lines_links(
         links_electricity_transmission
@@ -205,6 +217,21 @@ if __name__ == "__main__":
         links_electricity_transmission, regions_offshore
     )
 
+    ### Hydrogen pipelines (links)
+    links_hydrogen_pipeline = components["links_hydrogen_pipeline"].copy()
+    links_hydrogen_pipeline = _map_to_closest_region(
+        links_hydrogen_pipeline,
+        regions_onshore,
+        max_distance=MAX_DISTANCE,
+    )
+    links_hydrogen_pipeline = _drop_redundant_lines_links(links_hydrogen_pipeline)
+    # TODO, add missing buses like in the Baltic Sea
+    # TODO split pipelines into segments if they are touched by other pipelines
+    links_hydrogen_pipeline = _add_geometry_to_tags(links_hydrogen_pipeline)
+    links_hydrogen_pipeline = _set_underwater_fraction(
+        links_hydrogen_pipeline, regions_offshore
+    )
+
     if haversine_distance:
         logger.info("Recalculating line lengths with haversine distance.")
         lines_electricity_transmission = _calculate_haversine_distance(
@@ -213,12 +240,14 @@ if __name__ == "__main__":
         links_electricity_transmission = _calculate_haversine_distance(
             n, links_electricity_transmission, line_length_factor
         )
+        links_hydrogen_pipeline = _calculate_haversine_distance(
+            n, links_hydrogen_pipeline, line_length_factor
+        )
 
+    ### EXPORT
     projects = sorted(
         lines_electricity_transmission["tags"].apply(lambda x: x["pci_code"]).unique()
     )
-
-    # Export
     logger.info("Exporting PCI/PMI projects to resources folder.")
     projects = sorted(
         lines_electricity_transmission["tags"].apply(lambda x: x["pci_code"]).unique()
@@ -233,4 +262,11 @@ if __name__ == "__main__":
     logger.info(f" - Electricity transmission links (DC) projects: {projects}")
     links_electricity_transmission[COLUMNS_LINKS].to_csv(
         snakemake.output.links_electricity_transmission, index=True
+    )
+    projects = sorted(
+        links_hydrogen_pipeline["tags"].apply(lambda x: x["pci_code"]).unique()
+    )
+    logger.info(f" - Hydrogen pipeline projects: {projects}")
+    links_hydrogen_pipeline[COLUMNS_LINKS].to_csv(
+        snakemake.output.links_hydrogen_pipeline, index=True
     )
