@@ -4629,21 +4629,31 @@ def _add_pci_pmi_links_hydrogen(
     n: pypsa.Network,
     pci_pmi_projects,
     investment_year: int,
-    path: str,
+    links_path: str,
+    buses_path: str,
     costs: pd.DataFrame,
 ) -> None:
+    logger.info("Adding additional PCI/PMI offshore hydrogen buses.")
+    buses = pd.read_csv(buses_path, index_col=0, dtype={"bus0": str, "bus1": str})
+
+    n.madd(
+        "Bus",
+        buses.index,
+        **buses.drop(columns="geometry"),
+    )
+
     logger.info(
         f"Adding PCI/PMI electricity transmission lines commissioned by {investment_year}."
     )
-    projects = pd.read_csv(path, index_col=0, dtype={"bus0": str, "bus1": str})
+    projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
 
     # Only add projects that are built before / up until the investment year
     projects = projects[projects["build_year"] <= investment_year]
     n.madd(
         "Link",
         projects.index,
-        bus0=projects.bus0.values + " H2",
-        bus1=projects.bus1.values + " H2",
+        bus0=projects.bus0.values,
+        bus1=projects.bus1.values,
         p_nom=projects.p_nom.values,
         p_min_pu=-1,  # allow all PCI/PMI projects to be used in both directions
         length=projects.length.values,
@@ -4698,6 +4708,8 @@ if __name__ == "__main__":
     options = snakemake.params.sector
     cf_industry = snakemake.params.industry
     pci_pmi_projects = snakemake.params.pci_pmi_projects
+    if pci_pmi_projects.get("enable", False):
+        buses_pci_pmi_offshore = snakemake.input.buses_pci_pmi_offshore
 
     investment_year = int(snakemake.wildcards.planning_horizons)
 
@@ -4813,6 +4825,7 @@ if __name__ == "__main__":
             pci_pmi_projects,
             investment_year,
             snakemake.input["links_hydrogen_pipeline"],
+            buses_pci_pmi_offshore,
             costs,
         )
 

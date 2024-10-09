@@ -1036,6 +1036,13 @@ rule prepare_sector_network:
         unpack(input_add_pci_pmi_projects),
         **rules.cluster_gas_network.output,
         **rules.build_gas_input_locations.output,
+        buses_pci_pmi_offshore=lambda w: (
+            resources(
+                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            )
+            if config_provider("pci-pmi-projects", "enable")(w)
+            else []
+        ),
         snapshot_weightings=resources(
             "snapshot_weightings_base_s_{clusters}_elec_l{ll}_{opts}_{sector_opts}.csv"
         ),
@@ -1200,6 +1207,7 @@ if config["pci-pmi-projects"]["enable"]:
             network=resources("networks/base_s_{clusters}_elec_l{ll}_{opts}.nc"),
             regions_onshore=resources("regions_onshore_base_s_{clusters}.geojson"),
             regions_offshore=resources("regions_offshore_base_s_{clusters}.geojson"),
+            scope=resources("europe_shape.geojson"),
             pci_pmi_projects=lambda w: [
                 "data/pci-pmi/projects/" + name + ".geojson"
                 for name, include in config_provider("pci-pmi-projects", "include")(
@@ -1208,6 +1216,9 @@ if config["pci-pmi-projects"]["enable"]:
                 if include
             ],
         output:
+            buses_pci_pmi_offshore=resources(
+                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            ),
             lines_electricity_transmission=resources(
                 "pci-pmi-projects/lines_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
             ),

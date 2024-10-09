@@ -11,6 +11,7 @@ https://ec.europa.eu/energy/infrastructure/transparency_platform/map-viewer/main
 import json
 import logging
 import re
+from itertools import chain
 
 import geopandas as gpd
 import numpy as np
@@ -18,11 +19,15 @@ import pandas as pd
 import pypsa
 import tqdm
 from _helpers import configure_logging, set_scenario_config
-from base_network import _set_links_underwater_fraction
-from dateutil import parser
 from pypsa.geo import haversine_pts  # to recalculate crow-flies distance
-from shapely.geometry import LineString, MultiLineString, MultiPolygon, Point, Polygon
-from shapely.ops import linemerge
+from shapely.geometry import (
+    LineString,
+    MultiLineString,
+    MultiPoint,
+    MultiPolygon,
+    Point,
+    Polygon,
+)
 
 logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
@@ -80,11 +85,27 @@ def _map_endpoints_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE, co
     return gdf_points["name"]
 
 
-def _map_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE):
+def _map_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE, add_suffix=None):
+    # add Suffix to regions index
+    regions = regions.copy()
+    if add_suffix:
+        regions.index = regions.index + " " + add_suffix
+
     gdf = gdf.copy()
-    gdf["bus0"] = _map_endpoints_to_closest_region(gdf, regions, max_distance, coords=0)
-    gdf["bus1"] = _map_endpoints_to_closest_region(
-        gdf, regions, max_distance, coords=-1
+    # if columns bus0 and bus1 dont exist, create them
+    if "bus0" not in gdf.columns:
+        gdf["bus0"] = None
+    if "bus1" not in gdf.columns:
+        gdf["bus1"] = None
+
+    # Apply mapping to rows where 'bus0' is None
+    gdf.loc[gdf["bus0"].isna(), "bus0"] = _map_endpoints_to_closest_region(
+        gdf[gdf["bus0"].isna()], regions, max_distance, coords=0
+    )
+
+    # Apply mapping to rows where 'bus1' is None
+    gdf.loc[gdf["bus1"].isna(), "bus1"] = _map_endpoints_to_closest_region(
+        gdf[gdf["bus1"].isna()], regions, max_distance, coords=-1
     )
 
     return gdf
@@ -143,6 +164,43 @@ def _set_underwater_fraction(links, regions_offshore):
     return links
 
 
+def _create_new_buses(gdf, regions, scope, carrier):
+    buffered_regions = (
+        regions.to_crs(CRS_DISTANCE).buffer(5000).to_crs(CRS_WGS84).union_all()
+    )
+
+    # filter all rows in gdf where at least one of the geometry linestring endings is outside unary_union(regions)
+    # create a list of Points of all linestring endings in gdf
+    list_points = list(
+        chain(*gdf.geometry.apply(lambda x: [Point(x.coords[0]), Point(x.coords[-1])]))
+    )
+    # create multipoint geometry of all points
+    list_points = MultiPoint(list_points)
+    list_points = list_points.intersection(scope.union_all())
+    # Drop all points that are within unary_union(regions) and a buffer of 5000 meters
+    list_points = list_points.difference(buffered_regions)
+
+    gdf_points = gpd.GeoDataFrame(
+        geometry=[geom for geom in list_points.geoms], crs=CRS_WGS84
+    )
+
+    # Extract x and y coordinates into separate columns
+    gdf_points["x"] = gdf_points.geometry.x
+    gdf_points["y"] = gdf_points.geometry.y
+    gdf_points["name"] = gdf_points.apply(
+        lambda x: f"PCI-PMI {int(x.name)+1} {carrier}", axis=1
+    )
+    gdf_points.set_index("name", inplace=True)
+    gdf_points["carrier"] = carrier
+    gdf_points["location"] = gdf_points.index
+
+    gdf_points["geometry"] = (
+        gdf_points.to_crs(CRS_DISTANCE).buffer(MAX_DISTANCE).to_crs(CRS_WGS84)
+    )
+
+    return gdf_points[["x", "y", "carrier", "location", "geometry"]]
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -164,6 +222,7 @@ if __name__ == "__main__":
     n = pypsa.Network(snakemake.input.network)
     regions_onshore = gpd.read_file(snakemake.input.regions_onshore).set_index("name")
     regions_offshore = gpd.read_file(snakemake.input.regions_offshore).set_index("name")
+    scope = gpd.read_file(snakemake.input.scope)
 
     logger.info("Imported network.")
 
@@ -219,10 +278,22 @@ if __name__ == "__main__":
 
     ### Hydrogen pipelines (links)
     links_hydrogen_pipeline = components["links_hydrogen_pipeline"].copy()
+
+    ## Here
+    buses_hydrogen_offshore = _create_new_buses(
+        links_hydrogen_pipeline, regions_onshore, scope, "H2"
+    )
+
+    links_hydrogen_pipeline = _map_to_closest_region(
+        links_hydrogen_pipeline,
+        buses_hydrogen_offshore,
+        max_distance=MAX_DISTANCE,
+    )
     links_hydrogen_pipeline = _map_to_closest_region(
         links_hydrogen_pipeline,
         regions_onshore,
         max_distance=MAX_DISTANCE,
+        add_suffix="H2",
     )
     links_hydrogen_pipeline = _drop_redundant_lines_links(links_hydrogen_pipeline)
     # TODO, add missing buses like in the Baltic Sea
@@ -230,6 +301,13 @@ if __name__ == "__main__":
     links_hydrogen_pipeline = _add_geometry_to_tags(links_hydrogen_pipeline)
     links_hydrogen_pipeline = _set_underwater_fraction(
         links_hydrogen_pipeline, regions_offshore
+    )
+
+    #### Add buses
+    n.madd(
+        "Bus",
+        buses_hydrogen_offshore.index,
+        **buses_hydrogen_offshore.drop(columns="geometry"),
     )
 
     if haversine_distance:
@@ -245,6 +323,12 @@ if __name__ == "__main__":
         )
 
     ### EXPORT
+    ### Buses
+    buses_pci_pmi_offshore = pd.concat([buses_hydrogen_offshore])
+    logger.info("Exporting added PCI/PMI buses to resources folder.")
+    buses_pci_pmi_offshore.to_csv(snakemake.output.buses_pci_pmi_offshore, index=True)
+
+    ### Projects
     projects = sorted(
         lines_electricity_transmission["tags"].apply(lambda x: x["pci_code"]).unique()
     )

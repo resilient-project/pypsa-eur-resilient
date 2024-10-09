@@ -12,6 +12,7 @@ https://ec.europa.eu/energy/infrastructure/transparency_platform/map-viewer/main
 import json
 import logging
 import re
+from itertools import chain
 
 import geopandas as gpd
 import numpy as np
@@ -19,9 +20,10 @@ import pandas as pd
 import pypsa
 import tqdm
 from _helpers import configure_logging, set_scenario_config
+from build_osm_network import _split_linestring_by_point
 from dateutil import parser
 from shapely.geometry import LineString, MultiLineString, Point, Polygon
-from shapely.ops import linemerge
+from shapely.ops import linemerge, snap, unary_union
 
 logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
@@ -1015,6 +1017,82 @@ def _set_params_links_hydrogen(df):
     return df
 
 
+# Function to check intersections and store valid points
+def _get_crosspoints(row, gdf):
+    """
+    tbd.
+    """
+    crosspoints = []  # List to hold intersection points
+    start_point = Point(row["geometry"].coords[0])
+    end_point = Point(row["geometry"].coords[-1])
+
+    # Create a union of all other geometries (excluding the current one)
+    other_geometries = gdf[gdf.index != row.name]["geometry"]
+    union_geometry = unary_union(other_geometries)
+
+    # Check for intersections with the union
+    intersection = row["geometry"].intersection(union_geometry)
+
+    if not intersection.is_empty:
+        if intersection.geom_type == "Point":
+            # Check if the intersection is not at the start or end point of the LineString
+            if intersection != start_point and intersection != end_point:
+                point = snap(intersection, row["geometry"], tolerance=0.01)
+                crosspoints.append(point)
+        elif intersection.geom_type == "MultiPoint":
+            # Filter points from MultiPoint geometry
+            for point in intersection.geoms:
+                if point != start_point and point != end_point:
+                    point = snap(point, row["geometry"], tolerance=0.01)
+                    crosspoints.append(point)
+
+    return crosspoints if crosspoints else []
+
+
+def _create_new_rows(row):
+    """
+    tbd.
+    """
+    # Check if the length of the split_linestrings is greater than 1
+    new_rows = []
+    entries = len(row["split_linestrings"])
+    for idx, geom in enumerate(row["split_linestrings"]):
+        # Create a new row with updated geometry and index
+        new_row = row.copy()
+        new_row["geometry"] = geom
+        if entries > 1:
+            new_row["id"] = f"{row['id']}-s{idx+1}"
+        new_rows.append(new_row)
+
+    return new_rows
+
+
+def _split_to_segments(gdf):
+    """
+    tbd.
+    """
+    logger.info("Splitting linestrings at junction points into segments.")
+    gdf = gdf.copy()
+    gdf.reset_index(inplace=True)
+    gdf["crosspoints"] = gdf.apply(lambda row: _get_crosspoints(row, gdf), axis=1)
+    gdf["split_linestrings"] = gdf.apply(
+        lambda row: _split_linestring_by_point(row["geometry"], row["crosspoints"]),
+        axis=1,
+    )
+
+    rows = gdf.apply(_create_new_rows, axis=1)
+
+    new_gdf = gpd.GeoDataFrame(list(chain(*rows)), crs=gdf.crs)
+    new_gdf.set_index("id", inplace=True)
+
+    # Update lengths
+    new_gdf["length"] = (
+        new_gdf["geometry"].to_crs(CRS_DISTANCE).length.div(1e3).round(1)
+    )
+
+    return new_gdf
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -1053,6 +1131,17 @@ if __name__ == "__main__":
         projects
     )  # Remove redundant components such as 'Polygon' geometries or already commissioned projects
 
+    # Manual fix for PCI 10.1.2, MultiLineString that contains 'messy' linestrings. Remove all short stubs
+    projects.loc[projects["pci_code"] == "10.1.2", "geometry"] = MultiLineString(
+        [
+            line
+            for line in projects.loc[projects["pci_code"] == "10.1.2", "geometry"]
+            .values[0]
+            .geoms
+            if line.length > 1000
+        ]
+    )
+
     projects = pd.concat(
         projects.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
     )  # Split MultiLineStrings into LineStrings
@@ -1081,6 +1170,11 @@ if __name__ == "__main__":
     )
 
     components["links_hydrogen_pipeline"] = _set_params_links_hydrogen(
+        components["links_hydrogen_pipeline"]
+    )
+
+    # Split linestrings into segments if they are touched by others
+    components["links_hydrogen_pipeline"] = _split_to_segments(
         components["links_hydrogen_pipeline"]
     )
 
