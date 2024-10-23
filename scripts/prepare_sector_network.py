@@ -4794,7 +4794,8 @@ if __name__ == "__main__":
     if not options["electricity_transmission_grid"]:
         decentral(n)
 
-    if not options["H2_network"] and not (
+    # Remove H2 network if deactivated or PCI/PMI projects are included (overwrites H2 network)
+    if not options["H2_network"] or (
         pci_pmi_projects.get("enable", False)
         and pci_pmi_projects.get("include", {}).get("links_hydrogen_pipeline", False)
     ):
