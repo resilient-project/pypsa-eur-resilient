@@ -1239,6 +1239,9 @@ if config["pci-pmi-projects"]["enable"]:
             links_hydrogen_pipeline=resources(
                 "pci-pmi-projects/links_hydrogen_pipeline_s_{clusters}_l{ll}_{opts}.csv"
             ),
+            # links_co2_pipeline=resources(
+            #     "pci-pmi-projects/links_co2_pipeline_s_{clusters}_l{ll}_{opts}.csv"
+            # ),
         log:
             logs("build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}.log"),
         benchmark:

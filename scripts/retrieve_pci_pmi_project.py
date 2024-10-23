@@ -10,9 +10,7 @@ https://ec.europa.eu/energy/infrastructure/transparency_platform/map-viewer/main
 
 import json
 import logging
-import os
 
-import pandas as pd
 import requests
 from _helpers import configure_logging, set_scenario_config
 

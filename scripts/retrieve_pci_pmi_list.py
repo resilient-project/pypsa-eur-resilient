@@ -8,7 +8,6 @@ Retrieve PCI and PMI project list and codes from PDF annex.
 https://energy.ec.europa.eu/document/download/3db5e3d1-9989-4d10-93e3-67f5b9ad9103_en?filename=Annex%20PCI%20PMI%20list.pdf
 """
 
-import json
 import logging
 import re
 

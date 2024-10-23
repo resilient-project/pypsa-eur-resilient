@@ -28,6 +28,7 @@ from shapely.geometry import (
     Point,
     Polygon,
 )
+from shapely.ops import snap
 
 logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
@@ -201,6 +202,28 @@ def _create_new_buses(gdf, regions, scope, carrier):
     return gdf_points[["x", "y", "carrier", "location", "geometry"]]
 
 
+# def _find_overpassing_regions(link, regions):
+#     link["link_index"] = link.index
+#     regions["region_index"] = regions.index
+#     overlap = gpd.overlay(link, regions)
+
+
+#     overlap["center_point"] = overlap["geometry"].apply(
+#         lambda l: l.interpolate(l.length / 2)
+#     )
+
+#     overlap["on_point"] = overlap.apply(
+#         lambda row: nearest_points(row["center_point"], row["geometry"])[1],
+#         axis=1
+#     )
+#     overlap["on_point"].crs=CRS_WGS84
+
+#     link_segments = [l for l in overlap.geometry]
+#     regions = [r for r in overlap.region_index]
+
+#     return overpassing_regions
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -296,21 +319,23 @@ if __name__ == "__main__":
         add_suffix="H2",
     )
     links_hydrogen_pipeline = _drop_redundant_lines_links(links_hydrogen_pipeline)
-    # TODO, add missing buses like in the Baltic Sea
-    # TODO split pipelines into segments if they are touched by other pipelines
     links_hydrogen_pipeline = _add_geometry_to_tags(links_hydrogen_pipeline)
     links_hydrogen_pipeline = _set_underwater_fraction(
         links_hydrogen_pipeline, regions_offshore
     )
+    # TODO: Split pipeline into segments, if they overpass multiple regions
 
-    #### Add buses
-    n.madd(
-        "Bus",
-        buses_hydrogen_offshore.index,
-        **buses_hydrogen_offshore.drop(columns="geometry"),
-    )
+    ### CO2 pipelines (links)
+    # links_co2_pipeline = components["links_co2_pipeline"].copy()
 
+    # Recalculate length/distances if activated
     if haversine_distance:
+        n.madd(
+            "Bus",
+            buses_hydrogen_offshore.index,
+            **buses_hydrogen_offshore.drop(columns="geometry"),
+        )
+
         logger.info("Recalculating line lengths with haversine distance.")
         lines_electricity_transmission = _calculate_haversine_distance(
             n, lines_electricity_transmission, line_length_factor
