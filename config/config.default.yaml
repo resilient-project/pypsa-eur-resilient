@@ -136,15 +136,19 @@ pci-pmi-projects:
   include:
     lines_electricity_transmission: true
     links_electricity_transmission: true
+    links_hydrogen_pipeline: true
+    links_co2_pipeline: true
+    storage_units_hydrogen: true
+    stores_co2: true
   lines:
     s_max_pu: 0.7
     s_nom_max: .inf
-    s_nom_extendable: true
+    s_nom_extendable: false
     max_extension: 20000 #MW
   links:
     p_max_pu: 1.0
     p_nom_max: .inf
-    p_nom_extendable: true
+    p_nom_extendable: false
     max_extension: 30000 #MW
 
 
