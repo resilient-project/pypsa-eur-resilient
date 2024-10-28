@@ -85,6 +85,7 @@ COLUMNS_STORAGE_UNITS = [
     "build_year",
     "p_nom",
     "max_hours",
+    "carrier",
     "tags",
     "geometry",
 ]
@@ -92,6 +93,7 @@ COLUMNS_STORES = [
     "project_status",
     "build_year",
     "e_nom_max",
+    "carrier",
     "tags",
     "geometry",
 ]
@@ -176,6 +178,8 @@ CARRIER_MAPPING = {
     "links_gas_pipeline": "gas",
     "links_hydrogen_pipeline": "H2 pipeline",
     "links_offshore_grids": "DC",
+    "storage_units_hydrogen": "H2",
+    "stores_co2": "CO2",
 }
 
 LINE_TYPES_MAPPING = {

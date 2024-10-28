@@ -2541,7 +2541,7 @@ def add_biomass(n, costs):
     if options["regional_oil_demand"]:
         unsustainable_liquid_biofuel_potentials_spatial = biomass_potentials[
             "unsustainable bioliquids"
-        ].rename(index=lambda x: x + " bioliquids")
+        ].rename(index=lambda x: x + " unsustainable bioliquids")
     else:
         unsustainable_liquid_biofuel_potentials_spatial = biomass_potentials[
             "unsustainable bioliquids"
@@ -4521,7 +4521,7 @@ def _add_pci_pmi_lines(
 
     # Only add projects that are built before / up until the investment year
     projects = projects[projects["build_year"] <= investment_year]
-    n.madd("Line", projects.index, **projects)
+    n.add("Line", projects.index, **projects)
 
     # Set additional line params:
 
@@ -4567,7 +4567,7 @@ def _add_pci_pmi_links_electricity(
 
     # Only add projects that are built before / up until the investment year
     projects = projects[projects["build_year"] <= investment_year]
-    n.madd("Link", projects.index, **projects)
+    n.add("Link", projects.index, **projects)
 
     # Set additional link params:
 
@@ -4617,7 +4617,7 @@ def _add_pci_pmi_links_hydrogen(
     logger.info("Adding additional PCI/PMI offshore hydrogen buses.")
     buses = pd.read_csv(buses_path, index_col=0, dtype={"bus0": str, "bus1": str})
 
-    n.madd(
+    n.add(
         "Bus",
         buses.index,
         **buses.drop(columns="geometry"),
@@ -4630,7 +4630,7 @@ def _add_pci_pmi_links_hydrogen(
 
     # Only add projects that are built before / up until the investment year
     projects = projects[projects["build_year"] <= investment_year]
-    n.madd(
+    n.add(
         "Link",
         projects.index,
         bus0=projects.bus0.values,
@@ -4675,7 +4675,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "prepare_sector_network",
             opts="",
-            clusters="256",
+            clusters="90",
             ll="vopt",
             sector_opts="",
             planning_horizons="2030",
@@ -4793,9 +4793,22 @@ if __name__ == "__main__":
 
     if not options["electricity_transmission_grid"]:
         decentral(n)
+    ### HERE
+
+    # Extras settings PCI-PMI
+    # only national extendability of p_nom for hydrogen and CO2
+    if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get("extras").get(
+        "only_national_p_nom_extendable"
+    ):
+        bool_international_connection = n.links.apply(
+            lambda row: (row["bus0"].split(" ")[0] != row["bus1"].split(" ")[0])
+            and (row["carrier"] == "H2 pipeline"),
+            axis=1,
+        )
+        n.links.loc[bool_international_connection, "p_nom_extendable"] = False
 
     # Remove H2 network if deactivated or PCI/PMI projects are included (overwrites H2 network)
-    if not options["H2_network"] or (
+    if not options["H2_network"] and not (
         pci_pmi_projects.get("enable", False)
         and pci_pmi_projects.get("include", {}).get("links_hydrogen_pipeline", False)
     ):

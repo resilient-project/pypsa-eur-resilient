@@ -21,7 +21,7 @@ import tqdm
 from _helpers import configure_logging, set_scenario_config
 from clean_pci_pmi_projects import _split_multilinestring
 from pypsa.geo import haversine_pts  # to recalculate crow-flies distance
-from shapely import segmentize
+from shapely import segmentize, unary_union
 from shapely.algorithms.polylabel import polylabel
 from shapely.geometry import MultiPoint, Point
 from shapely.ops import nearest_points
@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 DISTANCE_CRS = "EPSG:3035"
 GEO_CRS = "EPSG:4326"
 OFFSHORE_BUS_RADIUS = 5000
+CLUSTER_TOL = 25000
 
 COLUMNS_LINES = [
     "bus0",
@@ -45,7 +46,6 @@ COLUMNS_LINES = [
     "type",
     "tags",
 ]
-
 COLUMNS_LINKS = [
     "bus0",
     "bus1",
@@ -56,12 +56,34 @@ COLUMNS_LINKS = [
     "underwater_fraction",
     "tags",
 ]
+COLUMNS_STORAGE_UNITS = [
+    "bus",
+    "build_year",
+    "p_nom",
+    "max_hours",
+    "carrier",
+    "tags",
+]
+COLUMNS_STORES = [
+    "bus",
+    "build_year",
+    "e_nom_max",
+    "carrier",
+    "tags",
+]
 
 
 def _map_endpoints_to_closest_region(
-    gdf, regions, max_distance=OFFSHORE_BUS_RADIUS, coords=0
+    gdf,
+    regions,
+    max_distance=OFFSHORE_BUS_RADIUS,
+    coords=0,
+    lines=True,
 ):
-    gdf_points = gdf.geometry.apply(lambda x: Point(x.coords[coords]))
+    if lines:
+        gdf_points = gdf.geometry.apply(lambda x: Point(x.coords[coords]))
+    else:
+        gdf_points = gdf.geometry
 
     gdf_points = gpd.GeoDataFrame(geometry=gdf_points, crs=GEO_CRS)
     # Spatial join nearest with regions
@@ -78,7 +100,7 @@ def _map_endpoints_to_closest_region(
         lambda x: x.geometry_point.distance(x.geometry_region), axis=1
     )
 
-    bool_too_far = gdf_points["distance"] > OFFSHORE_BUS_RADIUS
+    bool_too_far = gdf_points["distance"] > max_distance
     gdf_points.loc[bool_too_far, "name"] = None
 
     return gdf_points["name"]
@@ -107,6 +129,33 @@ def _map_to_closest_region(
     # Apply mapping to rows where 'bus1' is None
     gdf.loc[gdf["bus1"].isna(), "bus1"] = _map_endpoints_to_closest_region(
         gdf[gdf["bus1"].isna()], regions, max_distance, coords=-1
+    )
+
+    return gdf
+
+
+def _map_points_to_closest_region(
+    gdf,
+    regions,
+    max_distance=OFFSHORE_BUS_RADIUS,
+    add_suffix=None,
+    distance_crs=DISTANCE_CRS,
+    geo_crs=GEO_CRS,
+):
+    # Change name of index in regions to "bus"
+    regions = regions.copy()
+    if add_suffix:
+        regions.index = regions.index + " " + add_suffix
+
+    if "bus" not in gdf.columns:
+        gdf["bus"] = None
+
+    gdf.loc[gdf["bus"].isna(), "bus"] = _map_endpoints_to_closest_region(
+        gdf[gdf["bus"].isna()],
+        regions,
+        max_distance,
+        coords=0,
+        lines=False,
     )
 
     return gdf
@@ -175,7 +224,10 @@ def _create_new_buses(
     tol=OFFSHORE_BUS_RADIUS,
 ):
     buffered_regions = (
-        regions.to_crs(distance_crs).buffer(30000).to_crs(geo_crs).union_all()
+        regions.to_crs(distance_crs)
+        .buffer(5000)
+        .to_crs(geo_crs)
+        .union_all()  # Coastal buffer
     )
 
     # filter all rows in gdf where at least one of the geometry linestring endings is outside unary_union(regions)
@@ -315,6 +367,57 @@ def _set_unique_index(gdf):
     return gdf
 
 
+def _cluster_close_buses(
+    gdf, tol=CLUSTER_TOL, distance_crs=DISTANCE_CRS, geo_crs=GEO_CRS
+):
+    prefix = gdf.index[0].split(" ")[0]
+    suffix = gdf.index[0].split(" ")[-1]
+    carrier = gdf["carrier"].iloc[0]
+
+    logger.info(f"Clustering close PCI (offshore) buses within {tol} m.")
+
+    gdf.to_crs(distance_crs, inplace=True)
+    gdf["cluster_buffer"] = gdf["geometry"].buffer(tol)
+
+    cluster_union = gdf["cluster_buffer"].union_all()
+    gdf_clusters = gpd.GeoDataFrame(
+        geometry=list(cluster_union.geoms),
+        crs=distance_crs,
+    )
+
+    # spatial join
+    gdf = gpd.sjoin(gdf, gdf_clusters, how="left", predicate="intersects")
+
+    # Group by index_right
+    gdf = gdf.groupby("index_right").agg(
+        {
+            "geometry": lambda x: unary_union(x).convex_hull,
+            "carrier": "first",
+        }
+    )
+
+    gdf = gpd.GeoDataFrame(gdf, geometry="geometry", crs=distance_crs)
+
+    gdf["poi"] = gdf.apply(
+        lambda x: polylabel(x["geometry"], tolerance=tol / 2), axis=1
+    )
+    gdf["poi"].crs = distance_crs
+
+    gdf["geometry"] = gdf["geometry"].to_crs(geo_crs)
+    gdf["poi"] = gdf["poi"].to_crs(geo_crs)
+    gdf.to_crs(geo_crs, inplace=True)
+
+    gdf["x"] = gdf["poi"].x
+    gdf["y"] = gdf["poi"].y
+
+    gdf["name"] = prefix + " " + (gdf.index + 1).astype(str) + " " + suffix
+    gdf["carrier"] = carrier
+    gdf["location"] = gdf.index
+    gdf.set_index("name", inplace=True)
+
+    return gdf[["x", "y", "carrier", "location", "geometry"]]
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -322,7 +425,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "build_pci_pmi_projects",
             ll="vopt",
-            clusters=256,
+            clusters=90,
             opts="",
         )
 
@@ -399,6 +502,11 @@ if __name__ == "__main__":
     buses_hydrogen_offshore = _create_new_buses(
         links_hydrogen_pipeline, regions_onshore, scope, "H2"
     )
+    buses_hydrogen_offshore = _cluster_close_buses(
+        buses_hydrogen_offshore, tol=CLUSTER_TOL
+    )
+
+    # gpd.GeoDataFrame(geometry=buses_hydrogen_offshore.apply(lambda row: Point(row["x"], row["y"]), axis=1), crs=GEO_CRS).explore(m=map, color="purple")
 
     links_hydrogen_pipeline = _split_to_overpassing_segments(
         links_hydrogen_pipeline,
@@ -429,6 +537,7 @@ if __name__ == "__main__":
     buses_co2_offshore = _create_new_buses(
         links_co2_pipeline, regions_onshore, scope, "CO2", tol=OFFSHORE_BUS_RADIUS
     )
+    buses_co2_offshore = _cluster_close_buses(buses_co2_offshore, tol=CLUSTER_TOL)
 
     links_co2_pipeline = _split_to_overpassing_segments(
         links_co2_pipeline,
@@ -439,12 +548,14 @@ if __name__ == "__main__":
         links_co2_pipeline,
         buses_co2_offshore,
         max_distance=OFFSHORE_BUS_RADIUS,
+        add_suffix="",
     )
 
     links_co2_pipeline = _map_to_closest_region(
         links_co2_pipeline,
         regions_onshore,
-        max_distance=OFFSHORE_BUS_RADIUS,
+        max_distance=OFFSHORE_BUS_RADIUS * 4,
+        add_suffix="CO2",
     )
 
     links_co2_pipeline = _drop_redundant_lines_links(links_co2_pipeline)
@@ -452,7 +563,41 @@ if __name__ == "__main__":
     links_co2_pipeline = _set_underwater_fraction(links_co2_pipeline, regions_offshore)
     links_co2_pipeline = _set_unique_index(links_co2_pipeline)
 
-    # export to geojson
+    ### Map stores and storage units
+    components["storage_units_hydrogen"] = _map_points_to_closest_region(
+        components["storage_units_hydrogen"],
+        regions_onshore,
+        max_distance=OFFSHORE_BUS_RADIUS,
+    )
+
+    components["stores_co2"] = _map_points_to_closest_region(
+        components["stores_co2"],
+        buses_co2_offshore,
+        max_distance=CLUSTER_TOL * 2,
+    )
+    components["stores_co2"] = _map_points_to_closest_region(
+        components["stores_co2"],
+        regions_onshore,
+        max_distance=CLUSTER_TOL * 2,
+        add_suffix="CO2",
+    )
+
+    ## DEBUG
+    map = None
+    map = regions_onshore.explore(m=map, color="grey")
+    map = buses_hydrogen_offshore.explore(m=map)
+    map = links_hydrogen_pipeline[["bus0", "bus1", "geometry"]].explore(
+        m=map, color="red"
+    )
+    map = components["storage_units_hydrogen"].explore(m=map, color="green")
+    map
+
+    map = None
+    map = regions_onshore.explore(m=map, color="grey")
+    map = buses_co2_offshore.explore(m=map)
+    map = links_co2_pipeline[["bus0", "bus1", "geometry"]].explore(m=map, color="red")
+    map = components["stores_co2"].explore(m=map, color="green")
+    map
 
     # Recalculate length/distances if activated
     if haversine_distance:

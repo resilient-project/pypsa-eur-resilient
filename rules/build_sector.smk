@@ -1243,6 +1243,12 @@ if config["pci-pmi-projects"]["enable"]:
             links_co2_pipeline=resources(
                 "pci-pmi-projects/links_co2_pipeline_s_{clusters}_l{ll}_{opts}.csv"
             ),
+            storage_units_hydrogen=resources(
+                "pci-pmi-projects/storage_units_hydrogen_s_{clusters}_l{ll}_{opts}.csv"
+            ),
+            stores_co2=resources(
+                "pci-pmi-projects/stores_co2_s_{clusters}_l{ll}_{opts}.csv"
+            ),
         log:
             logs("build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}.log"),
         benchmark:

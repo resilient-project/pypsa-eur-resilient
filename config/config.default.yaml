@@ -150,6 +150,8 @@ pci-pmi-projects:
     p_nom_max: .inf
     p_nom_extendable: false
     max_extension: 30000 #MW
+  extras:
+    only_national_p_nom_extendable: true
 
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
