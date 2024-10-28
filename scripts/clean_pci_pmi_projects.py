@@ -1127,6 +1127,7 @@ if __name__ == "__main__":
 
     country_shapes = gpd.read_file(snakemake.input.country_shapes).set_index("name")
     json_files = snakemake.input.projects
+    fixes = snakemake.input.fix
 
     # Read params for storage units
     params_stores_co2 = pd.read_csv(
@@ -1145,6 +1146,11 @@ if __name__ == "__main__":
 
     # INITIALISATION OF PROJECTS
     projects = _import_projects(json_files)  # Import projects from JSON files
+    projects_fixes = _import_projects(fixes)  # Import fixes from CSV files
+    projects_fixes.PCI_CODE.unique()
+    # Overwrite projects with fixes, if the pci_code is in both
+    projects = projects[~projects["PCI_CODE"].isin(projects_fixes["PCI_CODE"].unique())]
+    projects = pd.concat([projects, projects_fixes], ignore_index=True)
 
     projects = _clean_columns(projects)
     projects = _assign_project_types(

@@ -1,0 +1,1452 @@
+[
+  {
+    "layerId": 1,
+    "layerName": "CO2 injection and surface facilities",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "686",
+      "INFRA": "34",
+      "SHAPE": "Point",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS"
+    },
+    "geometryType": "esriGeometryPoint",
+    "geometry": {
+      "x": 383314.04360000044,
+      "y": 8529206.662600003,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 3,
+    "layerName": "CO2 liquefaction and buffer storage",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "685",
+      "INFRA": "24",
+      "SHAPE": "Point",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS"
+    },
+    "geometryType": "esriGeometryPoint",
+    "geometry": {
+      "x": 543715.3398999982,
+      "y": 8524233.4644,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "972",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "1429990.524756"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            383314.04360000044,
+            8529206.662600003
+          ],
+          [
+            382445.5762999989,
+            8622170.951200001
+          ],
+          [
+            386701.3055999987,
+            8712146.3301
+          ],
+          [
+            402099.40630000085,
+            8798922.8913
+          ],
+          [
+            435341.7681000009,
+            8872015.5942
+          ],
+          [
+            523851.59690000117,
+            8974766.288099997
+          ],
+          [
+            651872.4310999997,
+            9102627.217
+          ],
+          [
+            724073.0802000016,
+            9166690.733900003
+          ],
+          [
+            817679.4671999998,
+            9236777.221500002
+          ],
+          [
+            849770.4013999999,
+            9279244.323799998
+          ],
+          [
+            884305.5302999988,
+            9312845.1721
+          ],
+          [
+            908648.435899999,
+            9337095.8459
+          ],
+          [
+            938851.1739000008,
+            9348742.976599999
+          ],
+          [
+            985711.993900001,
+            9338758.541599996
+          ],
+          [
+            1030917.8202,
+            9304958.356200002
+          ],
+          [
+            1081074.0987000018,
+            9262099.391400002
+          ],
+          [
+            1102410.4580999985,
+            9229910.312299997
+          ],
+          [
+            1128877.8104999997,
+            9217401.010399997
+          ],
+          [
+            1165982.7479000017,
+            9227949.992899999
+          ],
+          [
+            1239638.6920000017,
+            9300746.956
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "973",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "645200.371888"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            1030917.8202,
+            9304958.356200002
+          ],
+          [
+            1042692.9996999986,
+            9379556.410300002
+          ],
+          [
+            1058353.9959999993,
+            9454974.291000001
+          ],
+          [
+            1096556.8297999986,
+            9477344.264799997
+          ],
+          [
+            1135005.9547000006,
+            9503312.556900002
+          ],
+          [
+            1153601.9444000013,
+            9549876.884400003
+          ],
+          [
+            1170596.8403000012,
+            9598610.911300004
+          ],
+          [
+            1189653.7773999982,
+            9643839.4335
+          ],
+          [
+            1220041.8236000016,
+            9675812.434100002
+          ],
+          [
+            1263543.2833000012,
+            9690350.669100001
+          ],
+          [
+            1293690.1163999997,
+            9691609.103699997
+          ],
+          [
+            1422716.0901000015,
+            9714280.5814
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "974",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "654550.105862"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            1422716.0901000015,
+            9714280.5814
+          ],
+          [
+            1312043.7928000018,
+            9742956.241099998
+          ],
+          [
+            1263010.1506000012,
+            9755641.671800002
+          ],
+          [
+            1244375.7166000009,
+            9775304.150700003
+          ],
+          [
+            1247178.8762000017,
+            9823794.114500001
+          ],
+          [
+            1263610.4816999994,
+            9876299.580700003
+          ],
+          [
+            1303989.3487000018,
+            9942485.169699997
+          ],
+          [
+            1380584.884300001,
+            10009935.783600003
+          ],
+          [
+            1442523.4816000015,
+            10029572.965800002
+          ],
+          [
+            1466565.4957000017,
+            10036534.934600003
+          ],
+          [
+            1554652.0086999983,
+            10021865.710699998
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "975",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "1859707.753654"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            1325785.6026999988,
+            7903358.627999999
+          ],
+          [
+            1310680.2459000014,
+            7896179.7168999985
+          ],
+          [
+            1283022.2833999991,
+            7896115.691100001
+          ],
+          [
+            1263945.0954999998,
+            7906627.883000001
+          ],
+          [
+            1243928.4299999997,
+            7932795.332999997
+          ],
+          [
+            1238564.1636999995,
+            7962224.275700003
+          ],
+          [
+            1242852.867899999,
+            7989096.200099997
+          ],
+          [
+            1251925.7769000009,
+            8012244.077399999
+          ],
+          [
+            1275138.9138000011,
+            8026273.654100001
+          ],
+          [
+            1244906.7102000006,
+            8029582.593699999
+          ],
+          [
+            1206128.5491000004,
+            8053746.418300003
+          ],
+          [
+            1188544.083900001,
+            8092528.795299999
+          ],
+          [
+            1181108.2802000009,
+            8166159.479000002
+          ],
+          [
+            1200222.5381999984,
+            8362461.240400001
+          ],
+          [
+            1177723.0346999988,
+            8248798.337899998
+          ],
+          [
+            1162678.1438000016,
+            8158086.6329
+          ],
+          [
+            1148211.5058999993,
+            8117250.414999999
+          ],
+          [
+            1129889.705600001,
+            8088805.412299998
+          ],
+          [
+            1111699.620099999,
+            8082729.001400001
+          ],
+          [
+            1099549.0823,
+            8101014.237000003
+          ],
+          [
+            1089247.4120000005,
+            8158205.582699999
+          ],
+          [
+            1081620.8084999993,
+            8191687.208300002
+          ],
+          [
+            1077251.0905000009,
+            8107053.226300001
+          ],
+          [
+            1073600.3937,
+            8030025.366999999
+          ],
+          [
+            1069975.7829999998,
+            7961774.670500003
+          ],
+          [
+            1036778.3247999996,
+            7901835.045699999
+          ],
+          [
+            964762.4893000014,
+            7851435.491800003
+          ],
+          [
+            902826.3869000003,
+            7822525.120999999
+          ],
+          [
+            835169.9930000007,
+            7802811.922700003
+          ],
+          [
+            770529.4171000011,
+            7810072.832000002
+          ],
+          [
+            685297.9963999987,
+            7868882.4353
+          ],
+          [
+            618883.3027000017,
+            7922520.706
+          ],
+          [
+            581614.2714999989,
+            7974042.2102999985
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "976",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "2872597.093902"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            2857066.160799999,
+            8487489.2289
+          ],
+          [
+            2828044.9450000003,
+            8422924.693099998
+          ],
+          [
+            2788107.6459,
+            8392577.565899998
+          ],
+          [
+            2661828.7074000016,
+            8357333.849200003
+          ],
+          [
+            2383996.7639000006,
+            8283251.960500002
+          ],
+          [
+            2135604.5199000016,
+            8262056.5189
+          ],
+          [
+            2039521.9186999984,
+            8268537.775200002
+          ],
+          [
+            2100264.8597999997,
+            8239825.655100003
+          ],
+          [
+            2138772.0309000015,
+            8219965.041599996
+          ],
+          [
+            2145825.9976999983,
+            8197778.049800001
+          ],
+          [
+            2145358.0418,
+            8153263.026000001
+          ],
+          [
+            2122945.8647000007,
+            8112046.524599999
+          ],
+          [
+            2034273.1561000012,
+            8008648.351899996
+          ],
+          [
+            1974133.1306999996,
+            7905018.848399997
+          ],
+          [
+            1945722.6237999983,
+            7826790.861299999
+          ],
+          [
+            1928267.8227000013,
+            7773605.470399998
+          ],
+          [
+            1922683.4045000002,
+            7665362.420299999
+          ],
+          [
+            1905309.6523999982,
+            7571261.388999999
+          ],
+          [
+            1887999.7210999988,
+            7531169.521700002
+          ],
+          [
+            1839882.0273000002,
+            7501676.8103
+          ],
+          [
+            1765927.7404000014,
+            7472315.861199997
+          ],
+          [
+            1693285.6920000017,
+            7445937.676899999
+          ],
+          [
+            1640242.4178999998,
+            7422728.564199999
+          ],
+          [
+            1617312.3018999994,
+            7401501.2654
+          ],
+          [
+            1569063.1675999984,
+            7370405.063199997
+          ],
+          [
+            1522195.1864,
+            7356301.516500004
+          ],
+          [
+            1485449.9092999995,
+            7358095.161499999
+          ],
+          [
+            1440186.7380000018,
+            7376710.978299998
+          ],
+          [
+            1405794.2740000002,
+            7394717.315899998
+          ],
+          [
+            1395711.360199999,
+            7422951.3955999985
+          ],
+          [
+            1403951.8079000004,
+            7445025.792599998
+          ],
+          [
+            1419476.048700001,
+            7461265.766199999
+          ],
+          [
+            1427375.0482,
+            7472192.650399998
+          ],
+          [
+            1433812.4666000009,
+            7492574.441100001
+          ],
+          [
+            1423336.7060999982,
+            7511798.156999998
+          ],
+          [
+            1412521.2434,
+            7523519.336800002
+          ],
+          [
+            1404394.6290000007,
+            7542578.297700003
+          ],
+          [
+            1409947.922699999,
+            7559987.439000003
+          ],
+          [
+            1403690.7591999993,
+            7572664.525899999
+          ],
+          [
+            1390815.9816999994,
+            7584772.494499996
+          ],
+          [
+            1361230.5258000009,
+            7607642.5842999965
+          ],
+          [
+            1331929.1319999993,
+            7646729.505099997
+          ],
+          [
+            1315555.9913999997,
+            7677884.746600002
+          ],
+          [
+            1292521.1020999998,
+            7717983.449000001
+          ],
+          [
+            1279518.6871999986,
+            7740541.556900002
+          ],
+          [
+            1278187.0399000011,
+            7768749.844999999
+          ],
+          [
+            1282835.5003999993,
+            7798526.82
+          ],
+          [
+            1297758.5788000003,
+            7834082.376800001
+          ],
+          [
+            1316754.6966000013,
+            7893253.568400003
+          ],
+          [
+            1325785.6026999988,
+            7903358.627999999
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "977",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "767189.943312"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            1082483.8680999987,
+            7097207.957400002
+          ],
+          [
+            936587.8907000013,
+            7174691.023400001
+          ],
+          [
+            901083.0980999991,
+            7191426.345399998
+          ],
+          [
+            840281.9985999987,
+            7230341.825599998
+          ],
+          [
+            800581.4618000016,
+            7272595.023500003
+          ],
+          [
+            751405.8936999999,
+            7332396.328400001
+          ],
+          [
+            716902.6114999987,
+            7388953.672200002
+          ],
+          [
+            689006.8638999984,
+            7443350.604199998
+          ],
+          [
+            656674.7910000011,
+            7518995.761200003
+          ],
+          [
+            635484.8176000006,
+            7588827.109399997
+          ],
+          [
+            619619.4387000017,
+            7659599.806199998
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "978",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "716455.7538"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            759654.1125999987,
+            7066269.389899999
+          ],
+          [
+            758858.0729999989,
+            7110936.8583
+          ],
+          [
+            761578.7655000016,
+            7136562.435599998
+          ],
+          [
+            792942.9644999988,
+            7158092.8429000005
+          ],
+          [
+            847934.8924999982,
+            7164146.552100003
+          ],
+          [
+            893254.7322999984,
+            7132309.360200003
+          ],
+          [
+            980650.9646999985,
+            6996995.247100003
+          ],
+          [
+            949310.0588000007,
+            7060271.785499997
+          ],
+          [
+            934153.2382000014,
+            7099956.329400003
+          ],
+          [
+            924563.8247999996,
+            7122472.5282000005
+          ],
+          [
+            924030.8269999996,
+            7145278.557800002
+          ],
+          [
+            933751.7947999984,
+            7155947.178000003
+          ],
+          [
+            949603.5106000006,
+            7156484.811300002
+          ],
+          [
+            964243.9794999994,
+            7150082.960100003
+          ],
+          [
+            1082483.8680999987,
+            7097207.957400002
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "979",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "655022.556678"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            12020.779599998146,
+            6359153.439099997
+          ],
+          [
+            1989.2670999988914,
+            6360024.204499997
+          ],
+          [
+            -5089.000999998301,
+            6368888.7097999975
+          ],
+          [
+            -6240.5703999996185,
+            6380218.3992
+          ],
+          [
+            -2360.955299999565,
+            6397248.038999997
+          ],
+          [
+            17949.387699998915,
+            6419130.689000003
+          ],
+          [
+            50033.09670000151,
+            6438932.472599998
+          ],
+          [
+            83535.3676000014,
+            6481692.594999999
+          ],
+          [
+            120945.45809999853,
+            6551170.2368
+          ],
+          [
+            141353.78819999844,
+            6593844.767800003
+          ],
+          [
+            171170.8850999996,
+            6625142.532499999
+          ],
+          [
+            204397.4059999995,
+            6644833.454700001
+          ],
+          [
+            226969.9050000012,
+            6651581.1401999965
+          ],
+          [
+            246731.26330000162,
+            6645534.943300001
+          ],
+          [
+            264551.5491000004,
+            6627960.347499996
+          ],
+          [
+            261304.2787999995,
+            6652618.619199999
+          ],
+          [
+            272070.07079999894,
+            6684947.485600002
+          ],
+          [
+            301528.7879999988,
+            6705653.909999996
+          ],
+          [
+            343754.4387000017,
+            6702634.795599997
+          ],
+          [
+            368833.04089999944,
+            6682729.735399999
+          ],
+          [
+            392893.54129999876,
+            6655610.107799999
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "980",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "254356.815118"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            392893.54129999876,
+            6655610.107799999
+          ],
+          [
+            358878.5995000005,
+            6721459.2641
+          ],
+          [
+            350910.22989999875,
+            6738135.4023
+          ],
+          [
+            346150.5313999988,
+            6758063.738899998
+          ],
+          [
+            361340.5925000012,
+            6764110.646200001
+          ],
+          [
+            385465.9631000012,
+            6753440.945799999
+          ],
+          [
+            464664.43140000105,
+            6694806.500200003
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "981",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "1035853.117894"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            464664.43140000105,
+            6694806.500200003
+          ],
+          [
+            394761.2998000011,
+            6764574.3901999965
+          ],
+          [
+            384583.0700000003,
+            6806295.090000004
+          ],
+          [
+            390496.5566000007,
+            6870545.6954
+          ],
+          [
+            410485.882100001,
+            6940489.767499998
+          ],
+          [
+            448911.8077000007,
+            7048457.345700003
+          ],
+          [
+            501537.8445000015,
+            7196701.851099998
+          ],
+          [
+            538540.4675000012,
+            7266308.970899999
+          ],
+          [
+            564304.4444999993,
+            7328656.735200003
+          ],
+          [
+            582470.7923000008,
+            7365880.2064
+          ],
+          [
+            606913.3559999987,
+            7459606.778099999
+          ],
+          [
+            619619.4387000017,
+            7659599.806199998
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 4,
+    "layerName": "CO2 shipping route",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "982",
+      "INFRA": "20",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "919762.198104"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            619619.4387000017,
+            7659599.806199998
+          ],
+          [
+            595641.8665999994,
+            7870051.759499997
+          ],
+          [
+            579698.8827,
+            7973913.088600002
+          ],
+          [
+            565741.3313000016,
+            8057648.219899997
+          ],
+          [
+            540618.7454000004,
+            8196725.437100001
+          ],
+          [
+            502585.4545000009,
+            8344228.692000002
+          ],
+          [
+            466195.1570999995,
+            8438489.560599998
+          ],
+          [
+            424691.1656000018,
+            8491296.2562
+          ],
+          [
+            383314.04360000044,
+            8529206.662600003
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  },
+  {
+    "layerId": 5,
+    "layerName": "CO2 pipeline",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "13.13",
+    "attributes": {
+      "OBJECTID": "971",
+      "INFRA": "19",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "13.13",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1050",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PMI",
+      "CLUSTER_CODE": "n/a",
+      "SECTOR_ABBREVIATION": "C",
+      "CORRIDOR_CODE": "CO2 network",
+      "CORRIDOR_NUMBER": "25",
+      "PROJECT_FICHE_SHORT_TITLE": "Northern Lights European CO2 Transport EcoSystem (N-LiTES)",
+      "PROJECT_FULL_TITLE": "Northern Lights \u2013 a CO2 cross-border connection project between several European capture initiatives (among others Belgium, Germany, Ireland, France, Sweden) transport by ship to storage on the Norwegian continental shelf",
+      "TECHNICAL_DESCR": "<p>CO2 transport connection project between several European capture initiatives and the storage site on the Norwegian Continental Shelf, as well as providing alternative storage to other CCS projects.<br />\n<br />\nThis PMI involves promoters in Norway and several Member States (France, Belgium, Netherlands, Germany, Sweden). The N-LiTES storage site is located offshore Norway, and the CO2 receiving terminal is at the Energy Park located in the &Oslash;ygarden municipality, west of Bergen, Norway. The pipeline from the CO2 receiving terminal to the storage site is about 100 km long.&nbsp;<br />\n<br />\nThe project is developed in two stages:</p>\n\n<p>Phase 1 (outside the scope of this PMI): Capacity to transport, inject and store up to 1.5 Mt/y CO2, where ca. 800 ktpa reserved for the two capture projects in the Longship. Construction of both on- and offshore facilities commenced in 2021, and Phase 1 is planned to be ready for operations in 2024.</p>\n\n<p>Phase 2: This phase will allow for expansion of the CO2 transport, onshore handling and offshore storage capacity to up to 5 Mt/y. Part of the Phase 1 infrastructure has already been designed for Phase 2 capacity, this includes the offshore pipeline, and the umbilical to the offshore template.</p>\n\n<p>The infrastructure elements comprising this PMI related to Phase 2, are as follows:</p>\n\n<p>- A dedicated CO2 collection pipeline from the receiving terminal in the &Oslash;ygarden municipality to the storage site, built as part of phase 1.</p>\n\n<p>- Onshore receiving terminal with intermediate storage tanks and export pumps. Shipping solutions are not part of the PMI.</p>\n\n<p>- Subsea facilities, umbilical and flowlines associated to the CO2 storage acreage in Norway.</p>\n\n<p>- Any equipment or installation for the operation of the project, including protection, control and monitoring systems.</p>\n",
+      "IMPLEMENTATION_STATUS": "4",
+      "IMPLEMENTATION_STATUS_DESCR": "Under construction",
+      "COUNTRY_CONCERNED": "BE, DE, FR, NL, NO, SE, UK",
+      "PROMOTERS": "AirLiquide Industries France (FR) ; ArcelorMittal Belgium (BE) ; ArcelorMittal GmbH Hamburg (DE) ; ArcelorMittal GmbH Bremen (DE) ; Esso Raffinage SAS (FR) ; Fluxys Belgium SA/NV (BE) ; Havenbedrijf Antwerpen (Antwerp Port Authority) (BE) ; Neste Oyi (FI) ; Norcem AS (NO) ; Shell Global Solutions International B.V. (NL) ; Total S.E. (FR/BE) ; YARA France SAS (FR) ; Air Liquide Industries Belgium (BE) ; Preem (SE) ; Stockholm Exergi (SE) ; Havenbedrijf Antwerpen NV van publiek recht (BE) ; Equinor ASA (NO) ; Northern Lights JV DA (NO)",
+      "COMMISSIONING_DATE": "2026",
+      "CEF_ACTIONS": "12.4-0010-be-s-m-20 ; 12.4-be-s-m-22-gch ; 12.4-be-w-m-22-antwerp at c co2 hub ; 12.4-no-w-m-23-nlp2 ; 12.4-s-m-21-nl p2 studies",
+      "CEF_ACTION_FICHES": "https://ec.europa.eu/assets/cinea/project_fiches/cef/cef_energy/12.4-0010-BE-S-M-20.pdf ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103042/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101103080/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101146854/CEF2027 ; https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-details/43251567/101069502/CEF2027",
+      "STUDIES_OR_WORKS": "STUDIES ; Studies ; WORKS",
+      "SHAPE.LEN": "160478.374104"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            653715.3398999982,
+            8524233.4644
+          ],
+          [
+            383314.04360000044,
+            8529206.662600003
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  }
+]

@@ -1178,6 +1178,7 @@ if config["pci-pmi-projects"]["enable"]:
         input:
             projects=input_clean_pci_pmi_projects,
             country_shapes=resources("country_shapes.geojson"),
+            fix=lambda wildcards: glob.glob("data/pci-pmi/fix/*.json"),
             params_stores_co2="data/pci-pmi/params/stores_co2.csv",
             params_storage_units_hydrogen="data/pci-pmi/params/storage_units_hydrogen.csv",
         output:
