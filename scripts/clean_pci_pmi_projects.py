@@ -28,9 +28,10 @@ from shapely.ops import linemerge, snap, unary_union
 logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
 
-CRS_DISTANCE = "EPSG:3035"
-CRS_INPUT = "EPSG:3857"  # Data is in Web Mercator projection
-CRS_OUTPUT = "EPSG:4326"  # Output is in WGS84 projection (as all other PyPSA-Eur data
+DISTANCE_CRS = "EPSG:3035"
+MERCATOR_CRS = "EPSG:3857"  # Data is in Web Mercator projection
+GEO_CRS = "EPSG:4326"  # Output is in WGS84 projection (as all other PyPSA-Eur data
+BUFFER_RADIUS = 500  # meters
 
 V_NOM_AC_DEFAULT_CONTINENTAL = 380  # kV
 V_NOM_AC_DEFAULT_BALTICS = 330  # kV
@@ -54,8 +55,6 @@ COLUMNS_GENERATORS = [
     "p_nom",
     "carrier",
     "tags",
-    "x",
-    "y",
     "geometry",
 ]
 COLUMNS_LINES = [
@@ -69,10 +68,6 @@ COLUMNS_LINES = [
     "carrier",
     "type",
     "tags",
-    "x0",
-    "y0",
-    "x1",
-    "y1",
     "geometry",
 ]
 COLUMNS_LINKS = [
@@ -83,10 +78,6 @@ COLUMNS_LINKS = [
     "p_nom",
     "carrier",
     "tags",
-    "x0",
-    "y0",
-    "x1",
-    "y1",
     "geometry",
 ]
 COLUMNS_STORAGE_UNITS = [
@@ -95,17 +86,13 @@ COLUMNS_STORAGE_UNITS = [
     "p_nom",
     "max_hours",
     "tags",
-    "x",
-    "y",
     "geometry",
 ]
 COLUMNS_STORES = [
     "project_status",
     "build_year",
-    "e_nom",
+    "e_nom_max",
     "tags",
-    "x",
-    "y",
     "geometry",
 ]
 
@@ -129,8 +116,8 @@ RENAME_COLUMNS = {
 
 LAYER_MAPPING = {
     "Baltic synchronisation": "links_electricity_transmission",
-    "CO2 injection and surface facilities": "stores_co2_sequestration",
-    "CO2 liquefaction and buffer storage": "storage_units_co2_liquefaction",
+    "CO2 injection and surface facilities": "stores_co2",
+    "CO2 liquefaction and buffer storage": "stores_co2",
     "CO2 pipeline": "links_co2_pipeline",
     "CO2 shipping route": "links_co2_shipping",
     "Electricity line": "lines_electricity_transmission",  # contains both onshore and offshore projects, split in import; contains links and lines, split later
@@ -162,10 +149,9 @@ COMPONENTS_MAPPING = {
     "links_gas_pipeline": COLUMNS_LINKS,
     "links_hydrogen_pipeline": COLUMNS_LINKS,
     "links_offshore_grids": COLUMNS_LINKS,
-    "storage_units_co2_liquefaction": COLUMNS_STORAGE_UNITS,
     "storage_units_electricity": COLUMNS_STORAGE_UNITS,
     "storage_units_hydrogen": COLUMNS_STORAGE_UNITS,
-    "stores_co2_sequestration": COLUMNS_STORES,
+    "stores_co2": COLUMNS_STORES,
 }
 
 UNDERGROUND_MAPPING = {  # "t" for true (underground), "f" for false (overground)
@@ -579,38 +565,13 @@ def _create_components_dict(projects, project_types):
                 # Assign values using .loc to ensure correct index alignment
                 df[col] = filtered_projects.loc[df.index, col]
 
-        df = gpd.GeoDataFrame(df, crs=CRS_INPUT, geometry="geometry").to_crs(
-            crs=CRS_OUTPUT
+        df = gpd.GeoDataFrame(df, crs=MERCATOR_CRS, geometry="geometry").to_crs(
+            crs=GEO_CRS
         )  # Convert to GeoDataFrame and reproject
-        df_meters = df[["geometry"]].to_crs(CRS_DISTANCE)
+        df_meters = df[["geometry"]].to_crs(DISTANCE_CRS)
 
-        # Initiate x, y, x0, y0, x1, y1 columns based on geometry
-        if all(col in df.columns for col in ["x", "y"]):
-            df[["x", "y"]] = df.apply(
-                lambda row: (
-                    (row["geometry"].x, row["geometry"].y)
-                    if row["geometry"] is not None
-                    else (None, None)
-                ),
-                axis=1,
-                result_type="expand",
-            )
-        elif all(col in df.columns for col in ["x0", "y0", "x1", "y1"]):
-            df[["x0", "y0", "x1", "y1"]] = df.apply(
-                lambda row: (
-                    (
-                        row["geometry"].coords[0][0],
-                        row["geometry"].coords[0][1],
-                        row["geometry"].coords[-1][0],
-                        row["geometry"].coords[-1][1],
-                    )
-                    if row["geometry"] is not None
-                    else (None, None, None, None)
-                ),
-                axis=1,
-                result_type="expand",
-            )
-            df["length"] = (df_meters.length / 1e3).round(1)  # Calculate length in km
+        if "length" in df.columns:
+            df["length"] = df_meters.length.div(1e3).round(1)  # Calculate length in km
 
         # Initiate 'underground' column based on type
         if component in UNDERGROUND_MAPPING and "underground" in df.columns:
@@ -1017,111 +978,192 @@ def _set_params_links_hydrogen(df):
     return df
 
 
-# Function to check intersections and store valid points
-def _get_crosspoints(row, gdf):
+def _create_endpoints(gdf):
     """
-    tbd.
+    Creates a GeoDataFrame containing the endpoints of the input GeoDataFrame.
+
+    Parameters:
+        - gdf (GeoDataFrame): The input GeoDataFrame containing the projects.
+
+    Returns:
+        - points (GeoDataFrame): The output GeoDataFrame containing the endpoints of the input geometries.
     """
-    crosspoints = []  # List to hold intersection points
-    start_point = Point(row["geometry"].coords[0])
-    end_point = Point(row["geometry"].coords[-1])
 
-    # Create a union of all other geometries (excluding the current one)
-    other_geometries = gdf[gdf.index != row.name]["geometry"]
-    union_geometry = unary_union(other_geometries)
+    points0 = gdf["geometry"].apply(
+        lambda x: (
+            x.boundary.geoms[0]
+            if hasattr(x.boundary, "geoms") and len(x.boundary.geoms) > 0
+            else None
+        )
+    )
 
-    # Check for intersections with the union
-    intersection = row["geometry"].intersection(union_geometry)
+    points1 = gdf["geometry"].apply(
+        lambda x: (
+            x.boundary.geoms[-1]
+            if hasattr(x.boundary, "geoms") and len(x.boundary.geoms) > 1
+            else None
+        )
+    )
 
-    if not intersection.is_empty:
-        if intersection.geom_type == "Point":
-            # Check if the intersection is not at the start or end point of the LineString
-            if intersection != start_point and intersection != end_point:
-                point = snap(intersection, row["geometry"], tolerance=0.01)
-                crosspoints.append(point)
-        elif intersection.geom_type == "MultiPoint":
-            # Filter points from MultiPoint geometry
-            for point in intersection.geoms:
-                if point != start_point and point != end_point:
-                    point = snap(point, row["geometry"], tolerance=0.01)
-                    crosspoints.append(point)
+    points = pd.concat([points0, points1], axis=0)
+    # Create a GeoDataFrame with the points
+    points = gpd.GeoDataFrame(points, columns=["geometry"], crs=gdf.crs).reset_index(
+        drop=True
+    )
+    # Drop by duplicates in geometry column
+    points.drop_duplicates(subset=["geometry"], inplace=True)
+    # Drop nas
+    points.dropna(subset=["geometry"], inplace=True)
+    points.reset_index(drop=True, inplace=True)
 
-    return crosspoints if crosspoints else []
+    return points
 
 
-def _create_new_rows(row):
+def _split_to_segments(
+    gdf, buffer_radius=BUFFER_RADIUS, distance_crs=DISTANCE_CRS, geo_crs=GEO_CRS
+):
     """
-    tbd.
-    """
-    # Check if the length of the split_linestrings is greater than 1
-    new_rows = []
-    entries = len(row["split_linestrings"])
-    for idx, geom in enumerate(row["split_linestrings"]):
-        # Create a new row with updated geometry and index
-        new_row = row.copy()
-        new_row["geometry"] = geom
-        if entries > 1:
-            new_row["id"] = f"{row['id']}-s{idx+1}"
-        new_rows.append(new_row)
+    Split projects into their individual subcomponents based on junction points (at a tolerance of buffer_radius).
+    buffer_radius defaults to 500 meters
 
-    return new_rows
+    Parameters:
+        - gdf (GeoDataFrame): The input GeoDataFrame containing the projects.
+        - buffer_radius (float): The buffer radius to use for the junction points.
+        - distance_crs (str): The coordinate reference system to use for distance calculations.
+        - geo_crs (str): The coordinate reference system to use for the output GeoDataFrame.
 
-
-def _split_to_segments(gdf):
-    """
-    tbd.
+    Returns:
+        - gdf_split (GeoDataFrame): The output GeoDataFrame containing the split projects in geo_crs projection.
     """
     logger.info("Splitting linestrings at junction points into segments.")
-    gdf = gdf.copy()
-    gdf.reset_index(inplace=True)
-    gdf["crosspoints"] = gdf.apply(lambda row: _get_crosspoints(row, gdf), axis=1)
-    gdf["split_linestrings"] = gdf.apply(
-        lambda row: _split_linestring_by_point(row["geometry"], row["crosspoints"]),
-        axis=1,
+    gdf_split = gdf.copy().to_crs(distance_crs)
+    gdf_subcomponents = gpd.GeoDataFrame(
+        geometry=list(gdf_split["geometry"].union_all().geoms), crs=gdf_split.crs
     )
 
-    rows = gdf.apply(_create_new_rows, axis=1)
+    points = _create_endpoints(gdf_subcomponents)
+    points.to_crs(distance_crs, inplace=True)
 
-    new_gdf = gpd.GeoDataFrame(list(chain(*rows)), crs=gdf.crs)
-    new_gdf.set_index("id", inplace=True)
+    points["buffer"] = points["geometry"].buffer(buffer_radius)
 
-    # Update lengths
-    new_gdf["length"] = (
-        new_gdf["geometry"].to_crs(CRS_DISTANCE).length.div(1e3).round(1)
+    # Split linestrings of gdf by union of points[buffer]
+    gdf_split["geometry"] = gdf_split["geometry"].apply(
+        lambda x: x.difference(points["buffer"].union_all())
     )
 
-    return new_gdf
+    # Drop empty geometries
+    gdf_split = gdf_split[~gdf_split["geometry"].is_empty]
+
+    gdf_split.reset_index(inplace=True)
+
+    # All rows with multilinestrings, split them into their individual linestrings and fill the rows with the same data
+    gdf_split = pd.concat(
+        gdf_split.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
+    )
+
+    gdf_split = gpd.GeoDataFrame(gdf_split, crs=distance_crs).to_crs(geo_crs)
+    gdf_split.set_index("id", inplace=True)
+
+    return gdf_split
+
+
+def _clip_to_offshore(gdf, regions, distance_crs=DISTANCE_CRS, geo_crs=GEO_CRS):
+    buffer = 10000  # m
+    gdf_clip = gdf.copy().to_crs(DISTANCE_CRS)
+    regions_union = regions["geometry"].to_crs(DISTANCE_CRS).union_all()
+    regions_union_buffer = regions_union.buffer(buffer)
+
+    gdf_clip["geometry"] = gdf_clip["geometry"].apply(
+        lambda x: x.difference(regions_union)
+    )
+    gdf_clip = gdf_clip[~gdf_clip["geometry"].is_empty]
+
+    # All rows with multilinestrings, split them into their individual linestrings and fill the rows with the same data
+    gdf_clip.reset_index(inplace=True)
+    gdf_clip = pd.concat(
+        gdf_clip.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
+    )
+    gdf_clip = gpd.GeoDataFrame(gdf_clip, crs=distance_crs)
+
+    # Drop those geometries that are fully within the buffer of regions_union
+    gdf_clip = gdf_clip[
+        ~gdf_clip["geometry"].apply(lambda x: x.within(regions_union_buffer))
+    ]
+
+    gdf_clip.set_index("id", inplace=True)
+    gdf_clip = gdf_clip.to_crs(geo_crs)
+
+    return gdf_clip
+
+
+def _map_params_to_projects(df, params, column):
+    df["pci_code"] = df["tags"].apply(lambda x: x["pci_code"])
+    df[column] = df["pci_code"].map(params[column])
+
+    # Group by pci_code and divide column value by number of projects with the same pci_code
+    df[column] = (
+        df.groupby("pci_code")[column].transform(lambda x: x / x.count()).round(0)
+    )
+
+    df.drop(columns=["pci_code"], inplace=True)
+
+    return df
 
 
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("clean_pci_pmi_projects")
-
-        # Manual updating snakemake.input for mock_snakemake, as mock_snakemake cannot yet handle input files depending on checkpoint rules
-        import os
-
-        input_dir = os.path.dirname(os.path.dirname(snakemake.input[0]))
-        with open(snakemake.input[0], "r") as f:
-            # Read each line, strip whitespace and newlines, and return as a list
-            project_ids = [line.strip() for line in f.readlines()]
-            snakemake.input = [
-                f"{input_dir}/json/{project_id}.json" for project_id in project_ids
-            ]
+        snakemake = mock_snakemake(
+            "clean_pci_pmi_projects",
+        )
 
     configure_logging(snakemake)
     set_scenario_config(snakemake)
 
-    json_files = snakemake.input
-    project_types = list(snakemake.output.keys())
+    country_shapes = gpd.read_file(snakemake.input.country_shapes).set_index("name")
+    json_files = snakemake.input.projects
+
+    # Read params for storage units
+    params_stores_co2 = pd.read_csv(
+        snakemake.input.params_stores_co2,
+        skiprows=[1],
+        dtype={"id": str, "p_nom": float, "max_hours": float},
+    )
+    params_stores_co2.set_index("id", inplace=True)
+
+    params_storage_units_hydrogen = pd.read_csv(
+        snakemake.input.params_storage_units_hydrogen,
+        skiprows=[1],
+        dtype={"id": str, "p_nom": float, "max_hours": float},
+    )
+    params_storage_units_hydrogen.set_index("id", inplace=True)
 
     # INITIALISATION OF PROJECTS
     projects = _import_projects(json_files)  # Import projects from JSON files
+
     projects = _clean_columns(projects)
     projects = _assign_project_types(
         projects
     )  # Assign project types based on layerName
+
+    # Storage units CO2
+    list_co2_sequestration = projects[
+        projects.layer_name == "CO2 injection and surface facilities"
+    ]["pci_code"].unique()
+
+    projects = projects[
+        ~(
+            (projects.layer_name == "CO2 liquefaction and buffer storage")
+            & (projects.pci_code.isin(list_co2_sequestration))
+        )
+    ]
+    projects = projects[
+        ~(
+            (projects.layer_name == "CO2 liquefaction and buffer storage")
+            & (~projects.pci_code.isin(params_stores_co2.index))
+        )
+    ]
 
     # FIXING GEOMETRIES
     projects["geometry"] = projects.apply(
@@ -1130,17 +1172,6 @@ if __name__ == "__main__":
     projects = _remove_redundant_components(
         projects
     )  # Remove redundant components such as 'Polygon' geometries or already commissioned projects
-
-    # Manual fix for PCI 10.1.2, MultiLineString that contains 'messy' linestrings. Remove all short stubs
-    projects.loc[projects["pci_code"] == "10.1.2", "geometry"] = MultiLineString(
-        [
-            line
-            for line in projects.loc[projects["pci_code"] == "10.1.2", "geometry"]
-            .values[0]
-            .geoms
-            if line.length > 1000
-        ]
-    )
 
     projects = pd.concat(
         projects.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
@@ -1154,6 +1185,8 @@ if __name__ == "__main__":
     projects = _columns_to_tags(
         projects
     )  # Move columns with additional information to tags
+
+    project_types = projects.project_type.unique()
 
     # Create a dictionary to type-specific GeoDataFrames
     components = _create_components_dict(projects, project_types)
@@ -1178,28 +1211,38 @@ if __name__ == "__main__":
         components["links_hydrogen_pipeline"]
     )
 
-    # remove all non-numeric characters, dots are allowed, letters are allowed, using rege
-    # Check list
-    # components['buses_electricity_transmission']          # clean
-    # components['buses_offshore_grids']                    # clean
-    # components['buses_smart_electricity_transmission']    # clean
-    # components['links_electricity_transmission']          # clean
-    # components['links_offshore_grids']                    # clean
-    # components['lines_electricity_transmission']          # clean, s_nom need to be added in build_pci_pmi_projects for missing ones, linetypes missing
-    # components['links_hydrogen_pipeline']                 # clean
+    components["links_co2_pipeline"] = _split_to_segments(
+        components["links_co2_pipeline"]
+    )
 
-    # components['links_co2_pipeline']                      # p_nom missing
-    # components['links_co2_shipping']                      # p_nom missing
+    ### Storage unites
+    # Map params to storage projects
+    # CO2
+    components["stores_co2"] = _map_params_to_projects(
+        components["stores_co2"],
+        params_stores_co2,
+        "e_nom_max",
+    )
 
-    # components['generators_hydrogen_terminal']            # p_nom missing
+    components["storage_units_hydrogen"] = _map_params_to_projects(
+        components["storage_units_hydrogen"],
+        params_storage_units_hydrogen,
+        "p_nom",
+    )
 
-    # components['links_electrolyser']                      # p_nom missing
-    # components['links_gas_pipeline']                      # p_nom missing
+    components["storage_units_hydrogen"] = _map_params_to_projects(
+        components["storage_units_hydrogen"],
+        params_storage_units_hydrogen,
+        "max_hours",
+    )
 
-    # components['storage_units_co2_liquefaction']          # p_nom, max_hours missing
-    # components['storage_units_electricity']               # p_nom, max_hours missing
-    # components['storage_units_hydrogen']                  # p_nom, max_hours missing
-    # components['stores_co2_sequestration']                # e_nom missing
+    # components["links_co2_shipping"] = _clip_to_offshore(
+    #     components["links_co2_shipping"], country_shapes
+    # )
+
+    # components["links_co2_shipping"] = _split_to_segments(
+    #     components["links_co2_shipping"]
+    # )
 
     # Export to correct output files depending on project_type
     total_count = 0

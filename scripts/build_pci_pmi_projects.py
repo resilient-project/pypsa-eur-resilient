@@ -19,23 +19,19 @@ import pandas as pd
 import pypsa
 import tqdm
 from _helpers import configure_logging, set_scenario_config
+from clean_pci_pmi_projects import _split_multilinestring
 from pypsa.geo import haversine_pts  # to recalculate crow-flies distance
-from shapely.geometry import (
-    LineString,
-    MultiLineString,
-    MultiPoint,
-    MultiPolygon,
-    Point,
-    Polygon,
-)
-from shapely.ops import snap
+from shapely import segmentize
+from shapely.algorithms.polylabel import polylabel
+from shapely.geometry import MultiPoint, Point
+from shapely.ops import nearest_points
 
 logging.getLogger("pyogrio._io").setLevel(logging.WARNING)  # disable pyogrio info
 logger = logging.getLogger(__name__)
 
-CRS_DISTANCE = "EPSG:3035"
-CRS_WGS84 = "EPSG:4326"
-MAX_DISTANCE = 3000
+DISTANCE_CRS = "EPSG:3035"
+GEO_CRS = "EPSG:4326"
+OFFSHORE_BUS_RADIUS = 5000
 
 COLUMNS_LINES = [
     "bus0",
@@ -62,15 +58,17 @@ COLUMNS_LINKS = [
 ]
 
 
-def _map_endpoints_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE, coords=0):
+def _map_endpoints_to_closest_region(
+    gdf, regions, max_distance=OFFSHORE_BUS_RADIUS, coords=0
+):
     gdf_points = gdf.geometry.apply(lambda x: Point(x.coords[coords]))
 
-    gdf_points = gpd.GeoDataFrame(geometry=gdf_points, crs=CRS_WGS84)
+    gdf_points = gpd.GeoDataFrame(geometry=gdf_points, crs=GEO_CRS)
     # Spatial join nearest with regions
 
     # Find nearest region index
-    regions = regions.to_crs(CRS_DISTANCE)
-    gdf_points = gdf_points.to_crs(CRS_DISTANCE)
+    regions = regions.to_crs(DISTANCE_CRS)
+    gdf_points = gdf_points.to_crs(DISTANCE_CRS)
 
     gdf_points = gpd.sjoin_nearest(gdf_points, regions, how="left")
     gdf_points = gdf_points.join(
@@ -80,13 +78,15 @@ def _map_endpoints_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE, co
         lambda x: x.geometry_point.distance(x.geometry_region), axis=1
     )
 
-    bool_too_far = gdf_points["distance"] > MAX_DISTANCE
+    bool_too_far = gdf_points["distance"] > OFFSHORE_BUS_RADIUS
     gdf_points.loc[bool_too_far, "name"] = None
 
     return gdf_points["name"]
 
 
-def _map_to_closest_region(gdf, regions, max_distance=MAX_DISTANCE, add_suffix=None):
+def _map_to_closest_region(
+    gdf, regions, max_distance=OFFSHORE_BUS_RADIUS, add_suffix=None
+):
     # add Suffix to regions index
     regions = regions.copy()
     if add_suffix:
@@ -158,16 +158,24 @@ def _calculate_haversine_distance(n, lines, line_length_factor):
 def _set_underwater_fraction(links, regions_offshore):
     links = links.copy()
     links.loc[:, "underwater_fraction"] = (
-        links.intersection(regions_offshore.union_all()).to_crs(CRS_DISTANCE).length
-        / links.to_crs(CRS_DISTANCE).length
+        links.intersection(regions_offshore.union_all()).to_crs(DISTANCE_CRS).length
+        / links.to_crs(DISTANCE_CRS).length
     ).round(2)
 
     return links
 
 
-def _create_new_buses(gdf, regions, scope, carrier):
+def _create_new_buses(
+    gdf,
+    regions,
+    scope,
+    carrier,
+    distance_crs=DISTANCE_CRS,
+    geo_crs=GEO_CRS,
+    tol=OFFSHORE_BUS_RADIUS,
+):
     buffered_regions = (
-        regions.to_crs(CRS_DISTANCE).buffer(5000).to_crs(CRS_WGS84).union_all()
+        regions.to_crs(distance_crs).buffer(30000).to_crs(geo_crs).union_all()
     )
 
     # filter all rows in gdf where at least one of the geometry linestring endings is outside unary_union(regions)
@@ -182,12 +190,26 @@ def _create_new_buses(gdf, regions, scope, carrier):
     list_points = list_points.difference(buffered_regions)
 
     gdf_points = gpd.GeoDataFrame(
-        geometry=[geom for geom in list_points.geoms], crs=CRS_WGS84
+        geometry=[geom for geom in list_points.geoms], crs=geo_crs
+    )
+
+    gdf_points["geometry"] = gdf_points.to_crs(distance_crs).buffer(tol).to_crs(geo_crs)
+
+    # Aggregate rows with touching polygons
+    gdf_points = gdf_points.dissolve()
+    # split into separate polygons
+    gdf_points = gdf_points.explode().reset_index(drop=True)
+
+    gdf_points["poi"] = (
+        gdf_points["geometry"]
+        .to_crs(distance_crs)
+        .apply(lambda polygon: polylabel(polygon, tolerance=tol / 2))
+        .to_crs(geo_crs)
     )
 
     # Extract x and y coordinates into separate columns
-    gdf_points["x"] = gdf_points.geometry.x
-    gdf_points["y"] = gdf_points.geometry.y
+    gdf_points["x"] = gdf_points["poi"].x
+    gdf_points["y"] = gdf_points["poi"].y
     gdf_points["name"] = gdf_points.apply(
         lambda x: f"PCI-PMI {int(x.name)+1} {carrier}", axis=1
     )
@@ -195,33 +217,102 @@ def _create_new_buses(gdf, regions, scope, carrier):
     gdf_points["carrier"] = carrier
     gdf_points["location"] = gdf_points.index
 
-    gdf_points["geometry"] = (
-        gdf_points.to_crs(CRS_DISTANCE).buffer(MAX_DISTANCE).to_crs(CRS_WGS84)
-    )
-
     return gdf_points[["x", "y", "carrier", "location", "geometry"]]
 
 
-# def _find_overpassing_regions(link, regions):
-#     link["link_index"] = link.index
-#     regions["region_index"] = regions.index
-#     overlap = gpd.overlay(link, regions)
+def _find_points_on_line_overpassing_region(
+    link, regions, distance_crs=DISTANCE_CRS, geo_crs=GEO_CRS
+):
+
+    overlap = gpd.overlay(link, regions)
+
+    # All rows with multilinestrings, split them into their individual linestrings and fill the rows with the same data
+    overlap = pd.concat(
+        overlap.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
+    )
+
+    overlap["center_point"] = overlap["geometry"].apply(
+        lambda l: l.interpolate(l.length / 2)
+    )
+
+    overlap["on_point"] = overlap.apply(
+        lambda row: nearest_points(row["center_point"], row["geometry"])[1], axis=1
+    )
+
+    return overlap[["on_point"]].rename(columns={"on_point": "geometry"})
 
 
-#     overlap["center_point"] = overlap["geometry"].apply(
-#         lambda l: l.interpolate(l.length / 2)
-#     )
+def _split_to_overpassing_segments(
+    gdf, regions, distance_crs=DISTANCE_CRS, geo_crs=GEO_CRS
+):
+    logger.info("Splitting linestrings into segments that connect overpassing regions.")
+    buffer_radius = 50  # m
 
-#     overlap["on_point"] = overlap.apply(
-#         lambda row: nearest_points(row["center_point"], row["geometry"])[1],
-#         axis=1
-#     )
-#     overlap["on_point"].crs=CRS_WGS84
+    ## Delete later
+    gdf_split = gdf.copy().to_crs(distance_crs)
+    regions_dist = regions.to_crs(distance_crs)
 
-#     link_segments = [l for l in overlap.geometry]
-#     regions = [r for r in overlap.region_index]
+    # Increase resolution of both geometries
+    gdf_split["geometry"] = gdf_split["geometry"].apply(lambda x: segmentize(x, 200))
+    regions_dist["geometry"] = regions_dist["geometry"].apply(
+        lambda x: segmentize(x, 300)
+    )
 
-#     return overpassing_regions
+    gdf_points = _find_points_on_line_overpassing_region(gdf_split, regions_dist)
+    gdf_points = gpd.GeoDataFrame(gdf_points, crs=distance_crs)
+
+    gdf_points["buffer"] = gdf_points["geometry"].buffer(buffer_radius)
+
+    # Split linestrings of gdf by union of points[buffer]
+    gdf_split["geometry"] = gdf_split["geometry"].apply(
+        lambda x: x.difference(gdf_points["buffer"].union_all())
+    )
+
+    # Drop empty geometries
+    gdf_split = gdf_split[~gdf_split["geometry"].is_empty]
+
+    gdf_split.reset_index(inplace=True)
+    # All rows with multilinestrings, split them into their individual linestrings and fill the rows with the same data
+    gdf_split = pd.concat(
+        gdf_split.apply(_split_multilinestring, axis=1).tolist(), ignore_index=True
+    )
+
+    gdf_split = gpd.GeoDataFrame(gdf_split, geometry="geometry", crs=distance_crs)
+
+    # Drop empty geometries
+    gdf_split = gdf_split[~gdf_split["geometry"].is_empty]
+
+    # Recalculate lengths
+    gdf_split["length"] = (
+        gdf_split["geometry"].length.div(1e3).round(1)
+    )  # Calculate in km, round to 1 decimal
+
+    gdf_split.to_crs(geo_crs, inplace=True)
+    gdf_split.set_index("id", inplace=True)
+
+    return gdf_split
+
+
+def _set_unique_index(gdf):
+    gdf = gdf.copy()
+    gdf.reset_index(inplace=True)
+
+    gdf["id"] = gdf["id"].apply(lambda x: x.split("-")[1])
+    gdf["id"] = "PCI" + "-" + gdf["id"]
+
+    # Group by id and sort from North to south, west to east
+    gdf = gdf.sort_values(
+        by=["id", "geometry"],
+    )
+
+    # Group by id and add cumcount +1 and zero padding
+    gdf["id"] = (
+        gdf["id"] + "-" + gdf.groupby("id").cumcount().add(1).astype(str).str.zfill(2)
+    )
+
+    gdf.set_index("id", inplace=True)
+
+    return gdf
 
 
 if __name__ == "__main__":
@@ -270,7 +361,7 @@ if __name__ == "__main__":
     lines_electricity_transmission = _map_to_closest_region(
         lines_electricity_transmission,
         regions_onshore,
-        max_distance=MAX_DISTANCE,
+        max_distance=OFFSHORE_BUS_RADIUS,
     )
     lines_electricity_transmission = _drop_redundant_lines_links(
         lines_electricity_transmission
@@ -281,13 +372,14 @@ if __name__ == "__main__":
     lines_electricity_transmission = _simplify_lines_to_380(
         lines_electricity_transmission, linetype_380
     )
+    lines_electricity_transmission = _set_unique_index(lines_electricity_transmission)
 
     ### Electricity transmission links
     links_electricity_transmission = components["links_electricity_transmission"].copy()
     links_electricity_transmission = _map_to_closest_region(
         links_electricity_transmission,
         regions_onshore,
-        max_distance=MAX_DISTANCE,
+        max_distance=OFFSHORE_BUS_RADIUS,
     )
     links_electricity_transmission = _drop_redundant_lines_links(
         links_electricity_transmission
@@ -298,6 +390,7 @@ if __name__ == "__main__":
     links_electricity_transmission = _set_underwater_fraction(
         links_electricity_transmission, regions_offshore
     )
+    lines_electricity_transmission = _set_unique_index(lines_electricity_transmission)
 
     ### Hydrogen pipelines (links)
     links_hydrogen_pipeline = components["links_hydrogen_pipeline"].copy()
@@ -307,15 +400,20 @@ if __name__ == "__main__":
         links_hydrogen_pipeline, regions_onshore, scope, "H2"
     )
 
+    links_hydrogen_pipeline = _split_to_overpassing_segments(
+        links_hydrogen_pipeline,
+        regions_onshore,
+    )
+
     links_hydrogen_pipeline = _map_to_closest_region(
         links_hydrogen_pipeline,
         buses_hydrogen_offshore,
-        max_distance=MAX_DISTANCE,
+        max_distance=OFFSHORE_BUS_RADIUS,
     )
     links_hydrogen_pipeline = _map_to_closest_region(
         links_hydrogen_pipeline,
         regions_onshore,
-        max_distance=MAX_DISTANCE,
+        max_distance=OFFSHORE_BUS_RADIUS,
         add_suffix="H2",
     )
     links_hydrogen_pipeline = _drop_redundant_lines_links(links_hydrogen_pipeline)
@@ -323,17 +421,51 @@ if __name__ == "__main__":
     links_hydrogen_pipeline = _set_underwater_fraction(
         links_hydrogen_pipeline, regions_offshore
     )
-    # TODO: Split pipeline into segments, if they overpass multiple regions
+    links_hydrogen_pipeline = _set_unique_index(links_hydrogen_pipeline)
 
     ### CO2 pipelines (links)
-    # links_co2_pipeline = components["links_co2_pipeline"].copy()
+    links_co2_pipeline = components["links_co2_pipeline"].copy()
+
+    buses_co2_offshore = _create_new_buses(
+        links_co2_pipeline, regions_onshore, scope, "CO2", tol=OFFSHORE_BUS_RADIUS
+    )
+
+    links_co2_pipeline = _split_to_overpassing_segments(
+        links_co2_pipeline,
+        regions_onshore,
+    )
+
+    links_co2_pipeline = _map_to_closest_region(
+        links_co2_pipeline,
+        buses_co2_offshore,
+        max_distance=OFFSHORE_BUS_RADIUS,
+    )
+
+    links_co2_pipeline = _map_to_closest_region(
+        links_co2_pipeline,
+        regions_onshore,
+        max_distance=OFFSHORE_BUS_RADIUS,
+    )
+
+    links_co2_pipeline = _drop_redundant_lines_links(links_co2_pipeline)
+    links_co2_pipeline = _add_geometry_to_tags(links_co2_pipeline)
+    links_co2_pipeline = _set_underwater_fraction(links_co2_pipeline, regions_offshore)
+    links_co2_pipeline = _set_unique_index(links_co2_pipeline)
+
+    # export to geojson
 
     # Recalculate length/distances if activated
     if haversine_distance:
-        n.madd(
+        n.add(
             "Bus",
             buses_hydrogen_offshore.index,
             **buses_hydrogen_offshore.drop(columns="geometry"),
+        )
+
+        n.add(
+            "Bus",
+            buses_co2_offshore.index,
+            **buses_co2_offshore.drop(columns="geometry"),
         )
 
         logger.info("Recalculating line lengths with haversine distance.")

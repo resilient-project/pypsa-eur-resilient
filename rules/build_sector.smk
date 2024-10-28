@@ -1169,15 +1169,17 @@ rule prepare_sector_network:
 if config["pci-pmi-projects"]["enable"]:
 
     def input_clean_pci_pmi_projects(w):
-        checkpoint_output = checkpoints.retrieve_pci_pmi_list.get().output[0]
-        with open(checkpoint_output, "r") as f:
+        with open("data/pci-pmi/annex/project_list.csv", "r") as f:
             # Read each line, strip whitespace and newlines, and return as a list
             project_ids = [line.strip() for line in f.readlines()]
         return expand("data/pci-pmi/json/{pci_code}.json", pci_code=project_ids)
 
     rule clean_pci_pmi_projects:
         input:
-            input_clean_pci_pmi_projects,
+            projects=input_clean_pci_pmi_projects,
+            country_shapes=resources("country_shapes.geojson"),
+            params_stores_co2="data/pci-pmi/params/stores_co2.csv",
+            params_storage_units_hydrogen="data/pci-pmi/params/storage_units_hydrogen.csv",
         output:
             buses_electricity_transmission="data/pci-pmi/projects/buses_electricity_transmission.geojson",
             buses_offshore_grids="data/pci-pmi/projects/buses_offshore_grids.geojson",
@@ -1191,10 +1193,9 @@ if config["pci-pmi-projects"]["enable"]:
             links_gas_pipeline="data/pci-pmi/projects/links_gas_pipeline.geojson",
             links_hydrogen_pipeline="data/pci-pmi/projects/links_hydrogen_pipeline.geojson",
             links_offshore_grids="data/pci-pmi/projects/links_offshore_grids.geojson",
-            storage_units_co2_liquefaction="data/pci-pmi/projects/storage_units_co2_liquefaction.geojson",
             storage_units_electricity="data/pci-pmi/projects/storage_units_electricity.geojson",
             storage_units_hydrogen="data/pci-pmi/projects/storage_units_hydrogen.geojson",
-            stores_co2_sequestration="data/pci-pmi/projects/stores_co2_sequestration.geojson",
+            stores_co2="data/pci-pmi/projects/stores_co2.geojson",
         log:
             logs("clean_pci_pmi_projects.log"),
         benchmark:
@@ -1239,9 +1240,9 @@ if config["pci-pmi-projects"]["enable"]:
             links_hydrogen_pipeline=resources(
                 "pci-pmi-projects/links_hydrogen_pipeline_s_{clusters}_l{ll}_{opts}.csv"
             ),
-            # links_co2_pipeline=resources(
-            #     "pci-pmi-projects/links_co2_pipeline_s_{clusters}_l{ll}_{opts}.csv"
-            # ),
+            links_co2_pipeline=resources(
+                "pci-pmi-projects/links_co2_pipeline_s_{clusters}_l{ll}_{opts}.csv"
+            ),
         log:
             logs("build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}.log"),
         benchmark:

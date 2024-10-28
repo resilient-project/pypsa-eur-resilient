@@ -133,6 +133,10 @@ if __name__ == "__main__":
         project for project_list in df["projects"] for project in project_list
     ]
 
+    # Drop project with ID "9.19"
+    if "9.19" in list_of_projects:
+        list_of_projects.remove("9.19")
+
     logger.info(f"Total number of PCI/PMI projects: {len(list_of_projects)}.\n")
 
     logger.info(f"Exporting PCI/PMI project list to:\n{project_list}.")
