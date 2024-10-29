@@ -4623,9 +4623,7 @@ def _add_pci_pmi_links_hydrogen(
         **buses.drop(columns="geometry"),
     )
 
-    logger.info(
-        f"Adding PCI/PMI electricity transmission lines commissioned by {investment_year}."
-    )
+    logger.info(f"Adding PCI/PMI hydrogen pipelines commissioned by {investment_year}.")
     projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
 
     # Only add projects that are built before / up until the investment year
@@ -4642,6 +4640,65 @@ def _add_pci_pmi_links_hydrogen(
         carrier=projects.carrier.values,
         underwater_fraction=projects.underwater_fraction.values,
         lifetime=costs.at["H2 (g) pipeline", "lifetime"],
+    )
+
+    # p_max_pu, p_nom_extendable
+    n.links.loc[projects.index, "p_max_pu"] = pci_pmi_projects.get("links", {}).get(
+        "p_max_pu", 1
+    )
+    n.links.loc[projects.index, "p_nom_extendable"] = pci_pmi_projects.get(
+        "links", {}
+    ).get("p_nom_extendable", False)
+
+    # p_nom_max
+    p_nom_max_set = pci_pmi_projects.get("links", {}).get("p_nom_max", np.inf)
+    p_nom_max_ext = pci_pmi_projects.get("links", {}).get("max_extension", np.inf)
+
+    if np.isfinite(p_nom_max_ext) and p_nom_max_ext > 0:
+        logger.info(f"- limiting PCI/PMI pipeline extensions to {p_nom_max_ext} MW")
+        n.links.loc[projects.index, "p_nom_max"] = (
+            n.links.loc[projects.index, "p_nom"] + p_nom_max_ext
+        )
+
+    n.links.loc[projects.index, "p_nom_max"] = n.links.loc[
+        projects.index, "p_nom_max"
+    ].clip(upper=p_nom_max_set)
+
+
+def _add_pci_pmi_links_co2(
+    n: pypsa.Network,
+    pci_pmi_projects,
+    investment_year: int,
+    links_path: str,
+    buses_path: str,
+    costs: pd.DataFrame,
+) -> None:
+    logger.info("Adding additional PCI/PMI offshore CO2 buses.")
+    buses = pd.read_csv(buses_path, index_col=0, dtype={"bus0": str, "bus1": str})
+
+    n.add(
+        "Bus",
+        buses.index,
+        **buses.drop(columns="geometry"),
+    )
+
+    logger.info(f"Adding PCI/PMI CO2 pipelines commissioned by {investment_year}.")
+    projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
+
+    # Only add projects that are built before / up until the investment year
+    projects = projects[projects["build_year"] <= investment_year]
+    n.add(
+        "Link",
+        projects.index,
+        bus0=projects.bus0.values,
+        bus1=projects.bus1.values,
+        p_nom=projects.p_nom.values,
+        p_min_pu=-1,  # allow all PCI/PMI projects to be used in both directions
+        length=projects.length.values,
+        capital_cost=costs.at["CO2 pipeline", "fixed"] * projects.length.values,
+        carrier=projects.carrier.values,
+        underwater_fraction=projects.underwater_fraction.values,
+        lifetime=costs.at["CO2 pipeline", "lifetime"],
     )
 
     # p_max_pu, p_nom_extendable
@@ -4688,8 +4745,6 @@ if __name__ == "__main__":
     options = snakemake.params.sector
     cf_industry = snakemake.params.industry
     pci_pmi_projects = snakemake.params.pci_pmi_projects
-    if pci_pmi_projects.get("enable", False):
-        buses_pci_pmi_offshore = snakemake.input.buses_pci_pmi_offshore
 
     investment_year = int(snakemake.wildcards.planning_horizons)
 
@@ -4793,7 +4848,6 @@ if __name__ == "__main__":
 
     if not options["electricity_transmission_grid"]:
         decentral(n)
-    ### HERE
 
     # Extras settings PCI-PMI
     # only national extendability of p_nom for hydrogen and CO2
@@ -4822,9 +4876,23 @@ if __name__ == "__main__":
             pci_pmi_projects,
             investment_year,
             snakemake.input["links_hydrogen_pipeline"],
-            buses_pci_pmi_offshore,
+            snakemake.input["buses_hydrogen_offshore"],
             costs,
         )
+
+    if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get(
+        "include", {}
+    ).get("links_co2_pipeline", False):
+        _add_pci_pmi_links_co2(
+            n,
+            pci_pmi_projects,
+            investment_year,
+            snakemake.input["links_co2_pipeline"],
+            snakemake.input["buses_co2_stored_offshore"],
+            costs,
+        )
+
+    n.buses.groupby("location").agg({"x": "first", "y": "first"})
 
     if options["co2network"]:
         add_co2_network(n, costs)

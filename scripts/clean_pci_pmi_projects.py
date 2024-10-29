@@ -171,15 +171,15 @@ UNDERGROUND_MAPPING = {  # "t" for true (underground), "f" for false (overground
 CARRIER_MAPPING = {
     "generators_hydrogen_terminal": "H2",
     "lines_electricity_transmission": "AC",
-    "links_co2_pipeline": "CO2",
-    "links_co2_shipping": "CO2",
+    "links_co2_pipeline": "CO2 pipeline",
+    "links_co2_shipping": "CO2 pipeline",
     "links_electricity_transmission": "DC",
     "links_electrolyser": "H2",
     "links_gas_pipeline": "gas",
     "links_hydrogen_pipeline": "H2 pipeline",
     "links_offshore_grids": "DC",
     "storage_units_hydrogen": "H2",
-    "stores_co2": "CO2",
+    "stores_co2": "co2 sequestered",
 }
 
 LINE_TYPES_MAPPING = {

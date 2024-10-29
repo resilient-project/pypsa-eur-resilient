@@ -56,6 +56,14 @@ COLUMNS_LINKS = [
     "underwater_fraction",
     "tags",
 ]
+COLUMNS_LINKS_CO2_SEQUESTERED = [
+    "bus0",
+    "bus1",
+    "length",
+    "p_nom",
+    "carrier",
+    "reversed",
+]
 COLUMNS_STORAGE_UNITS = [
     "bus",
     "build_year",
@@ -193,8 +201,8 @@ def _add_geometry_to_tags(df):
     return df
 
 
-def _calculate_haversine_distance(n, lines, line_length_factor):
-    coords = n.buses[["x", "y"]]
+def _calculate_haversine_distance(buses, lines, line_length_factor):
+    coords = buses[["x", "y"]]
 
     lines.loc[:, "length"] = (
         haversine_pts(coords.loc[lines["bus0"]], coords.loc[lines["bus1"]])
@@ -368,11 +376,14 @@ def _set_unique_index(gdf):
 
 
 def _cluster_close_buses(
-    gdf, tol=CLUSTER_TOL, distance_crs=DISTANCE_CRS, geo_crs=GEO_CRS
+    gdf,
+    tol=CLUSTER_TOL,
+    distance_crs=DISTANCE_CRS,
+    geo_crs=GEO_CRS,
 ):
-    prefix = gdf.index[0].split(" ")[0]
-    suffix = gdf.index[0].split(" ")[-1]
     carrier = gdf["carrier"].iloc[0]
+    prefix = gdf.index[0].split(" ")[0]
+    suffix = carrier
 
     logger.info(f"Clustering close PCI (offshore) buses within {tol} m.")
 
@@ -462,6 +473,18 @@ if __name__ == "__main__":
     regions_offshore = gpd.read_file(snakemake.input.regions_offshore).set_index("name")
     scope = gpd.read_file(snakemake.input.scope)
 
+    # Buses
+    buses_coords = n.buses.loc[n.buses.carrier == "AC", ["x", "y"]].copy()
+    # Create suffix versions and append (suffix "H2")
+    buses_coords = pd.concat(
+        [
+            buses_coords,
+            buses_coords.rename(lambda x: x + " H2"),
+            buses_coords.rename(lambda x: x + " co2 stored"),
+            buses_coords.rename(lambda x: x + " co2 sequestered"),
+        ]
+    )
+
     logger.info("Imported network.")
 
     # TODO: make this more robust
@@ -519,72 +542,121 @@ if __name__ == "__main__":
     )
 
     ### Hydrogen pipelines (links)
-    links_hydrogen_pipeline = components["links_hydrogen_pipeline"].copy()
-
     ## Here
     buses_hydrogen_offshore = _create_new_buses(
-        links_hydrogen_pipeline, regions_onshore, scope, "H2"
+        components["links_hydrogen_pipeline"], regions_onshore, scope, "H2"
     )
     buses_hydrogen_offshore = _cluster_close_buses(
         buses_hydrogen_offshore, tol=CLUSTER_TOL
     )
+    # Append to buses_coords
+    buses_coords = pd.concat([buses_coords, buses_hydrogen_offshore[["x", "y"]]])
 
     # gpd.GeoDataFrame(geometry=buses_hydrogen_offshore.apply(lambda row: Point(row["x"], row["y"]), axis=1), crs=GEO_CRS).explore(m=map, color="purple")
 
-    links_hydrogen_pipeline = _split_to_overpassing_segments(
-        links_hydrogen_pipeline,
+    components["links_hydrogen_pipeline"] = _split_to_overpassing_segments(
+        components["links_hydrogen_pipeline"],
         regions_onshore,
     )
 
-    links_hydrogen_pipeline = _map_to_closest_region(
-        links_hydrogen_pipeline,
+    components["links_hydrogen_pipeline"] = _map_to_closest_region(
+        components["links_hydrogen_pipeline"],
         buses_hydrogen_offshore,
         max_distance=OFFSHORE_BUS_RADIUS,
     )
-    links_hydrogen_pipeline = _map_to_closest_region(
-        links_hydrogen_pipeline,
+    components["links_hydrogen_pipeline"] = _map_to_closest_region(
+        components["links_hydrogen_pipeline"],
         regions_onshore,
         max_distance=OFFSHORE_BUS_RADIUS,
         add_suffix="H2",
     )
-    links_hydrogen_pipeline = _drop_redundant_lines_links(links_hydrogen_pipeline)
-    links_hydrogen_pipeline = _add_geometry_to_tags(links_hydrogen_pipeline)
-    links_hydrogen_pipeline = _set_underwater_fraction(
-        links_hydrogen_pipeline, regions_offshore
+    components["links_hydrogen_pipeline"] = _drop_redundant_lines_links(
+        components["links_hydrogen_pipeline"]
     )
-    links_hydrogen_pipeline = _set_unique_index(links_hydrogen_pipeline)
+    components["links_hydrogen_pipeline"] = _add_geometry_to_tags(
+        components["links_hydrogen_pipeline"]
+    )
+    components["links_hydrogen_pipeline"] = _set_underwater_fraction(
+        components["links_hydrogen_pipeline"], regions_offshore
+    )
+    components["links_hydrogen_pipeline"] = _set_unique_index(
+        components["links_hydrogen_pipeline"]
+    )
 
     ### CO2 pipelines (links)
-    links_co2_pipeline = components["links_co2_pipeline"].copy()
-
-    buses_co2_offshore = _create_new_buses(
-        links_co2_pipeline, regions_onshore, scope, "CO2", tol=OFFSHORE_BUS_RADIUS
+    buses_co2_stored_offshore = _create_new_buses(
+        components["links_co2_pipeline"],
+        regions_onshore,
+        scope,
+        "co2 stored",
+        tol=OFFSHORE_BUS_RADIUS,
     )
-    buses_co2_offshore = _cluster_close_buses(buses_co2_offshore, tol=CLUSTER_TOL)
 
-    links_co2_pipeline = _split_to_overpassing_segments(
-        links_co2_pipeline,
+    buses_co2_stored_offshore = _cluster_close_buses(
+        buses_co2_stored_offshore, tol=CLUSTER_TOL
+    )
+    # Append to buses_coords
+    buses_coords = pd.concat([buses_coords, buses_co2_stored_offshore[["x", "y"]]])
+
+    # Create co2 sequestered buses
+    buses_co2_sequestered_offshore = buses_co2_stored_offshore.copy()
+    # Replace all strings "co2 stored" with "co2 sequestered"
+    buses_co2_sequestered_offshore.index = (
+        buses_co2_sequestered_offshore.index.str.replace(
+            "co2 stored", "co2 sequestered"
+        )
+    )
+    buses_co2_sequestered_offshore["carrier"] = buses_co2_sequestered_offshore[
+        "carrier"
+    ].str.replace("co2 stored", "co2 sequestered")
+    # Append to buses_coords
+    buses_coords = pd.concat([buses_coords, buses_co2_sequestered_offshore[["x", "y"]]])
+
+    # Create links between co2 stored and co2 sequestered buses
+    links_co2_sequestered = pd.DataFrame(
+        {
+            "id": buses_co2_sequestered_offshore.index,
+            "bus0": buses_co2_stored_offshore.index,
+            "bus1": buses_co2_sequestered_offshore.index,
+            "length": 0,
+            "p_nom": 0,
+            "carrier": "co2 sequestered",
+            "reversed": False,
+        }
+    )
+    links_co2_sequestered.set_index("id", inplace=True)
+
+    components["links_co2_pipeline"] = _split_to_overpassing_segments(
+        components["links_co2_pipeline"],
         regions_onshore,
     )
 
-    links_co2_pipeline = _map_to_closest_region(
-        links_co2_pipeline,
-        buses_co2_offshore,
+    components["links_co2_pipeline"] = _map_to_closest_region(
+        components["links_co2_pipeline"],
+        buses_co2_stored_offshore,
         max_distance=OFFSHORE_BUS_RADIUS,
         add_suffix="",
     )
 
-    links_co2_pipeline = _map_to_closest_region(
-        links_co2_pipeline,
+    components["links_co2_pipeline"] = _map_to_closest_region(
+        components["links_co2_pipeline"],
         regions_onshore,
         max_distance=OFFSHORE_BUS_RADIUS * 4,
-        add_suffix="CO2",
+        add_suffix="co2 stored",
     )
 
-    links_co2_pipeline = _drop_redundant_lines_links(links_co2_pipeline)
-    links_co2_pipeline = _add_geometry_to_tags(links_co2_pipeline)
-    links_co2_pipeline = _set_underwater_fraction(links_co2_pipeline, regions_offshore)
-    links_co2_pipeline = _set_unique_index(links_co2_pipeline)
+    components["links_co2_pipeline"] = _drop_redundant_lines_links(
+        components["links_co2_pipeline"]
+    )
+    components["links_co2_pipeline"] = _add_geometry_to_tags(
+        components["links_co2_pipeline"]
+    )
+    components["links_co2_pipeline"] = _set_underwater_fraction(
+        components["links_co2_pipeline"], regions_offshore
+    )
+    components["links_co2_pipeline"] = _set_unique_index(
+        components["links_co2_pipeline"]
+    )
 
     ### Map stores and storage units
     components["storage_units_hydrogen"] = _map_points_to_closest_region(
@@ -595,26 +667,26 @@ if __name__ == "__main__":
 
     components["stores_co2"] = _map_points_to_closest_region(
         components["stores_co2"],
-        buses_co2_offshore,
+        buses_co2_sequestered_offshore,
         max_distance=CLUSTER_TOL * 2,
     )
     components["stores_co2"] = _map_points_to_closest_region(
         components["stores_co2"],
         regions_onshore,
         max_distance=CLUSTER_TOL * 2,
-        add_suffix="CO2",
+        add_suffix="co2 sequestered",
     )
     # Aggregate stores
     components["stores_co2"] = _aggregate_units(
         components["stores_co2"],
-        prefix="store",
+        prefix="sink",
     )
 
     ## DEBUG
     map = None
     map = regions_onshore.explore(m=map, color="grey")
     map = buses_hydrogen_offshore.explore(m=map)
-    map = links_hydrogen_pipeline[["bus0", "bus1", "geometry"]].explore(
+    map = components["links_hydrogen_pipeline"][["bus0", "bus1", "geometry"]].explore(
         m=map, color="red"
     )
     map = components["storage_units_hydrogen"].explore(m=map, color="green")
@@ -622,41 +694,50 @@ if __name__ == "__main__":
 
     map = None
     map = regions_onshore.explore(m=map, color="grey")
-    map = buses_co2_offshore.explore(m=map)
-    map = links_co2_pipeline[["bus0", "bus1", "geometry"]].explore(m=map, color="red")
+    map = buses_co2_stored_offshore.explore(m=map)
+    map = components["links_co2_pipeline"][["bus0", "bus1", "geometry"]].explore(
+        m=map, color="red"
+    )
     map = components["stores_co2"].explore(m=map, color="green")
     map
 
     # Recalculate length/distances if activated
     if haversine_distance:
-        n.add(
-            "Bus",
-            buses_hydrogen_offshore.index,
-            **buses_hydrogen_offshore.drop(columns="geometry"),
-        )
-
-        n.add(
-            "Bus",
-            buses_co2_offshore.index,
-            **buses_co2_offshore.drop(columns="geometry"),
-        )
-
         logger.info("Recalculating line lengths with haversine distance.")
         components["lines_electricity_transmission"] = _calculate_haversine_distance(
-            n, components["lines_electricity_transmission"], line_length_factor
+            buses_coords,
+            components["lines_electricity_transmission"],
+            line_length_factor,
         )
         components["links_electricity_transmission"] = _calculate_haversine_distance(
-            n, components["links_electricity_transmission"], line_length_factor
+            buses_coords,
+            components["links_electricity_transmission"],
+            line_length_factor,
         )
-        links_hydrogen_pipeline = _calculate_haversine_distance(
-            n, links_hydrogen_pipeline, line_length_factor
+        components["links_hydrogen_pipeline"] = _calculate_haversine_distance(
+            buses_coords,
+            components["links_hydrogen_pipeline"],
+            line_length_factor,
+        )
+        components["links_co2_pipeline"] = _calculate_haversine_distance(
+            buses_coords,
+            components["links_co2_pipeline"],
+            line_length_factor,
         )
 
     ### EXPORT
     ### Buses
-    buses_pci_pmi_offshore = pd.concat([buses_hydrogen_offshore])
     logger.info("Exporting added PCI/PMI buses to resources folder.")
-    buses_pci_pmi_offshore.to_csv(snakemake.output.buses_pci_pmi_offshore, index=True)
+    buses_hydrogen_offshore.to_csv(snakemake.output.buses_hydrogen_offshore, index=True)
+    buses_co2_stored_offshore.to_csv(
+        snakemake.output.buses_co2_stored_offshore, index=True
+    )
+    buses_co2_sequestered_offshore.to_csv(
+        snakemake.output.buses_co2_sequestered_offshore, index=True
+    )
+
+    ### Sequestered links
+    links_co2_sequestered.to_csv(snakemake.output.links_co2_sequestered, index=True)
 
     ### Projects
     logger.info("Exporting PCI/PMI projects to resources folder.")
@@ -680,11 +761,20 @@ if __name__ == "__main__":
         snakemake.output.links_electricity_transmission, index=True
     )
     projects = sorted(
-        links_hydrogen_pipeline["tags"].apply(lambda x: x["pci_code"]).unique()
+        components["links_hydrogen_pipeline"]["tags"]
+        .apply(lambda x: x["pci_code"])
+        .unique()
     )
     logger.info(f" - Hydrogen pipeline projects: {projects}")
-    links_hydrogen_pipeline[COLUMNS_LINKS].to_csv(
+    components["links_hydrogen_pipeline"][COLUMNS_LINKS].to_csv(
         snakemake.output.links_hydrogen_pipeline, index=True
+    )
+    projects = sorted(
+        components["links_co2_pipeline"]["tags"].apply(lambda x: x["pci_code"]).unique()
+    )
+    logger.info(f" - CO2 pipeline projects: {projects}")
+    components["links_co2_pipeline"][COLUMNS_LINKS].to_csv(
+        snakemake.output.links_co2_pipeline, index=True
     )
 
     ### Export storages and stores
