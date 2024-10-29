@@ -1226,8 +1226,16 @@ if __name__ == "__main__":
     )
 
     ### Storage unites
+    # Drop CO2 onshore surface injection facilities BE and DE
+    onshore_DE_BE = components["stores_co2"]["geometry"].apply(
+        lambda x: x.within(country_shapes.loc["BE"].geometry.buffer(0.02))
+        or x.within(country_shapes.loc["DE"].geometry.buffer(0.02))
+    )
+    components["stores_co2"] = components["stores_co2"][~onshore_DE_BE]
+
     # Map params to storage projects
     # CO2
+
     components["stores_co2"] = _map_params_to_projects(
         components["stores_co2"],
         params_stores_co2,

@@ -418,6 +418,27 @@ def _cluster_close_buses(
     return gdf[["x", "y", "carrier", "location", "geometry"]]
 
 
+def _aggregate_units(gdf, prefix=""):
+    gdf = gdf.groupby(["bus", "build_year"]).agg(
+        {
+            "e_nom_max": "sum",
+            "carrier": "first",
+            "tags": lambda x: list(x.index),
+            "geometry": lambda x: unary_union(x).centroid,
+        }
+    )
+
+    gdf.reset_index(inplace=True)
+    gdf["id"] = gdf.apply(
+        lambda row: f"{prefix} {row['bus']}-{row['build_year']}", axis=1
+    )
+    gdf = gpd.GeoDataFrame(gdf, geometry="geometry", crs=GEO_CRS)
+
+    gdf.set_index("id", inplace=True)
+
+    return gdf
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -460,40 +481,42 @@ if __name__ == "__main__":
         components[component]["tags"] = components[component]["tags"].apply(json.loads)
 
     ### Electricity transmission lines
-    lines_electricity_transmission = components["lines_electricity_transmission"].copy()
-    lines_electricity_transmission = _map_to_closest_region(
-        lines_electricity_transmission,
+    components["lines_electricity_transmission"] = _map_to_closest_region(
+        components["lines_electricity_transmission"],
         regions_onshore,
         max_distance=OFFSHORE_BUS_RADIUS,
     )
-    lines_electricity_transmission = _drop_redundant_lines_links(
-        lines_electricity_transmission
+    components["lines_electricity_transmission"] = _drop_redundant_lines_links(
+        components["lines_electricity_transmission"]
     )
-    lines_electricity_transmission = _add_geometry_to_tags(
-        lines_electricity_transmission
+    components["lines_electricity_transmission"] = _add_geometry_to_tags(
+        components["lines_electricity_transmission"]
     )
-    lines_electricity_transmission = _simplify_lines_to_380(
-        lines_electricity_transmission, linetype_380
+    components["lines_electricity_transmission"] = _simplify_lines_to_380(
+        components["lines_electricity_transmission"], linetype_380
     )
-    lines_electricity_transmission = _set_unique_index(lines_electricity_transmission)
+    components["lines_electricity_transmission"] = _set_unique_index(
+        components["lines_electricity_transmission"]
+    )
 
     ### Electricity transmission links
-    links_electricity_transmission = components["links_electricity_transmission"].copy()
-    links_electricity_transmission = _map_to_closest_region(
-        links_electricity_transmission,
+    components["links_electricity_transmission"] = _map_to_closest_region(
+        components["links_electricity_transmission"],
         regions_onshore,
         max_distance=OFFSHORE_BUS_RADIUS,
     )
-    links_electricity_transmission = _drop_redundant_lines_links(
-        links_electricity_transmission
+    components["links_electricity_transmission"] = _drop_redundant_lines_links(
+        components["links_electricity_transmission"]
     )
-    links_electricity_transmission = _add_geometry_to_tags(
-        links_electricity_transmission
+    components["links_electricity_transmission"] = _add_geometry_to_tags(
+        components["links_electricity_transmission"]
     )
-    links_electricity_transmission = _set_underwater_fraction(
-        links_electricity_transmission, regions_offshore
+    components["links_electricity_transmission"] = _set_underwater_fraction(
+        components["links_electricity_transmission"], regions_offshore
     )
-    lines_electricity_transmission = _set_unique_index(lines_electricity_transmission)
+    components["links_electricity_transmission"] = _set_unique_index(
+        components["links_electricity_transmission"]
+    )
 
     ### Hydrogen pipelines (links)
     links_hydrogen_pipeline = components["links_hydrogen_pipeline"].copy()
@@ -581,6 +604,11 @@ if __name__ == "__main__":
         max_distance=CLUSTER_TOL * 2,
         add_suffix="CO2",
     )
+    # Aggregate stores
+    components["stores_co2"] = _aggregate_units(
+        components["stores_co2"],
+        prefix="store",
+    )
 
     ## DEBUG
     map = None
@@ -614,11 +642,11 @@ if __name__ == "__main__":
         )
 
         logger.info("Recalculating line lengths with haversine distance.")
-        lines_electricity_transmission = _calculate_haversine_distance(
-            n, lines_electricity_transmission, line_length_factor
+        components["lines_electricity_transmission"] = _calculate_haversine_distance(
+            n, components["lines_electricity_transmission"], line_length_factor
         )
-        links_electricity_transmission = _calculate_haversine_distance(
-            n, links_electricity_transmission, line_length_factor
+        components["links_electricity_transmission"] = _calculate_haversine_distance(
+            n, components["links_electricity_transmission"], line_length_factor
         )
         links_hydrogen_pipeline = _calculate_haversine_distance(
             n, links_hydrogen_pipeline, line_length_factor
@@ -631,22 +659,24 @@ if __name__ == "__main__":
     buses_pci_pmi_offshore.to_csv(snakemake.output.buses_pci_pmi_offshore, index=True)
 
     ### Projects
-    projects = sorted(
-        lines_electricity_transmission["tags"].apply(lambda x: x["pci_code"]).unique()
-    )
     logger.info("Exporting PCI/PMI projects to resources folder.")
     projects = sorted(
-        lines_electricity_transmission["tags"].apply(lambda x: x["pci_code"]).unique()
+        components["lines_electricity_transmission"]["tags"]
+        .apply(lambda x: x["pci_code"])
+        .unique()
     )
     logger.info(f" - Electricity transmission line (AC) projects: {projects}")
-    lines_electricity_transmission[COLUMNS_LINES].to_csv(
+    components["lines_electricity_transmission"][COLUMNS_LINES].to_csv(
         snakemake.output.lines_electricity_transmission, index=True
     )
+
     projects = sorted(
-        links_electricity_transmission["tags"].apply(lambda x: x["pci_code"]).unique()
+        components["links_electricity_transmission"]["tags"]
+        .apply(lambda x: x["pci_code"])
+        .unique()
     )
     logger.info(f" - Electricity transmission links (DC) projects: {projects}")
-    links_electricity_transmission[COLUMNS_LINKS].to_csv(
+    components["links_electricity_transmission"][COLUMNS_LINKS].to_csv(
         snakemake.output.links_electricity_transmission, index=True
     )
     projects = sorted(
@@ -655,4 +685,13 @@ if __name__ == "__main__":
     logger.info(f" - Hydrogen pipeline projects: {projects}")
     links_hydrogen_pipeline[COLUMNS_LINKS].to_csv(
         snakemake.output.links_hydrogen_pipeline, index=True
+    )
+
+    ### Export storages and stores
+    logger.info("Exporting storage units and stores to resources folder.")
+    components["storage_units_hydrogen"][COLUMNS_STORAGE_UNITS].to_csv(
+        snakemake.output.storage_units_hydrogen, index=True
+    )
+    components["stores_co2"][COLUMNS_STORES].to_csv(
+        snakemake.output.stores_co2, index=True
     )
