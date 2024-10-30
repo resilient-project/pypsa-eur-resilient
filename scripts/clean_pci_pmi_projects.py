@@ -92,7 +92,7 @@ COLUMNS_STORAGE_UNITS = [
 COLUMNS_STORES = [
     "project_status",
     "build_year",
-    "e_nom_max",
+    "e_nom",
     "carrier",
     "tags",
     "geometry",
@@ -1239,13 +1239,13 @@ if __name__ == "__main__":
     components["stores_co2"] = _map_params_to_projects(
         components["stores_co2"],
         params_stores_co2,
-        "e_nom_max",
+        "e_nom",
     )
 
     components["stores_hydrogen"] = _map_params_to_projects(
         components["stores_hydrogen"],
         params_stores_hydrogen,
-        "e_nom_max",
+        "e_nom",
     )
 
     # components["links_co2_shipping"] = _clip_to_offshore(

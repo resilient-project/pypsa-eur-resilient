@@ -67,7 +67,7 @@ COLUMNS_STORAGE_UNITS = [
 COLUMNS_STORES = [
     "bus",
     "build_year",
-    "e_nom_max",
+    "e_nom",
     "carrier",
     "tags",
 ]
@@ -419,7 +419,7 @@ def _cluster_close_buses(
 def _aggregate_units(gdf):
     gdf = gdf.groupby(["bus", "build_year"]).agg(
         {
-            "e_nom_max": "sum",
+            "e_nom": "sum",
             "carrier": "first",
             "tags": lambda x: list(x.index),
             "geometry": lambda x: unary_union(x).centroid,
@@ -618,6 +618,10 @@ if __name__ == "__main__":
         regions_onshore,
         max_distance=OFFSHORE_BUS_RADIUS,
     )
+    components["stores_hydrogen"] = _aggregate_units(
+        components["stores_hydrogen"],
+    )
+
     components["stores_co2"] = _map_points_to_closest_region(
         components["stores_co2"],
         buses_co2_offshore,
@@ -628,11 +632,14 @@ if __name__ == "__main__":
         regions_onshore,
         max_distance=CLUSTER_TOL * 2,
     )
+    components["stores_co2"] = _aggregate_units(
+        components["stores_co2"],
+    )
 
-    # Aggregate stores
-    # components["stores_co2"] = _aggregate_units(
-    #     components["stores_co2"],
-    # )
+    # Set p_nom of co2_pipeline to the max of all co2 stores
+    components["links_co2_pipeline"]["p_nom"] = (
+        components["stores_co2"]["e_nom"].sum() / 8760
+    ).round(0)
 
     ## DEBUG
     map = None

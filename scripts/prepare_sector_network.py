@@ -5047,7 +5047,13 @@ if __name__ == "__main__":
 
     # only keep buses with H2 stores and str starts with PCI
     # Debugging
-    n.links = n.links.query("carrier == 'CO2 pipeline' and index.str.startswith('PCI')")
-    n.plot(line_widths=0.1)
+    n2 = n.copy()
+
+    n2.links = n2.links.query(
+        "carrier == 'H2 pipeline' and index.str.startswith('PCI')"
+    )
+    n2.plot(line_widths=0.1)
+
+    # Remove H2 network underneath PCI
 
 # %%
