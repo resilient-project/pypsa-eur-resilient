@@ -659,8 +659,8 @@ if __name__ == "__main__":
     )
 
     ### Map stores and storage units
-    components["storage_units_hydrogen"] = _map_points_to_closest_region(
-        components["storage_units_hydrogen"],
+    components["stores_hydrogen"] = _map_points_to_closest_region(
+        components["stores_hydrogen"],
         regions_onshore,
         max_distance=OFFSHORE_BUS_RADIUS,
     )
@@ -689,7 +689,7 @@ if __name__ == "__main__":
     map = components["links_hydrogen_pipeline"][["bus0", "bus1", "geometry"]].explore(
         m=map, color="red"
     )
-    map = components["storage_units_hydrogen"].explore(m=map, color="green")
+    map = components["stores_hydrogen"].explore(m=map, color="green")
     map
 
     map = None
@@ -779,8 +779,8 @@ if __name__ == "__main__":
 
     ### Export storages and stores
     logger.info("Exporting storage units and stores to resources folder.")
-    components["storage_units_hydrogen"][COLUMNS_STORAGE_UNITS].to_csv(
-        snakemake.output.storage_units_hydrogen, index=True
+    components["stores_hydrogen"][COLUMNS_STORAGE_UNITS].to_csv(
+        snakemake.output.stores_hydrogen, index=True
     )
     components["stores_co2"][COLUMNS_STORES].to_csv(
         snakemake.output.stores_co2, index=True

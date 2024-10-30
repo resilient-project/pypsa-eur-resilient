@@ -1047,9 +1047,30 @@ rule prepare_sector_network:
         unpack(input_add_pci_pmi_projects),
         **rules.cluster_gas_network.output,
         **rules.build_gas_input_locations.output,
-        buses_pci_pmi_offshore=lambda w: (
+        buses_hydrogen_offshore=lambda w: (
             resources(
-                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/buses_hydrogen_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            )
+            if config_provider("pci-pmi-projects", "enable")(w)
+            else []
+        ),
+        buses_co2_stored_offshore=lambda w: (
+            resources(
+                "pci-pmi-projects/buses_co2_stored_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            )
+            if config_provider("pci-pmi-projects", "enable")(w)
+            else []
+        ),
+        buses_co2_sequestered_offshore=lambda w: (
+            resources(
+                "pci-pmi-projects/buses_co2_sequestered_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            )
+            if config_provider("pci-pmi-projects", "enable")(w)
+            else []
+        ),
+        links_co2_sequestered=lambda w: (
+            resources(
+                "pci-pmi-projects/links_co2_sequestered_s_{clusters}_l{ll}_{opts}.csv"
             )
             if config_provider("pci-pmi-projects", "enable")(w)
             else []
@@ -1180,7 +1201,7 @@ if config["pci-pmi-projects"]["enable"]:
             country_shapes=resources("country_shapes.geojson"),
             fix=lambda wildcards: glob.glob("data/pci-pmi/fix/*.json"),
             params_stores_co2="data/pci-pmi/params/stores_co2.csv",
-            params_storage_units_hydrogen="data/pci-pmi/params/storage_units_hydrogen.csv",
+            params_stores_hydrogen="data/pci-pmi/params/stores_hydrogen.csv",
         output:
             buses_electricity_transmission="data/pci-pmi/projects/buses_electricity_transmission.geojson",
             buses_offshore_grids="data/pci-pmi/projects/buses_offshore_grids.geojson",
@@ -1195,7 +1216,7 @@ if config["pci-pmi-projects"]["enable"]:
             links_hydrogen_pipeline="data/pci-pmi/projects/links_hydrogen_pipeline.geojson",
             links_offshore_grids="data/pci-pmi/projects/links_offshore_grids.geojson",
             storage_units_electricity="data/pci-pmi/projects/storage_units_electricity.geojson",
-            storage_units_hydrogen="data/pci-pmi/projects/storage_units_hydrogen.geojson",
+            stores_hydrogen="data/pci-pmi/projects/stores_hydrogen.geojson",
             stores_co2="data/pci-pmi/projects/stores_co2.geojson",
         log:
             logs("clean_pci_pmi_projects.log"),
@@ -1229,8 +1250,17 @@ if config["pci-pmi-projects"]["enable"]:
                 if include
             ],
         output:
-            buses_pci_pmi_offshore=resources(
-                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            buses_hydrogen_offshore=resources(
+                "pci-pmi-projects/buses_hydrogen_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            ),
+            buses_co2_stored_offshore=resources(
+                "pci-pmi-projects/buses_co2_stored_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            ),
+            buses_co2_sequestered_offshore=resources(
+                "pci-pmi-projects/buses_co2_sequestered_offshore_s_{clusters}_l{ll}_{opts}.csv"
+            ),
+            links_co2_sequestered=resources(
+                "pci-pmi-projects/links_co2_sequestered_s_{clusters}_l{ll}_{opts}.csv"
             ),
             lines_electricity_transmission=resources(
                 "pci-pmi-projects/lines_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
@@ -1244,8 +1274,8 @@ if config["pci-pmi-projects"]["enable"]:
             links_co2_pipeline=resources(
                 "pci-pmi-projects/links_co2_pipeline_s_{clusters}_l{ll}_{opts}.csv"
             ),
-            storage_units_hydrogen=resources(
-                "pci-pmi-projects/storage_units_hydrogen_s_{clusters}_l{ll}_{opts}.csv"
+            stores_hydrogen=resources(
+                "pci-pmi-projects/stores_hydrogen_s_{clusters}_l{ll}_{opts}.csv"
             ),
             stores_co2=resources(
                 "pci-pmi-projects/stores_co2_s_{clusters}_l{ll}_{opts}.csv"

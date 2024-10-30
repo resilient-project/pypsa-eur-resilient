@@ -128,7 +128,7 @@ LAYER_MAPPING = {
     "Electrolyser": "links_electrolyser",
     "Gas pipeline": "links_gas_pipeline",
     "Hydrogen pipeline": "links_hydrogen_pipeline",
-    "Hydrogen storage": "storage_units_hydrogen",
+    "Hydrogen storage": "stores_hydrogen",
     "Hydrogen terminal": "generators_hydrogen_terminal",
     "Offshore grids": "links_offshore_grids",
     "Other essential CO2 equipement": "other",  # arbitrary assignment to mark for dropping later
@@ -152,7 +152,7 @@ COMPONENTS_MAPPING = {
     "links_hydrogen_pipeline": COLUMNS_LINKS,
     "links_offshore_grids": COLUMNS_LINKS,
     "storage_units_electricity": COLUMNS_STORAGE_UNITS,
-    "storage_units_hydrogen": COLUMNS_STORAGE_UNITS,
+    "stores_hydrogen": COLUMNS_STORES,
     "stores_co2": COLUMNS_STORES,
 }
 
@@ -178,7 +178,7 @@ CARRIER_MAPPING = {
     "links_gas_pipeline": "gas",
     "links_hydrogen_pipeline": "H2 pipeline",
     "links_offshore_grids": "DC",
-    "storage_units_hydrogen": "H2",
+    "stores_hydrogen": "H2",
     "stores_co2": "co2 sequestered",
 }
 
@@ -1137,12 +1137,12 @@ if __name__ == "__main__":
     )
     params_stores_co2.set_index("id", inplace=True)
 
-    params_storage_units_hydrogen = pd.read_csv(
-        snakemake.input.params_storage_units_hydrogen,
+    params_stores_hydrogen = pd.read_csv(
+        snakemake.input.params_stores_hydrogen,
         skiprows=[1],
         dtype={"id": str, "p_nom": float, "max_hours": float},
     )
-    params_storage_units_hydrogen.set_index("id", inplace=True)
+    params_stores_hydrogen.set_index("id", inplace=True)
 
     # INITIALISATION OF PROJECTS
     projects = _import_projects(json_files)  # Import projects from JSON files
@@ -1242,16 +1242,10 @@ if __name__ == "__main__":
         "e_nom_max",
     )
 
-    components["storage_units_hydrogen"] = _map_params_to_projects(
-        components["storage_units_hydrogen"],
-        params_storage_units_hydrogen,
-        "p_nom",
-    )
-
-    components["storage_units_hydrogen"] = _map_params_to_projects(
-        components["storage_units_hydrogen"],
-        params_storage_units_hydrogen,
-        "max_hours",
+    components["stores_hydrogen"] = _map_params_to_projects(
+        components["stores_hydrogen"],
+        params_stores_hydrogen,
+        "e_nom_max",
     )
 
     # components["links_co2_shipping"] = _clip_to_offshore(

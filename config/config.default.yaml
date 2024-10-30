@@ -138,7 +138,7 @@ pci-pmi-projects:
     links_electricity_transmission: true
     links_hydrogen_pipeline: true
     links_co2_pipeline: true
-    storage_units_hydrogen: true
+    stores_hydrogen: true
     stores_co2: true
   lines:
     s_max_pu: 0.7
