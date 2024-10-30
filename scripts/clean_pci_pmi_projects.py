@@ -178,7 +178,7 @@ CARRIER_MAPPING = {
     "links_gas_pipeline": "gas",
     "links_hydrogen_pipeline": "H2 pipeline",
     "links_offshore_grids": "DC",
-    "stores_hydrogen": "H2",
+    "stores_hydrogen": "H2 Store",
     "stores_co2": "co2 sequestered",
 }
 

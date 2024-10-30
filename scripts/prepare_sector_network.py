@@ -41,6 +41,7 @@ from pypsa.geo import haversine_pts
 from scipy.stats import beta
 
 spatial = SimpleNamespace()
+spatial_pci_pmi = SimpleNamespace()
 logger = logging.getLogger(__name__)
 
 
@@ -218,6 +219,42 @@ def define_spatial(nodes, options):
 
 
 spatial = SimpleNamespace()
+
+
+def define_spatial_pci_pmi(nodes, options):
+    """
+    Namespace for spatial.
+
+    Parameters
+    ----------
+    nodes : list-like
+    """
+
+    spatial_pci_pmi.nodes = nodes
+
+    # co2
+
+    spatial_pci_pmi.co2 = SimpleNamespace()
+
+    if options["co2_spatial"]:
+        spatial_pci_pmi.co2.nodes = nodes + " co2 stored"
+        spatial_pci_pmi.co2.locations = nodes
+        spatial_pci_pmi.co2.vents = nodes + " co2 vent"
+        spatial_pci_pmi.co2.process_emissions = nodes + " process emissions"
+    else:
+        spatial_pci_pmi.co2.nodes = ["co2 stored"]
+        spatial_pci_pmi.co2.locations = ["EU"]
+        spatial_pci_pmi.co2.vents = ["co2 vent"]
+        spatial_pci_pmi.co2.process_emissions = ["process emissions"]
+
+    spatial_pci_pmi.co2.df = pd.DataFrame(vars(spatial_pci_pmi.co2), index=nodes)
+
+    # hydrogen
+    spatial_pci_pmi.h2 = SimpleNamespace()
+    spatial_pci_pmi.h2.nodes = nodes + " H2"
+    spatial_pci_pmi.h2.locations = nodes
+
+    return spatial_pci_pmi
 
 
 def determine_emission_sectors(options):
@@ -609,7 +646,7 @@ def add_eu_bus(n, x=-5.5, y=46):
     n.add("Carrier", "none")
 
 
-def add_co2_tracking(n, costs, options):
+def add_co2_tracking(n, costs, spatial, options):
     # minus sign because opposite to how fossil fuels used:
     # CH4 burning puts CH4 down, atmosphere up
     n.add("Carrier", "co2", co2_emissions=-1.0)
@@ -634,6 +671,8 @@ def add_co2_tracking(n, costs, options):
         location=spatial.co2.locations,
         carrier="co2 stored",
         unit="t_co2",
+        x=n.buses.loc[spatial.co2.locations, "x"].rename(lambda x: x + " co2 stored"),
+        y=n.buses.loc[spatial.co2.locations, "y"].rename(lambda x: x + " co2 stored"),
     )
 
     n.add(
@@ -1357,7 +1396,15 @@ def add_storage_and_grids(n, costs):
 
     n.add("Carrier", "H2")
 
-    n.add("Bus", nodes + " H2", location=nodes, carrier="H2", unit="MWh_LHV")
+    n.add(
+        "Bus",
+        nodes + " H2",
+        location=nodes,
+        carrier="H2",
+        unit="MWh_LHV",
+        x=n.buses.loc[nodes, "x"].rename(lambda x: x + " H2"),
+        y=n.buses.loc[nodes, "y"].rename(lambda x: x + " H2"),
+    )
 
     n.add(
         "Link",
@@ -1729,6 +1776,36 @@ def add_storage_and_grids(n, costs):
             capital_cost=costs.at["SMR", "fixed"],
             lifetime=costs.at["SMR", "lifetime"],
         )
+
+
+def add_hydrogen_pci_pmi(n, costs, nodes):
+    logger.info("Adding hydrogen nodes for PCI/PMI")
+
+    n.add("Carrier", "H2")
+
+    n.add(
+        "Bus",
+        nodes + " H2",
+        location=nodes,
+        carrier="H2",
+        unit="MWh_LHV",
+        x=n.buses.loc[nodes, "x"].rename(lambda x: x + " H2"),
+        y=n.buses.loc[nodes, "y"].rename(lambda x: x + " H2"),
+    )
+
+    # change index name
+
+    n.add(
+        "Link",
+        nodes + " H2 Electrolysis",
+        bus1=nodes + " H2",
+        bus0=nodes,
+        p_nom_extendable=True,
+        carrier="H2 Electrolysis",
+        efficiency=costs.at["electrolysis", "efficiency"],
+        capital_cost=costs.at["electrolysis", "fixed"],
+        lifetime=costs.at["electrolysis", "lifetime"],
+    )
 
 
 def check_land_transport_shares(shares):
@@ -4606,22 +4683,24 @@ def _add_pci_pmi_links_electricity(
     ].clip(upper=p_nom_max_set)
 
 
-def _add_pci_pmi_links_hydrogen(
+def _add_pci_pmi_links(
     n: pypsa.Network,
     pci_pmi_projects,
     investment_year: int,
     links_path: str,
-    buses_path: str,
     costs: pd.DataFrame,
+    carrier,
 ) -> None:
-    logger.info("Adding additional PCI/PMI offshore hydrogen buses.")
-    buses = pd.read_csv(buses_path, index_col=0, dtype={"bus0": str, "bus1": str})
 
-    n.add(
-        "Bus",
-        buses.index,
-        **buses.drop(columns="geometry"),
-    )
+    if carrier == "H2 pipeline":
+        capital_cost_carrier = costs.at["H2 (g) pipeline", "fixed"]
+        lifetime_carrier = costs.at["H2 (g) pipeline", "lifetime"]
+
+    if carrier == "CO2 pipeline":
+        capital_cost_carrier = costs.at["CO2 pipeline", "fixed"]
+        lifetime_carrier = costs.at["CO2 pipeline", "lifetime"]
+
+    logger.info("Adding additional PCI/PMI offshore hydrogen buses.")
 
     logger.info(f"Adding PCI/PMI hydrogen pipelines commissioned by {investment_year}.")
     projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
@@ -4636,10 +4715,10 @@ def _add_pci_pmi_links_hydrogen(
         p_nom=projects.p_nom.values,
         p_min_pu=-1,  # allow all PCI/PMI projects to be used in both directions
         length=projects.length.values,
-        capital_cost=costs.at["H2 (g) pipeline", "fixed"] * projects.length.values,
+        capital_cost=capital_cost_carrier * projects.length.values,
         carrier=projects.carrier.values,
         underwater_fraction=projects.underwater_fraction.values,
-        lifetime=costs.at["H2 (g) pipeline", "lifetime"],
+        lifetime=lifetime_carrier,
     )
 
     # p_max_pu, p_nom_extendable
@@ -4665,63 +4744,28 @@ def _add_pci_pmi_links_hydrogen(
     ].clip(upper=p_nom_max_set)
 
 
-def _add_pci_pmi_links_co2(
-    n: pypsa.Network,
-    pci_pmi_projects,
-    investment_year: int,
-    links_path: str,
-    buses_path: str,
-    costs: pd.DataFrame,
-) -> None:
-    logger.info("Adding additional PCI/PMI offshore CO2 buses.")
-    buses = pd.read_csv(buses_path, index_col=0, dtype={"bus0": str, "bus1": str})
+def add_pci_pmi_stores(n, costs, stores_path):
+    stores = pd.read_csv(stores_path, index_col=0)
+    carrier = stores.carrier.unique()[0]
+
+    if carrier == "H2 Store":
+        capital_cost_carrier = costs.at["hydrogen storage underground", "fixed"]
+        lifetime_carrier = costs.at["hydrogen storage underground", "lifetime"]
+    if carrier == "co2 sequestered":
+        capital_cost_carrier = costs.at["CO2 storage tank", "fixed"]
+        lifetime_carrier = costs.at["CO2 storage tank", "lifetime"]
 
     n.add(
-        "Bus",
-        buses.index,
-        **buses.drop(columns="geometry"),
+        "Store",
+        stores.index,
+        bus=stores.bus.values,
+        e_nom_extendable=False,
+        e_nom_max=stores.e_nom_max.values,
+        e_cyclic=True,
+        carrier=stores.carrier.values,
+        capital_cost=capital_cost_carrier,
+        lifetime=lifetime_carrier,
     )
-
-    logger.info(f"Adding PCI/PMI CO2 pipelines commissioned by {investment_year}.")
-    projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
-
-    # Only add projects that are built before / up until the investment year
-    projects = projects[projects["build_year"] <= investment_year]
-    n.add(
-        "Link",
-        projects.index,
-        bus0=projects.bus0.values,
-        bus1=projects.bus1.values,
-        p_nom=projects.p_nom.values,
-        p_min_pu=-1,  # allow all PCI/PMI projects to be used in both directions
-        length=projects.length.values,
-        capital_cost=costs.at["CO2 pipeline", "fixed"] * projects.length.values,
-        carrier=projects.carrier.values,
-        underwater_fraction=projects.underwater_fraction.values,
-        lifetime=costs.at["CO2 pipeline", "lifetime"],
-    )
-
-    # p_max_pu, p_nom_extendable
-    n.links.loc[projects.index, "p_max_pu"] = pci_pmi_projects.get("links", {}).get(
-        "p_max_pu", 1
-    )
-    n.links.loc[projects.index, "p_nom_extendable"] = pci_pmi_projects.get(
-        "links", {}
-    ).get("p_nom_extendable", False)
-
-    # p_nom_max
-    p_nom_max_set = pci_pmi_projects.get("links", {}).get("p_nom_max", np.inf)
-    p_nom_max_ext = pci_pmi_projects.get("links", {}).get("max_extension", np.inf)
-
-    if np.isfinite(p_nom_max_ext) and p_nom_max_ext > 0:
-        logger.info(f"- limiting PCI/PMI pipeline extensions to {p_nom_max_ext} MW")
-        n.links.loc[projects.index, "p_nom_max"] = (
-            n.links.loc[projects.index, "p_nom"] + p_nom_max_ext
-        )
-
-    n.links.loc[projects.index, "p_nom_max"] = n.links.loc[
-        projects.index, "p_nom_max"
-    ].clip(upper=p_nom_max_set)
 
 
 # %%
@@ -4759,6 +4803,20 @@ if __name__ == "__main__":
         snakemake.params.costs,
         nyears,
     )
+
+    ### Add PCI offshore buses
+    if pci_pmi_projects.get("enable", False):
+        buses_pci_pmi_offshore = pd.read_csv(
+            snakemake.input.buses_pci_pmi_offshore, index_col=0
+        )
+        n.add(
+            "Bus",
+            buses_pci_pmi_offshore.index,
+            **buses_pci_pmi_offshore.drop(columns="geometry"),
+        )
+
+        ## Add spatial
+        spatial_pci_pmi = define_spatial_pci_pmi(buses_pci_pmi_offshore.index, options)
 
     ### add PCI projects
     if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get(
@@ -4813,11 +4871,27 @@ if __name__ == "__main__":
 
     add_eu_bus(n)
 
-    add_co2_tracking(n, costs, options)
+    add_co2_tracking(n, costs, spatial, options)
+
+    if pci_pmi_projects.get("enable", False):
+        add_co2_tracking(n, costs, spatial_pci_pmi, options)
+
+        if pci_pmi_projects.get("include", {}).get("stores_co2", False):
+            # remove all other co2 stores
+            n.stores.drop(
+                n.stores.index[n.stores.carrier == "co2 sequestered"], inplace=True
+            )
+            add_pci_pmi_stores(n, costs, snakemake.input.stores_co2)
 
     add_generation(n, costs)
 
     add_storage_and_grids(n, costs)
+
+    if pci_pmi_projects.get("enable", False):
+        add_hydrogen_pci_pmi(n, costs, nodes=spatial_pci_pmi.nodes)
+
+        if pci_pmi_projects.get("include", {}).get("stores_hydrogen", False):
+            add_pci_pmi_stores(n, costs, snakemake.input.stores_hydrogen)
 
     if options["transport"]:
         add_land_transport(n, costs)
@@ -4871,31 +4945,29 @@ if __name__ == "__main__":
     if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get(
         "include", {}
     ).get("links_hydrogen_pipeline", False):
-        _add_pci_pmi_links_hydrogen(
+        _add_pci_pmi_links(
             n,
             pci_pmi_projects,
             investment_year,
             snakemake.input["links_hydrogen_pipeline"],
-            snakemake.input["buses_hydrogen_offshore"],
             costs,
+            carrier="H2 pipeline",
         )
+
+    if options["co2network"]:
+        add_co2_network(n, costs)
 
     if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get(
         "include", {}
     ).get("links_co2_pipeline", False):
-        _add_pci_pmi_links_co2(
+        _add_pci_pmi_links(
             n,
             pci_pmi_projects,
             investment_year,
             snakemake.input["links_co2_pipeline"],
-            snakemake.input["buses_co2_stored_offshore"],
             costs,
+            carrier="CO2 pipeline",
         )
-
-    n.buses.groupby("location").agg({"x": "first", "y": "first"})
-
-    if options["co2network"]:
-        add_co2_network(n, costs)
 
     if options["allam_cycle_gas"]:
         add_allam_gas(n, costs)
@@ -4972,5 +5044,10 @@ if __name__ == "__main__":
     sanitize_locations(n)
 
     n.export_to_netcdf(snakemake.output[0])
+
+    # only keep buses with H2 stores and str starts with PCI
+    # Debugging
+    n.links = n.links.query("carrier == 'CO2 pipeline' and index.str.startswith('PCI')")
+    n.plot(line_widths=0.1)
 
 # %%

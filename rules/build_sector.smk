@@ -1047,30 +1047,9 @@ rule prepare_sector_network:
         unpack(input_add_pci_pmi_projects),
         **rules.cluster_gas_network.output,
         **rules.build_gas_input_locations.output,
-        buses_hydrogen_offshore=lambda w: (
+        buses_pci_pmi_offshore=lambda w: (
             resources(
-                "pci-pmi-projects/buses_hydrogen_offshore_s_{clusters}_l{ll}_{opts}.csv"
-            )
-            if config_provider("pci-pmi-projects", "enable")(w)
-            else []
-        ),
-        buses_co2_stored_offshore=lambda w: (
-            resources(
-                "pci-pmi-projects/buses_co2_stored_offshore_s_{clusters}_l{ll}_{opts}.csv"
-            )
-            if config_provider("pci-pmi-projects", "enable")(w)
-            else []
-        ),
-        buses_co2_sequestered_offshore=lambda w: (
-            resources(
-                "pci-pmi-projects/buses_co2_sequestered_offshore_s_{clusters}_l{ll}_{opts}.csv"
-            )
-            if config_provider("pci-pmi-projects", "enable")(w)
-            else []
-        ),
-        links_co2_sequestered=lambda w: (
-            resources(
-                "pci-pmi-projects/links_co2_sequestered_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
             )
             if config_provider("pci-pmi-projects", "enable")(w)
             else []
@@ -1250,17 +1229,8 @@ if config["pci-pmi-projects"]["enable"]:
                 if include
             ],
         output:
-            buses_hydrogen_offshore=resources(
-                "pci-pmi-projects/buses_hydrogen_offshore_s_{clusters}_l{ll}_{opts}.csv"
-            ),
-            buses_co2_stored_offshore=resources(
-                "pci-pmi-projects/buses_co2_stored_offshore_s_{clusters}_l{ll}_{opts}.csv"
-            ),
-            buses_co2_sequestered_offshore=resources(
-                "pci-pmi-projects/buses_co2_sequestered_offshore_s_{clusters}_l{ll}_{opts}.csv"
-            ),
-            links_co2_sequestered=resources(
-                "pci-pmi-projects/links_co2_sequestered_s_{clusters}_l{ll}_{opts}.csv"
+            buses_pci_pmi_offshore=resources(
+                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
             ),
             lines_electricity_transmission=resources(
                 "pci-pmi-projects/lines_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
