@@ -5050,7 +5050,7 @@ if __name__ == "__main__":
     n2 = n.copy()
 
     n2.links = n2.links.query(
-        "carrier == 'H2 pipeline' and index.str.startswith('PCI')"
+        "carrier == 'CO2 pipeline' and index.str.startswith('PCI')"
     )
     n2.plot(line_widths=0.1)
 
