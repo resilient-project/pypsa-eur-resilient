@@ -1009,7 +1009,8 @@ def input_add_pci_pmi_projects(w):
     if pci_pmi_projects["enable"]:
         return {
             project_type: resources(
-                f"pci-pmi-projects/{project_type}" + "_s_{clusters}_l{ll}_{opts}.csv"
+                f"pci-pmi-projects/{project_type}"
+                + "_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             )
             for project_type in pci_pmi_projects["include"]
             if pci_pmi_projects["include"][project_type]
@@ -1049,7 +1050,7 @@ rule prepare_sector_network:
         **rules.build_gas_input_locations.output,
         buses_pci_pmi_offshore=lambda w: (
             resources(
-                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             )
             if config_provider("pci-pmi-projects", "enable")(w)
             else []
@@ -1216,6 +1217,7 @@ if config["pci-pmi-projects"]["enable"]:
         params:
             pci_pmi_projects=config_provider("pci-pmi-projects"),
             line_length_factor=config_provider("lines", "length_factor"),
+            planning_horizons=config_provider("scenario", "planning_horizons"),
         input:
             network=resources("networks/base_s_{clusters}_elec_l{ll}_{opts}.nc"),
             regions_onshore=resources("regions_onshore_base_s_{clusters}.geojson"),
@@ -1230,30 +1232,34 @@ if config["pci-pmi-projects"]["enable"]:
             ],
         output:
             buses_pci_pmi_offshore=resources(
-                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/buses_pci_pmi_offshore_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             ),
             lines_electricity_transmission=resources(
-                "pci-pmi-projects/lines_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/lines_electricity_transmission_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             ),
             links_electricity_transmission=resources(
-                "pci-pmi-projects/links_electricity_transmission_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/links_electricity_transmission_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             ),
             links_hydrogen_pipeline=resources(
-                "pci-pmi-projects/links_hydrogen_pipeline_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/links_hydrogen_pipeline_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             ),
             links_co2_pipeline=resources(
-                "pci-pmi-projects/links_co2_pipeline_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/links_co2_pipeline_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             ),
             stores_hydrogen=resources(
-                "pci-pmi-projects/stores_hydrogen_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/stores_hydrogen_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             ),
             stores_co2=resources(
-                "pci-pmi-projects/stores_co2_s_{clusters}_l{ll}_{opts}.csv"
+                "pci-pmi-projects/stores_co2_s_{clusters}_l{ll}_{opts}_{planning_horizons}.csv"
             ),
         log:
-            logs("build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}.log"),
+            logs(
+                "build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}_{planning_horizons}.log"
+            ),
         benchmark:
-            benchmarks("build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}")
+            benchmarks(
+                "build_pci_pmi_projects_s_{clusters}_l{ll}_{opts}_{planning_horizons}"
+            )
         threads: 1
         resources:
             mem_mb=2000,

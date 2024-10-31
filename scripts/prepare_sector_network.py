@@ -4760,7 +4760,7 @@ def add_pci_pmi_stores(n, costs, stores_path):
         stores.index,
         bus=stores.bus.values,
         e_nom_extendable=False,
-        e_nom_max=stores.e_nom_max.values,
+        e_nom=stores.e_nom.values,
         e_cyclic=True,
         carrier=stores.carrier.values,
         capital_cost=capital_cost_carrier,

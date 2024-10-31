@@ -417,9 +417,10 @@ def _cluster_close_buses(
 
 
 def _aggregate_units(gdf):
-    gdf = gdf.groupby(["bus", "build_year"]).agg(
+    gdf = gdf.groupby(["bus"]).agg(
         {
             "e_nom": "sum",
+            "build_year": "max",
             "carrier": "first",
             "tags": lambda x: list(x.index),
             "geometry": lambda x: unary_union(x).centroid,
@@ -427,7 +428,38 @@ def _aggregate_units(gdf):
     )
 
     gdf.reset_index(inplace=True)
-    gdf["id"] = gdf.apply(lambda row: f"{row['bus']}-{row['build_year']}", axis=1)
+    gdf["id"] = gdf.apply(lambda row: f"{row['bus']}", axis=1)
+    gdf = gpd.GeoDataFrame(gdf, geometry="geometry", crs=GEO_CRS)
+
+    gdf.set_index("id", inplace=True)
+
+    return gdf
+
+
+def _aggregate_links(gdf):
+
+    gdf = gdf.groupby(["bus0", "bus1"]).agg(
+        {
+            "build_year": "max",
+            "carrier": "first",
+            "length": "max",
+            "p_nom": "sum",
+            "tags": lambda x: list(x.index),
+            "underground": "first",
+            "underwater_fraction": "first",
+            "geometry": "first",
+        }
+    )
+
+    gdf.reset_index(inplace=True)
+    gdf["id"] = gdf.apply(lambda row: f"{row['tags'][0]}", axis=1)
+    # Append +x if length of tags is greater than 1
+    gdf["id"] = gdf.apply(
+        lambda row: (
+            f"{row['id']} +{len(row['tags'])-1}" if len(row["tags"]) > 1 else row["id"]
+        ),
+        axis=1,
+    )
     gdf = gpd.GeoDataFrame(gdf, geometry="geometry", crs=GEO_CRS)
 
     gdf.set_index("id", inplace=True)
@@ -444,6 +476,7 @@ if __name__ == "__main__":
             ll="vopt",
             clusters=90,
             opts="",
+            planning_horizons="2030",
         )
 
     configure_logging(snakemake)
@@ -452,6 +485,7 @@ if __name__ == "__main__":
     line_length_factor = snakemake.params.line_length_factor
     haversine_distance = snakemake.params["pci_pmi_projects"]["haversine_distance"]
     linetype_380 = snakemake.config["lines"]["types"][380]
+    investment_year = int(snakemake.wildcards.planning_horizons)
 
     n = pypsa.Network(snakemake.input.network)
     regions_onshore = gpd.read_file(snakemake.input.regions_onshore).set_index("name")
@@ -487,6 +521,15 @@ if __name__ == "__main__":
         components[component] = gpd.read_file(path)
         components[component].set_index("id", inplace=True)
         components[component]["tags"] = components[component]["tags"].apply(json.loads)
+
+    ### Drop all components after investment year
+    logger.info(
+        f"Only keeping project components commissioned before {investment_year}."
+    )
+    for component in components:
+        components[component] = components[component].loc[
+            components[component]["build_year"] <= investment_year
+        ]
 
     ### Electricity transmission lines
     components["lines_electricity_transmission"] = _map_to_closest_region(
@@ -564,6 +607,9 @@ if __name__ == "__main__":
     components["links_hydrogen_pipeline"] = _set_unique_index(
         components["links_hydrogen_pipeline"]
     )
+    components["links_hydrogen_pipeline"] = _aggregate_links(
+        components["links_hydrogen_pipeline"]
+    )
 
     ### CO2 pipelines (links)
     buses_co2_offshore = _create_new_buses(
@@ -609,6 +655,9 @@ if __name__ == "__main__":
         components["links_co2_pipeline"], regions_offshore
     )
     components["links_co2_pipeline"] = _set_unique_index(
+        components["links_co2_pipeline"]
+    )
+    components["links_co2_pipeline"] = _aggregate_links(
         components["links_co2_pipeline"]
     )
 
@@ -715,38 +764,25 @@ if __name__ == "__main__":
 
     ### Projects
     logger.info("Exporting PCI/PMI projects to resources folder.")
-    projects = sorted(
-        components["lines_electricity_transmission"]["tags"]
-        .apply(lambda x: x["pci_code"])
-        .unique()
+    logger.info(
+        f" - Electricity transmission line (AC) components: {len(components["lines_electricity_transmission"])}"
     )
-    logger.info(f" - Electricity transmission line (AC) projects: {projects}")
     components["lines_electricity_transmission"][COLUMNS_LINES].to_csv(
         snakemake.output.lines_electricity_transmission, index=True
     )
-
-    projects = sorted(
-        components["links_electricity_transmission"]["tags"]
-        .apply(lambda x: x["pci_code"])
-        .unique()
+    logger.info(
+        f" - Electricity transmission links (DC) components: {len(components["links_electricity_transmission"])}"
     )
-    logger.info(f" - Electricity transmission links (DC) projects: {projects}")
     components["links_electricity_transmission"][COLUMNS_LINKS].to_csv(
         snakemake.output.links_electricity_transmission, index=True
     )
-    projects = sorted(
-        components["links_hydrogen_pipeline"]["tags"]
-        .apply(lambda x: x["pci_code"])
-        .unique()
+    logger.info(
+        f" - Hydrogen pipeline components: {len(components['links_hydrogen_pipeline'])}"
     )
-    logger.info(f" - Hydrogen pipeline projects: {projects}")
     components["links_hydrogen_pipeline"][COLUMNS_LINKS].to_csv(
         snakemake.output.links_hydrogen_pipeline, index=True
     )
-    projects = sorted(
-        components["links_co2_pipeline"]["tags"].apply(lambda x: x["pci_code"]).unique()
-    )
-    logger.info(f" - CO2 pipeline projects: {projects}")
+    logger.info(f" - CO2 pipeline projects: {len(components['links_co2_pipeline'])}")
     components["links_co2_pipeline"][COLUMNS_LINKS].to_csv(
         snakemake.output.links_co2_pipeline, index=True
     )
