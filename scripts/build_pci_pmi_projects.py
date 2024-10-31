@@ -456,7 +456,7 @@ def _aggregate_links(gdf):
     # Append +x if length of tags is greater than 1
     gdf["id"] = gdf.apply(
         lambda row: (
-            f"{row['id']} +{len(row['tags'])-1}" if len(row["tags"]) > 1 else row["id"]
+            f"{row['id']}+{len(row['tags'])-1}" if len(row["tags"]) > 1 else row["id"]
         ),
         axis=1,
     )

@@ -4700,10 +4700,47 @@ def _add_pci_pmi_links(
         capital_cost_carrier = costs.at["CO2 pipeline", "fixed"]
         lifetime_carrier = costs.at["CO2 pipeline", "lifetime"]
 
-    logger.info("Adding additional PCI/PMI offshore hydrogen buses.")
-
-    logger.info(f"Adding PCI/PMI hydrogen pipelines commissioned by {investment_year}.")
+    logger.info(f"Adding PCI/PMI {carrier}s commissioned by {investment_year}.")
     projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
+
+    # Drop existing links that have the same bus0 and bus1 as the PCI/PMI projects
+    existing_links = n.links.query("carrier == @carrier")
+
+    duplicates = (
+        existing_links.reset_index()
+        .merge(
+            projects[["bus0", "bus1"]],
+            on=["bus0", "bus1"],
+            how="left",
+            indicator=True,
+        )
+        .loc[lambda x: x["_merge"] == "both"]
+        .set_index("Link")
+        .index
+    )
+
+    logger.info(
+        f"- replacing {len(duplicates)} existing {carrier}s with PCI/PMI projects of the same bus0 and bus1"
+    )
+    n.links = n.links.drop(duplicates)
+
+    # Overwriting the extendability of non-PCI/PMI links
+
+    if (
+        pci_pmi_projects.get("non_pci_pmi_extendable").get(carrier.split(" ")[0])
+        == "national"
+    ):
+        logger.info(
+            f"- overwriting extendability of non-PCI/PMI {carrier}s: national extension only"
+        )
+        bool_international_connection = n.links.apply(
+            lambda row: (row["bus0"].split(" ")[0] != row["bus1"].split(" ")[0]),
+            axis=1,
+        )
+        bool_carrier = n.links.carrier == carrier
+        n.links.loc[
+            (bool_international_connection & bool_carrier), "p_nom_extendable"
+        ] = False
 
     # Only add projects that are built before / up until the investment year
     projects = projects[projects["build_year"] <= investment_year]
@@ -4724,6 +4761,10 @@ def _add_pci_pmi_links(
     # p_max_pu, p_nom_extendable
     n.links.loc[projects.index, "p_max_pu"] = pci_pmi_projects.get("links", {}).get(
         "p_max_pu", 1
+    )
+
+    logger.info(
+        f"- setting of PCI/PMI {carrier}s to {pci_pmi_projects.get('links', {}).get('p_nom_extendable', False)}"
     )
     n.links.loc[projects.index, "p_nom_extendable"] = pci_pmi_projects.get(
         "links", {}
@@ -4922,18 +4963,6 @@ if __name__ == "__main__":
 
     if not options["electricity_transmission_grid"]:
         decentral(n)
-
-    # Extras settings PCI-PMI
-    # only national extendability of p_nom for hydrogen and CO2
-    if pci_pmi_projects.get("enable", False) and pci_pmi_projects.get("extras").get(
-        "only_national_p_nom_extendable"
-    ):
-        bool_international_connection = n.links.apply(
-            lambda row: (row["bus0"].split(" ")[0] != row["bus1"].split(" ")[0])
-            and (row["carrier"] == "H2 pipeline"),
-            axis=1,
-        )
-        n.links.loc[bool_international_connection, "p_nom_extendable"] = False
 
     # Remove H2 network if deactivated or PCI/PMI projects are included (overwrites H2 network)
     if not options["H2_network"] and not (

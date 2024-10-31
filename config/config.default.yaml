@@ -150,9 +150,14 @@ pci-pmi-projects:
     p_nom_max: .inf
     p_nom_extendable: false
     max_extension: 30000 #MW
-  extras:
-    only_national_p_nom_extendable: true
+  non_pci_pmi_extendable:
+    H2: national
+    CO2: all
+    # Note all CO2 sinks are removed, when stores_co2 (75 Mt) are enabled
 
+custom_constraints:
+  co2_sequestration_target: 50*1e6 # tonnes
+  electrolyser_target: 40*1e3 # MW
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
 atlite:
