@@ -156,8 +156,8 @@ pci-pmi-projects:
     # Note all CO2 sinks are removed, when stores_co2 (75 Mt) are enabled
 
 custom_constraints:
-  co2_sequestration_target: 50*1e6 # tonnes
-  electrolyser_target: 40*1e3 # MW
+  co2_sequestration_target: 50000000 # tCO2
+  electrolyser_target: 40000 # MW
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
 atlite:

@@ -5,6 +5,10 @@
 
 rule solve_sector_network:
     params:
+        co2_sequestration_target=config_provider(
+            "custom_constraints", "co2_sequestration_target"
+        ),
+        electrolyser_target=config_provider("custom_constraints", "electrolyser_target"),
         solving=config_provider("solving"),
         foresight=config_provider("foresight"),
         planning_horizons=config_provider("scenario", "planning_horizons"),

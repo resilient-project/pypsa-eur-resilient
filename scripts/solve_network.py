@@ -443,9 +443,10 @@ def prepare_network(
         if snakemake.params["sector"]["limit_max_growth"]["enable"]:
             n = add_max_growth(n)
 
-    if n.stores.carrier.eq("co2 sequestered").any():
-        limit_dict = co2_sequestration_potential
-        add_co2_sequestration_limit(n, limit_dict=limit_dict)
+    # if n.stores.carrier.eq("co2 sequestered").any():
+    # else:
+    #     limit_dict = co2_sequestration_potential
+    #     add_co2_sequestration_limit(n, limit_dict=limit_dict)
 
     return n
 
@@ -931,6 +932,69 @@ def add_co2_atmosphere_constraint(n, snapshots):
             n.model.add_constraints(lhs <= rhs, name=f"GlobalConstraint-{name}")
 
 
+def add_electrolyser_target_constraint(n, target):
+    """
+    Adds constraints on the total installed capacity of electrolyser links in MW.
+    """
+    cname = "total_electrolyser_target"
+
+    valid_components = n.links[n.links.carrier == "H2 Electrolysis"].index
+    nom = n.model["Link-p_nom"].loc[valid_components]
+
+    lhs = nom.sum()
+
+    if cname in n.global_constraints.index:
+        logger.warning(
+            f"Global constraint {cname} already exists. Dropping and adding it again."
+        )
+        n.global_constraints.drop(cname, inplace=True)
+
+    rhs = target
+
+    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
+    n.add(
+        "GlobalConstraint",
+        cname,
+        constant=rhs,
+        sense=">=",
+        type="investment_minimum",
+        carrier_attribute="p_nom",
+    )
+
+
+def add_co2_sequestration_target_constraint(n, target):
+    """
+    Adds constraints on the total installed capacity of electrolyser links in MW.
+    """
+    cname = "total_co2_sequestration_target"
+    last_snapshot = (
+        n.model["Store-e"].loc[:, valid_components].indexes.get("snapshot")[-1]
+    )
+    valid_components = n.stores[n.stores.carrier == "co2 sequestered"].index
+
+    nom = n.model["Store-e"].loc[last_snapshot, valid_components]
+
+    lhs = nom.sum()
+
+    if cname in n.global_constraints.index:
+        logger.warning(
+            f"Global constraint {cname} already exists. Dropping and adding it again."
+        )
+        n.global_constraints.drop(cname, inplace=True)
+
+    rhs = target
+
+    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
+    n.add(
+        "GlobalConstraint",
+        cname,
+        constant=rhs,
+        sense=">=",
+        type="",
+        carrier_attribute="e",
+    )
+
+
 def extra_functionality(n, snapshots):
     """
     Collects supplementary constraints which will be passed to
@@ -975,6 +1039,11 @@ def extra_functionality(n, snapshots):
 
     if config["sector"]["enhanced_geothermal"]["enable"]:
         add_flexible_egs_constraint(n)
+
+    # Custom constraints PCI-PMI:
+    electrolyser_target = snakemake.params["electrolyser_target"]
+    if electrolyser_target is not None:
+        add_electrolyser_target_constraint(n, electrolyser_target)
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality
@@ -1053,13 +1122,13 @@ if __name__ == "__main__":
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "solve_sector_network_perfect",
-            configfiles="../config/test/config.perfect.yaml",
+            "solve_sector_network",
+            # configfiles="../config/test/config.perfect.yaml",
             opts="",
-            clusters="5",
-            ll="v1.0",
+            clusters="90",
+            ll="vopt",
             sector_opts="",
-            # planning_horizons="2030",
+            planning_horizons="2030",
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)
@@ -1104,3 +1173,5 @@ if __name__ == "__main__":
             allow_unicode=True,
             sort_keys=False,
         )
+
+# %%
