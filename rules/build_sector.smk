@@ -1183,21 +1183,49 @@ if config["pci-pmi-projects"]["enable"]:
             params_stores_co2="data/pci-pmi/params/stores_co2.csv",
             params_stores_hydrogen="data/pci-pmi/params/stores_hydrogen.csv",
         output:
-            buses_electricity_transmission="data/pci-pmi/projects/buses_electricity_transmission.geojson",
-            buses_offshore_grids="data/pci-pmi/projects/buses_offshore_grids.geojson",
-            buses_smart_electricity_transmission="data/pci-pmi/projects/buses_smart_electricity_transmission.geojson",
-            generators_hydrogen_terminal="data/pci-pmi/projects/generators_hydrogen_terminal.geojson",
-            lines_electricity_transmission="data/pci-pmi/projects/lines_electricity_transmission.geojson",
-            links_co2_pipeline="data/pci-pmi/projects/links_co2_pipeline.geojson",
-            links_co2_shipping="data/pci-pmi/projects/links_co2_shipping.geojson",
-            links_electricity_transmission="data/pci-pmi/projects/links_electricity_transmission.geojson",
-            links_electrolyser="data/pci-pmi/projects/links_electrolyser.geojson",
-            links_gas_pipeline="data/pci-pmi/projects/links_gas_pipeline.geojson",
-            links_hydrogen_pipeline="data/pci-pmi/projects/links_hydrogen_pipeline.geojson",
-            links_offshore_grids="data/pci-pmi/projects/links_offshore_grids.geojson",
-            storage_units_electricity="data/pci-pmi/projects/storage_units_electricity.geojson",
-            stores_hydrogen="data/pci-pmi/projects/stores_hydrogen.geojson",
-            stores_co2="data/pci-pmi/projects/stores_co2.geojson",
+            buses_electricity_transmission=resources(
+                "pci-pmi-projects/cleaned/buses_electricity_transmission.geojson"
+            ),
+            buses_offshore_grids=resources(
+                "pci-pmi-projects/cleaned/buses_offshore_grids.geojson"
+            ),
+            buses_smart_electricity_transmission=resources(
+                "pci-pmi-projects/cleaned/buses_smart_electricity_transmission.geojson"
+            ),
+            generators_hydrogen_terminal=resources(
+                "pci-pmi-projects/cleaned/generators_hydrogen_terminal.geojson"
+            ),
+            lines_electricity_transmission=resources(
+                "pci-pmi-projects/cleaned/lines_electricity_transmission.geojson"
+            ),
+            links_co2_pipeline=resources(
+                "pci-pmi-projects/cleaned/links_co2_pipeline.geojson"
+            ),
+            links_co2_shipping=resources(
+                "pci-pmi-projects/cleaned/links_co2_shipping.geojson"
+            ),
+            links_electricity_transmission=resources(
+                "pci-pmi-projects/cleaned/links_electricity_transmission.geojson"
+            ),
+            links_electrolyser=resources(
+                "pci-pmi-projects/cleaned/links_electrolyser.geojson"
+            ),
+            links_gas_pipeline=resources(
+                "pci-pmi-projects/cleaned/links_gas_pipeline.geojson"
+            ),
+            links_hydrogen_pipeline=resources(
+                "pci-pmi-projects/cleaned/links_hydrogen_pipeline.geojson"
+            ),
+            links_offshore_grids=resources(
+                "pci-pmi-projects/cleaned/links_offshore_grids.geojson"
+            ),
+            storage_units_electricity=resources(
+                "pci-pmi-projects/cleaned/storage_units_electricity.geojson"
+            ),
+            stores_hydrogen=resources(
+                "pci-pmi-projects/cleaned/stores_hydrogen.geojson"
+            ),
+            stores_co2=resources("pci-pmi-projects/cleaned/stores_co2.geojson"),
         log:
             logs("clean_pci_pmi_projects.log"),
         benchmark:
@@ -1224,7 +1252,7 @@ if config["pci-pmi-projects"]["enable"]:
             regions_offshore=resources("regions_offshore_base_s_{clusters}.geojson"),
             scope=resources("europe_shape.geojson"),
             pci_pmi_projects=lambda w: [
-                "data/pci-pmi/projects/" + name + ".geojson"
+                resources("pci-pmi-projects/cleaned/" + name + ".geojson")
                 for name, include in config_provider("pci-pmi-projects", "include")(
                     w
                 ).items()
