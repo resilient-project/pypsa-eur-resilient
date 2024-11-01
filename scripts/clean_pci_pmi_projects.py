@@ -1200,6 +1200,7 @@ if __name__ == "__main__":
 
     # Create a dictionary to type-specific GeoDataFrames
     components = _create_components_dict(projects, project_types)
+
     components = _set_electrical_params(components)  # bus types, voltage levels
 
     components["links_electricity_transmission"] = _set_params_links_electricity(

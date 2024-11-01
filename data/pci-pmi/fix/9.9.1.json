@@ -1,0 +1,116 @@
+[
+  {
+    "layerId": 5,
+    "layerName": "Hydrogen pipeline",
+    "displayFieldName": "LIST_NAME",
+    "foundFieldName": "PCI_CODE",
+    "value": "9.9.1",
+    "attributes": {
+      "OBJECTID": "4241",
+      "INFRA": "26",
+      "SHAPE": "Polyline",
+      "PCI_CODE": "9.9.1",
+      "ISHIGHWAY": "Null",
+      "PCI_ID": "1197",
+      "PCI_LIST_ID": "41",
+      "LIST_NAME": "1st PCI/PMI list",
+      "PCI_LIST_ACTIVE": "1",
+      "NATURE_CODE": "PCI",
+      "CLUSTER_CODE": "9.9",
+      "SECTOR_ABBREVIATION": "H",
+      "CORRIDOR_CODE": "HI West",
+      "CORRIDOR_NUMBER": "21",
+      "PROJECT_FICHE_SHORT_TITLE": "HyperLink III",
+      "PROJECT_FULL_TITLE": "Internal hydrogen infrastructure in Germany [currently known as HyperLink III]",
+      "TECHNICAL_DESCR": "<p>Hyperlink III, a hydrogen transport infrastructure in Germany though the route: Heidenau &ndash; Stade &ndash; Elbe S&uuml;d &ndash; Klein Offenseth &ndash; Fockbek &ndash; Ellund, connects to the Danish hydrogen network and facilitates the import of green hydrogen produced in Denmark.</p>\n\n<p>The related infrastructure will be planned and implemented in close cooperation with the Danish TSO Energinet. The resulting cross-border hydrogen transport network will extend from the underground hydrogen storage facility in Lille&nbsp;Torup&nbsp;via DK&nbsp;Hydrogen Pipeline West&nbsp;to Heidenau in the Hamburg area. It will also provide access to Storengy&rsquo;s SaltHy underground storage facility in Harsefeld. In Heidenau, Hyperlink III&nbsp;joins up with the other Hyperlink sections to enable the transmission of hydrogen to customers in other parts of Germany too.</p>\n\n<p>The project covers up to 198 km of new pipelines and aims at the transmission capacity of 2.5 GWh/h (0.3 Mt/y) by&nbsp;2028, with a further potential of&nbsp;4.3 GWh/h by 2030 and&nbsp;10 GWh/h as of&nbsp;2035.</p>\n\n<p>Hyperlink III&nbsp;will make it possible, in a close cooperation with a regional DSO, to reach the industrial region of Brunsb&uuml;ttel/Heide and prospective large customers (producers and offtakers) in Schleswig-Holstein and North-Eastern Lower Saxony. The project could also eventually facilitate offshore hydrogen imports with the integration of the future hydrogen import terminal in Brunsb&uuml;ttel.</p>\n",
+      "IMPLEMENTATION_STATUS": "2",
+      "IMPLEMENTATION_STATUS_DESCR": "Planned but not yet in permitting",
+      "COUNTRY_CONCERNED": "DE",
+      "PROMOTERS": "Gasunie (DE)",
+      "COMMISSIONING_DATE": "2028",
+      "CEF_ACTIONS": "Null",
+      "CEF_ACTION_FICHES": "Null",
+      "STUDIES_OR_WORKS": "Null",
+      "SHAPE.LEN": "314911.320163"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "geometry": {
+      "paths": [
+        [
+          [
+            1034073.7111999989,
+            7322000.671999998
+          ],
+          [
+            1052862.8018000014,
+            7258704.390799999
+          ],
+          [
+            1060286.3398000002,
+            7251285.566799998
+          ],
+          [
+            1065522.123399999,
+            7240046.313600004
+          ],
+          [
+            1066175.813099999,
+            7228357.237099998
+          ],
+          [
+            1073467.3077999987,
+            7221355.815800004
+          ],
+          [
+            1073045.0579000004,
+            7187020.742299996
+          ],
+          [
+            1089176.1184,
+            7159283.997599997
+          ],
+          [
+            1079467.8044999987,
+            7135129.674699999
+          ],
+          [
+            1079597.2712000012,
+            7107190.516900003
+          ],
+          [
+            1063733.0489000008,
+            7089862.154200003
+          ],
+          [
+            1053973.0839999989,
+            7083607.853299998
+          ],
+          [
+            1055877.2705999985,
+            7074934.465599999
+          ],
+          [
+            1062173.4726000018,
+            7066300.026500002
+          ],
+          [
+            1069210.8757000007,
+            7055845.128200002
+          ],
+          [
+            1072108.0910999998,
+            7045576.9921
+          ],
+          [
+            1072116.4365000017,
+            7041395.018200003
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857
+      }
+    }
+  }
+]
