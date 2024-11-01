@@ -1046,11 +1046,11 @@ def extra_functionality(n, snapshots):
 
     # Custom constraints PCI-PMI:
     electrolyser_target = snakemake.params["electrolyser_target"]
-    if electrolyser_target is not None:
+    if electrolyser_target:
         add_electrolyser_target_constraint(n, electrolyser_target)
 
     co2_sequestration_target = snakemake.params["co2_sequestration_target"]
-    if electrolyser_target is not None:
+    if electrolyser_target:
         add_co2_sequestration_target_constraint(n, co2_sequestration_target)
 
     if n.params.custom_extra_functionality:

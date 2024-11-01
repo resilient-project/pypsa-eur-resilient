@@ -5088,15 +5088,4 @@ if __name__ == "__main__":
 
     n.export_to_netcdf(snakemake.output[0])
 
-    # only keep buses with H2 stores and str starts with PCI
-    # Debugging
-    n2 = n.copy()
-
-    n2.links = n2.links.query(
-        "carrier == 'CO2 pipeline' and index.str.startswith('PCI')"
-    )
-    n2.plot(line_widths=0.1)
-
-    # Remove H2 network underneath PCI
-
 # %%
