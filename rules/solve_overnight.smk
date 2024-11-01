@@ -5,6 +5,7 @@
 
 rule solve_sector_network:
     params:
+        temp_reduction=config_provider("debug", "solve_network_temp_reduction"),
         co2_sequestration_target=config_provider(
             "custom_constraints", "co2_sequestration_target"
         ),

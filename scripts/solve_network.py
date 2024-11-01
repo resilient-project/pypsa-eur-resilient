@@ -936,6 +936,7 @@ def add_electrolyser_target_constraint(n, target):
     """
     Adds constraints on the total installed capacity of electrolyser links in MW.
     """
+    logger.info(f"Adding constraint for total electrolyser target of {target} MW.")
     cname = "total_electrolyser_target"
 
     valid_components = n.links[n.links.carrier == "H2 Electrolysis"].index
@@ -964,13 +965,16 @@ def add_electrolyser_target_constraint(n, target):
 
 def add_co2_sequestration_target_constraint(n, target):
     """
-    Adds constraints on the total installed capacity of electrolyser links in MW.
+    Adds constraints on the total CO2 sequestration target in tonnes.
     """
+    logger.info(
+        f"Adding constraint for total CO2 sequestration target of {target} tonnes."
+    )
     cname = "total_co2_sequestration_target"
+    valid_components = n.stores[n.stores.carrier == "co2 sequestered"].index
     last_snapshot = (
         n.model["Store-e"].loc[:, valid_components].indexes.get("snapshot")[-1]
     )
-    valid_components = n.stores[n.stores.carrier == "co2 sequestered"].index
 
     nom = n.model["Store-e"].loc[last_snapshot, valid_components]
 
@@ -1044,6 +1048,10 @@ def extra_functionality(n, snapshots):
     electrolyser_target = snakemake.params["electrolyser_target"]
     if electrolyser_target is not None:
         add_electrolyser_target_constraint(n, electrolyser_target)
+
+    co2_sequestration_target = snakemake.params["co2_sequestration_target"]
+    if electrolyser_target is not None:
+        add_co2_sequestration_target_constraint(n, co2_sequestration_target)
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality
@@ -1148,6 +1156,13 @@ if __name__ == "__main__":
         planning_horizons=snakemake.params.planning_horizons,
         co2_sequestration_potential=snakemake.params["co2_sequestration_potential"],
     )
+
+    # Manual section for debugging, temporal model reduction
+    if snakemake.params.get("temp_reduction", False):
+        nhours = snakemake.params.temp_reduction
+        logger.info(f"Reducing model to first {nhours} hours.")
+        n.set_snapshots(n.snapshots[:nhours])
+        n.snapshot_weightings[:] = 8760.0 / nhours
 
     with memory_logger(
         filename=getattr(snakemake.log, "memory", None), interval=30.0
