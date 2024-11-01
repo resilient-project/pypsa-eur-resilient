@@ -4792,21 +4792,35 @@ def add_pci_pmi_stores(n, costs, stores_path):
     if carrier == "H2 Store":
         capital_cost_carrier = costs.at["hydrogen storage underground", "fixed"]
         lifetime_carrier = costs.at["hydrogen storage underground", "lifetime"]
+
+        n.add(
+            "Store",
+            stores.index,
+            bus=stores.bus.values,
+            e_nom_extendable=False,
+            e_nom=stores.e_nom.values,
+            e_cyclic=True,
+            carrier=stores.carrier.values,
+            capital_cost=capital_cost_carrier,
+            lifetime=lifetime_carrier,
+        )
+
     if carrier == "co2 sequestered":
         capital_cost_carrier = costs.at["CO2 storage tank", "fixed"]
         lifetime_carrier = costs.at["CO2 storage tank", "lifetime"]
 
-    n.add(
-        "Store",
-        stores.index,
-        bus=stores.bus.values,
-        e_nom_extendable=False,
-        e_nom=stores.e_nom.values,
-        e_cyclic=True,
-        carrier=stores.carrier.values,
-        capital_cost=capital_cost_carrier,
-        lifetime=lifetime_carrier,
-    )
+        n.add(
+            "Store",
+            stores.index,
+            bus=stores.bus.values,
+            e_nom_extendable=False,
+            e_nom=stores.e_nom.values,
+            e_cyclic=False,
+            carrier=stores.carrier.values,
+            capital_cost=capital_cost_carrier,
+            marginal_cost=0.1,
+            lifetime=lifetime_carrier,
+        )
 
 
 # %%
