@@ -4818,7 +4818,7 @@ def add_pci_pmi_stores(n, costs, stores_path):
             e_cyclic=False,
             carrier=stores.carrier.values,
             capital_cost=capital_cost_carrier,
-            marginal_cost=0.1,
+            marginal_cost=-0.1,
             lifetime=lifetime_carrier,
         )
 
