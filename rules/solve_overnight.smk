@@ -9,6 +9,9 @@ rule solve_sector_network:
         co2_sequestration_target=config_provider(
             "custom_constraints", "co2_sequestration_target"
         ),
+        h2_production_target=config_provider(
+            "custom_constraints", "h2_production_target"
+        ),
         electrolyser_target=config_provider("custom_constraints", "electrolyser_target"),
         solving=config_provider("solving"),
         foresight=config_provider("foresight"),

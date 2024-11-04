@@ -157,6 +157,7 @@ pci-pmi-projects:
 
 custom_constraints:
   co2_sequestration_target: false
+  h2_production_target: false
   electrolyser_target: false
 
 debug:

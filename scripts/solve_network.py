@@ -963,12 +963,49 @@ def add_electrolyser_target_constraint(n, target):
     )
 
 
+def add_h2_production_target_constraint(n, target):
+    """
+    Adds a H2 production target, input is given in tonnes of H2 p.a.
+    """
+    energy_content_h2 = 33.33  # kWh/kg
+    target_mwh = target * energy_content_h2
+    logger.info(
+        f"Adding constraint for total H2 production target of {target} tonnes p.a. equivalent to {target_mwh} MWh p.a."
+    )
+    cname = "total_h2_production_target"
+    valid_components = n.links[n.links.carrier == "H2 Electrolysis"].index
+
+    lhs = (
+        n.model["Link-p"].loc[:, valid_components]
+        * n.links.loc[valid_components].efficiency
+        * n.snapshot_weightings.generators
+    ).sum()
+
+    if cname in n.global_constraints.index:
+        logger.warning(
+            f"Global constraint {cname} already exists. Dropping and adding it again."
+        )
+        n.global_constraints.drop(cname, inplace=True)
+
+    rhs = target_mwh
+
+    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
+    n.add(
+        "GlobalConstraint",
+        cname,
+        constant=rhs,
+        sense=">=",
+        type="production_minimum",
+        carrier_attribute="p",
+    )
+
+
 def add_co2_sequestration_target_constraint(n, target):
     """
     Adds constraints on the total CO2 sequestration target in tonnes.
     """
     logger.info(
-        f"Adding constraint for total CO2 sequestration target of {target} tonnes."
+        f"Adding constraint for total CO2 sequestration target of {target} tonnes p.a."
     )
     cname = "total_co2_sequestration_target"
     valid_components = n.stores[n.stores.carrier == "co2 sequestered"].index
@@ -1045,13 +1082,17 @@ def extra_functionality(n, snapshots):
         add_flexible_egs_constraint(n)
 
     # Custom constraints PCI-PMI:
+    co2_sequestration_target = snakemake.params["co2_sequestration_target"]
+    if co2_sequestration_target:
+        add_co2_sequestration_target_constraint(n, co2_sequestration_target)
+
+    h2_production_target = snakemake.params["h2_production_target"]
+    if h2_production_target:
+        add_h2_production_target_constraint(n, h2_production_target)
+
     electrolyser_target = snakemake.params["electrolyser_target"]
     if electrolyser_target:
         add_electrolyser_target_constraint(n, electrolyser_target)
-
-    co2_sequestration_target = snakemake.params["co2_sequestration_target"]
-    if electrolyser_target:
-        add_co2_sequestration_target_constraint(n, co2_sequestration_target)
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality
