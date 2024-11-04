@@ -83,3 +83,44 @@ rule validate_elec_networks:
             run=config["run"]["name"],
             kind=["production", "prices", "cross_border"],
         ),
+
+
+rule plot_balance_map:
+    params:
+        plotting=config_provider("plotting"),
+    input:
+        network=RESULTS
+        + "postnetworks/base_s_{clusters}_l{ll}_{opts}_{sector_opts}_{planning_horizons}.nc",
+        regions=resources("regions_onshore_base_s_{clusters}.geojson"),
+    output:
+        map=RESULTS
+        + "maps/base_s_{clusters}_l{ll}_{opts}_{sector_opts}-balance_map_{carrier}_{planning_horizons}.{ext}",
+    threads: 2
+    resources:
+        mem_mb=10000,
+    log:
+        RESULTS
+        + "logs/plot_balance_map/base_s_{clusters}_l{ll}_{opts}_{sector_opts}_{carrier}_{planning_horizons}_{ext}.log",
+    benchmark:
+        (
+            RESULTS
+            + "benchmarks/plot_balance_map/base_s_{clusters}_l{ll}_{opts}_{sector_opts}_{carrier}_{planning_horizons}_{ext}"
+        )
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_balance_map.py"
+
+
+rule plot_balance_maps:
+    input:
+        balance_maps=lambda w: expand(
+            (
+                RESULTS
+                + "maps/base_s_{clusters}_l{ll}_{opts}_{sector_opts}-balance_map_{carrier}_{planning_horizons}.{ext}"
+            ),
+            **config["scenario"],
+            carrier=config_provider("plotting", "balance_map", "carriers_to_plot")(w),
+            ext=config_provider("plotting", "balance_map", "ext")(w),
+            allow_missing=True,
+        ),
