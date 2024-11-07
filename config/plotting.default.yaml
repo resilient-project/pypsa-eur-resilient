@@ -38,7 +38,7 @@ plotting:
   # settings for energy balance maps
   balance_map:
     ext: pdf
-    carriers_to_plot: ["AC", "H2", "gas", "co2_stored", "urban_central_heat"]
+    carriers_to_plot: ["AC", "H2", "gas", "co2_stored", "urban_central_heat", "biogas", "solid_biomass"]
     alpha: 1
     region_alpha: 0.6
     figsize: [5, 6.5]
@@ -49,44 +49,44 @@ plotting:
       region_cmap: Greens
       region_unit: €/MWh$_{el}$
       bus_factor: 2e-3
-      branch_factor: 1e-2
-      flow_factor: 1e+2
+      branch_factor: 1e-1
+      flow_factor: 1e-1
       bus_sizes:
-      - 200
+      - 500
       - 100
       branch_sizes:
-      - 100
+      - 50
       - 20
     gas:
       unit: TWh$_{th}$
       unit_conversion: 1e6
-      region_cmap: Purples
+      region_cmap: Oranges
       region_unit: €/MWh$_{th}$
       bus_factor: 2e-3
-      branch_factor: 5e-2
-      flow_factor: 6e+1
+      branch_factor: 5e-3
+      flow_factor: 15e-1
       bus_sizes:
-      - 200
+      - 500
       - 100
       branch_sizes:
+      - 600
       - 100
-      - 50
     H2:
-      vmin: 60
-      vmax: 95
+      vmin: 45
+      vmax: 60
       unit: TWh$_{H_2}$
       unit_conversion: 1e6
       region_cmap: Blues
       region_unit: €/MWh$_{H_2}$
-      bus_factor: 2e-3
-      branch_factor: 7e-2
-      flow_factor: 5e+1
+      bus_factor: 5e-3
+      branch_factor: 2e-1
+      flow_factor: 1e+2
       bus_sizes:
-      - 200
-      - 100
+      - 250
+      - 70
       branch_sizes:
-      - 40
       - 20
+      - 5
     co2_stored:
       bus_carrier: co2 stored
       unit: Mt
@@ -94,38 +94,38 @@ plotting:
       region_cmap: Purples
       region_unit: €/t_${CO_2}$
       bus_factor: 3e-2
-      branch_factor: 1
-      flow_factor: 2e+3
+      branch_factor: 7e-2
+      flow_factor: 2e1
       bus_sizes:
+      - 40
+      - 5
+      branch_sizes:
       - 50
       - 10
-      branch_sizes:
-      - 5
-      - 2
     urban_central_heat:
       bus_carrier: urban central heat
       unit: TW$_{th}$
       unit_conversion: 1e6
       region_cmap: Oranges
       region_unit: €/MWh_{th}$
-      bus_factor: 5e-3
+      bus_factor: 6e-3
       branch_factor: 1e-1
       flow_factor: 1e+2
       bus_sizes:
-      - 300
-      - 100
+      - 150
+      - 50
       branch_sizes:
     methanol:
       unit: TWh$_{MeOH}$
       unit_conversion: 1e6
       region_cmap: Greens
       region_unit: €/MWh$_{MeOH}$
-      bus_factor: 5e-3
+      bus_factor: 7e-3
       branch_factor: 1e-1
       flow_factor: 1e+2
       bus_sizes:
-      - 20
-      - 10
+      - 0
+      - 170
       branch_sizes:
     biogas:
       unit: TWh$_{th}$
@@ -136,8 +136,8 @@ plotting:
       branch_factor: 1e-1
       flow_factor: 1e+2
       bus_sizes:
-      - 100
-      - 50
+      - 10
+      - 3
       branch_sizes:
     solid_biomass:
       bus_carrier: solid biomass
@@ -149,20 +149,20 @@ plotting:
       branch_factor: 1e-1
       flow_factor: 1e+2
       bus_sizes:
-      - 100
-      - 50
+      - 120
+      - 30
       branch_sizes:
     oil:
-      unit: TWh$_{th}$
-      unit_conversion: 1e6
+      unit: PWh$_{th}$
+      unit_conversion: 1e9
       region_cmap: Greys
       region_unit: €/MWh
-      bus_factor: 2e-3
+      bus_factor: 5e-1
       branch_factor: 1e-1
       flow_factor: 1e+2
       bus_sizes:
-      - 200
-      - 100
+      - 0
+      - 10
       branch_sizes:
 
   nice_names:
@@ -481,3 +481,165 @@ plotting:
     waste CHP: '#e3d37d'
     waste CHP CC: '#e3d3ff'
     HVC to air: 'k'
+
+  technology_groups:
+    AC: Electricity Grid
+    BEV charger: Battery Infrastructure
+    DAC: DAC
+    DC: Electricity Grid
+    EV battery: Battery Infrastructure
+    Fischer-Tropsch: Fischer-Tropsch
+    H2: H$_2$ Infrastructure
+    H2 Electrolysis: Electrolysis
+    H2 Fuel Cell: H$_2$ Infrastructure
+    H2 Store: H$_2$ Infrastructure
+    H2 for industry: H$_2$ Infrastructure
+    H2 pipeline: H$_2$ Infrastructure
+    Li ion: Battery Infrastructure
+    OCGT: Gas Infrastructure
+    PHS: Hydro and RoR
+    SMR: H$_2$ Infrastructure
+    SMR CC: Carbon Capt. at Point Sources
+    Sabatier: Methanation
+    V2G: Battery Infrastructure
+    agriculture electricity: Other
+    agriculture heat: Decentral Heat
+    agriculture machinery oil: Other
+    agriculture machinery oil emissions: Other
+    air heat pump: Heat Pump
+    allam: Carbon Capt. at Point Sources
+    battery: Battery Infrastructure
+    battery charger: Battery Infrastructure
+    battery discharger: Battery Infrastructure
+    battery storage: Battery Infrastructure
+    biogas: Bioenergy
+    biogas to gas: Bioenergy
+    biogas to gas CC: Carbon Capt. at Point Sources
+    biomass boiler: Bioenergy
+    co2: CO$_2$ Infrastructure
+    CO2 pipeline: CO$_2$ Infrastructure
+    co2 sequestered: CO$_2$ Infrastructure
+    co2 stored: CO$_2$ Infrastructure
+    coal: Coal
+    coal for industry: Coal
+    electricity: Electricity Grid
+    electricity distribution grid: Electricity Grid
+    gas: Gas Infrastructure
+    gas pipeline: Gas Infrastructure
+    gas pipeline new: Gas Infrastructure
+    gas CHP: Gas Infrastructure
+    gas CHP CC: Carbon Capt. at Point Sources
+    gas boiler: Gas Infrastructure
+    gas for industry: Gas Infrastructure
+    gas for industry CC: Carbon Capt. at Point Sources
+    geothermal: Other
+    ground heat pump: Heat Pump
+    heat: Other
+    heat waste: Other
+    home battery: Battery Infrastructure
+    home battery charger: Battery Infrastructure
+    home battery discharger: Battery Infrastructure
+    hydro: Hydro and RoR
+    industry electricity: Other
+    kerosene for aviation: Other
+    land transport EV: Other
+    land transport fuel cell: Other
+    land transport oil: Other
+    low voltage: Electricity Grid
+    low-temperature heat for industry: Other
+    methanol: Methanol
+    industry methanol: Methanol
+    methanolisation: Methanolisation
+    naphtha for industry: Other
+    nuclear: Nuclear
+    offwind: Offshore Wind
+    offwind-ac: Offshore Wind
+    offwind-dc: Offshore Wind
+    oil: Oil
+    oil primary: Oil
+    oil refining: Oil
+    oil emissions: Other
+    onwind: Onshore Wind
+    other: Other
+    process emissions: Other
+    process emissions CC: Carbon Capt. at Point Sources
+    resistive heater: Resistive Heater
+    ror: Hydro and RoR
+    rural air heat pump: Heat Pump
+    rural biomass boiler: Bioenergy
+    rural gas boiler: Gas Infrastructure
+    rural ground heat pump: Heat Pump
+    rural heat: Decentral Heat
+    rural resistive heater: Resistive Heater
+    rural solar thermal: Solar
+    rural water tanks: Other
+    rural water tanks charger: Other
+    rural water tanks discharger: Other
+    shipping methanol: Shipping
+    shipping methanol emissions: Shipping
+    solar: Solar
+    solar rooftop: Solar
+    solar thermal: Solar
+    solid biomass: Bioenergy
+    solid biomass CHP: Bioenergy
+    solid biomass CHP CC: Carbon Capt. at Point Sources
+    solid biomass for industry: Bioenergy
+    solid biomass for industry CC: Carbon Capt. at Point Sources
+    unsustainable biogas: Bioenergy
+    unsustainable bioliquids: Bioenergy
+    unsustainable solid biomass: Bioenergy
+    urban central air heat pump: Heat Pump
+    urban central gas CHP: Gas Infrastructure
+    urban central gas CHP CC: Carbon Capt. at Point Sources
+    urban central gas boiler: Boiler
+    urban central heat: Central Heat
+    urban central resistive heater: Resistive Heater
+    urban central solar thermal: Solar
+    urban central solid biomass CHP: Bioenergy
+    urban central solid biomass CHP CC: Carbon Capt. at Point Sources
+    urban central water tanks: Other
+    urban central water tanks charger: Other
+    urban central water tanks discharger: Other
+    urban decentral air heat pump: Heat Pump
+    urban decentral biomass boiler: Boiler
+    urban decentral heat: Decentral Heat
+    urban decentral gas boiler: Boiler
+    urban decentral resistive heater: Resistive Heater
+    urban decentral solar thermal: Solar
+    urban decentral water tanks: Other
+    urban decentral water tanks charger: Other
+    urban decentral water tanks discharger: Other
+    shipping oil: Oil
+    water tanks: Other
+    water tanks charger: Other
+    water tanks discharger: Other
+  technology_group_colors:
+    Boiler: "#db6a25"
+    Coal: "#545454"
+    Hydro and RoR: "#298c81"
+    Battery Infrastructure: "#ace37f"
+    Resistive Heater: "#d8f9b8"
+    Methanolisation: "#57aac1"
+    Methanation: "#c44ce6"
+    Methanol: "#57aac1"
+    Electricity Grid: "#97ad8c"
+    Electrolysis: "#b3e6ff"
+    CO$_2$ Infrastructure: "#cc99ff"
+    CO$_2$ Sequestration: "#f29dae"
+    Carbon Capt. at Point Sources: "#f29dae"
+    Heat Pump: "#2fb537"
+    Fischer-Tropsch: "#25c49a"
+    DAC: "#ff5270"
+    Bioenergy: "#baa741"
+    H$_2$ Infrastructure: "#bf13a0"
+    Gas Infrastructure: "#e05b09"
+    Shipping: "#ff8c00"
+    Offshore Wind: "#66b5ff"
+    Onshore Wind: "#235ebc"
+    Oil: "#001a33"
+    Solar: "#ffe066"
+    Process Emissions: "#222222"
+    Other: "#aaaaaa"
+    Nuclear: "#ff8c00"
+    Central Heat: "#cc1f1f"
+    Decentral Heat: "#750606"
