@@ -28,13 +28,14 @@ if __name__ == "__main__":
             "plot_balance_map",
             simpl="",
             opts="",
-            clusters="70",
-            ll="vopt",
+            clusters="90",
+            ll="v1.05",
             sector_opts="",
-            planning_horizons="2050",
-            run="maps",
-            carrier="oil",
+            planning_horizons="2030",
+            run="baseline",
+            carrier="co2_stored",
             ext="pdf",
+            configfiles=["/home/bobby/projects/pci-pmi-2030-targets/config/config.2030-targets-smr-0.5.yaml"]
         )
 
     configure_logging(snakemake)
@@ -155,7 +156,7 @@ if __name__ == "__main__":
     vmin = carrier_plotting.get("vmin", vmin)
     vmax = carrier_plotting.get("vmax", vmax)
     cmap = carrier_plotting.get("region_cmap", "Greens")
-
+    
     regions.plot(
         ax=ax,
         column="price",
@@ -186,7 +187,7 @@ if __name__ == "__main__":
     )
 
     # TODO maybe do with config
-    ax.set_title("Balance Map of carrier " + carrier)
+    ax.set_title("Balance Map of carrier " + carrier, fontsize=14)
 
     # Add legend
     legend_kwargs = {
@@ -200,17 +201,18 @@ if __name__ == "__main__":
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=vmin, vmax=vmax))
     price_unit = carrier_plotting.get("region_unit", "€/MWh")
     carrier = n.carriers.loc[carrier, "nice_name"]
-    cbr = fig.colorbar(
-        sm,
-        ax=ax,
-        label=f"Average Marginal Price {carrier} [{price_unit}]",
-        shrink=0.95,
-        pad=0.03,
-        aspect=50,
-        alpha=region_alpha,
-        orientation="horizontal",
-    )
-    cbr.outline.set_edgecolor("None")
+    if carrier != "co2 stored":
+        cbr = fig.colorbar(
+            sm,
+            ax=ax,
+            label=f"Average Marginal Price {carrier} [{price_unit}]",
+            shrink=0.95,
+            pad=0.03,
+            aspect=50,
+            alpha=region_alpha,
+            orientation="horizontal",
+        )
+        cbr.outline.set_edgecolor("None")
 
     pad = 0.18
     carriers = n.carriers.set_index("nice_name")
