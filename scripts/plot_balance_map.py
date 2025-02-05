@@ -66,6 +66,7 @@ if __name__ == "__main__":
     carrier_plotting = plotting.get(carrier, {})
     # use bus carrier from config if defined
     carrier = carrier_plotting.get("bus_carrier", carrier)
+
     # check if carrier is in network
     if carrier not in n.buses.carrier.unique():
         raise ValueError(f"Carrier {carrier} is not in the network.")
@@ -136,20 +137,16 @@ if __name__ == "__main__":
 
     # get prices per region as colormap
     buses = n.buses.query("carrier in @carrier").index
-    price = (
-        n.buses_t.marginal_price.mean()
-        .reindex(buses)
-        .rename(n.buses.location)
-        .groupby(level=0)
-        .mean()
-    )
+    demand = n.statistics.energy_balance(bus_carrier=carrier, aggregate_time=False, groupby=["bus", "carrier"]).clip(lower=0).groupby("bus").sum().reindex(buses).rename(n.buses.location).T
+    price = n.buses_t.marginal_price.reindex(buses, axis=1).rename(n.buses.location, axis=1)
+    weigthed_prices=(demand*price).sum()/demand.sum()
 
     # if only one price is available, use this price for all regions
-    if price.size == 1:
-        regions["price"] = price.values[0]
-        shift = round(price.values[0] / 20, 0)
+    if weigthed_prices.size == 1:
+        regions["price"] = weigthed_prices.values[0]
+        shift = round(weigthed_prices.values[0] / 20, 0)
     else:
-        regions["price"] = price.reindex(regions.index).fillna(0)
+        regions["price"] = weigthed_prices.reindex(regions.index).fillna(0)
         shift = 0
 
     vmin, vmax = regions.price.min() - shift, regions.price.max() + shift
@@ -186,8 +183,14 @@ if __name__ == "__main__":
         boundaries=boundaries,
     )
 
+    if carrier == "H2":
+        carrier_name = "H$_2$"
+    
+    if carrier == "co2 stored":
+        carrier_name = "CO$_2$"
+
     # TODO maybe do with config
-    ax.set_title("Balance Map of carrier " + carrier, fontsize=14)
+    # ax.set_title("Balance Map of carrier " + carrier_name, fontsize=14)
 
     # Add legend
     legend_kwargs = {
@@ -200,19 +203,21 @@ if __name__ == "__main__":
     # Add colorbar
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=vmin, vmax=vmax))
     price_unit = carrier_plotting.get("region_unit", "€/MWh")
-    carrier = n.carriers.loc[carrier, "nice_name"]
-    if carrier != "co2 stored":
-        cbr = fig.colorbar(
-            sm,
-            ax=ax,
-            label=f"Average Marginal Price {carrier} [{price_unit}]",
-            shrink=0.95,
-            pad=0.03,
-            aspect=50,
-            alpha=region_alpha,
-            orientation="horizontal",
-        )
-        cbr.outline.set_edgecolor("None")
+
+    if carrier == "co2 stored":
+        price_unit = "€/t CO$_2$"
+
+    cbr = fig.colorbar(
+        sm,
+        ax=ax,
+        label=f"Average Marginal Price {carrier_name} [{price_unit}]",
+        shrink=0.95,
+        pad=0.03,
+        aspect=50,
+        alpha=region_alpha,
+        orientation="horizontal",
+    )
+    cbr.outline.set_edgecolor("None")
 
     pad = 0.18
     carriers = n.carriers.set_index("nice_name")

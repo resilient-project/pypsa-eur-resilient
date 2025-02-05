@@ -1175,7 +1175,7 @@ if __name__ == "__main__":
             # configfiles="../config/test/config.perfect.yaml",
             opts="",
             clusters="90",
-            ll="vopt",
+            ll="v1.05",
             sector_opts="",
             planning_horizons="2030",
         )
