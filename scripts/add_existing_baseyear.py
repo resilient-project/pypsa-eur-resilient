@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# SPDX-FileCopyrightText: : 2020-2024 The PyPSA-Eur Authors
+# SPDX-FileCopyrightText: Contributors to PyPSA-Eur <https://github.com/pypsa/pypsa-eur>
 #
 # SPDX-License-Identifier: MIT
 """
@@ -18,13 +17,12 @@ import pypsa
 import xarray as xr
 from _helpers import (
     configure_logging,
+    sanitize_custom_columns,
     set_scenario_config,
     update_config_from_wildcards,
 )
 from add_electricity import sanitize_carriers
-from definitions.heat_sector import HeatSector
 from definitions.heat_system import HeatSystem
-from definitions.heat_system_type import HeatSystemType
 from prepare_sector_network import cluster_heat_buses, define_spatial, prepare_costs
 
 logger = logging.getLogger(__name__)
@@ -380,8 +378,8 @@ def get_efficiency(heat_system, carrier, nodes, heating_efficiencies, costs):
     Computes the heating system efficiency based on the sector and carrier
     type.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     heat_system : object
     carrier : str
         The type of fuel or energy carrier (e.g., 'gas', 'oil').
@@ -392,14 +390,14 @@ def get_efficiency(heat_system, carrier, nodes, heating_efficiencies, costs):
     costs : pandas.DataFrame
         A DataFrame containing boiler cost and efficiency data for different heating systems.
 
-    Returns:
-    --------
+    Returns
+    -------
     efficiency : pandas.Series or float
         A pandas Series mapping the efficiencies based on nodes for residential and services sectors, or a single
         efficiency value for other heating systems (e.g., urban central).
 
-    Notes:
-    ------
+    Notes
+    -----
     - For residential and services sectors, efficiency is mapped based on the nodes.
     - For other sectors, the default boiler efficiency is retrieved from the `costs` database.
     """
@@ -623,22 +621,6 @@ def add_heating_capacities_installed_before_baseyear(
             )
 
 
-def set_defaults(n):
-    """
-    Set default values for missing values in the network.
-
-    Parameters:
-        n (pypsa.Network): The network object.
-    Returns:
-        None
-    """
-    if "Link" in n.components:
-        if "reversed" in n.links.columns:
-            # Replace NA values with default value False
-            n.links.loc[n.links.reversed.isna(), "reversed"] = False
-            n.links.reversed = n.links.reversed.astype(bool)
-
-
 # %%
 if __name__ == "__main__":
     if "snakemake" not in globals():
@@ -706,13 +688,12 @@ if __name__ == "__main__":
         )
 
     # Set defaults for missing missing values
-    set_defaults(n)
 
     if options.get("cluster_heat_buses", False):
         cluster_heat_buses(n)
 
     n.meta = dict(snakemake.config, **dict(wildcards=dict(snakemake.wildcards)))
 
+    sanitize_custom_columns(n)
     sanitize_carriers(n, snakemake.config)
-
     n.export_to_netcdf(snakemake.output[0])

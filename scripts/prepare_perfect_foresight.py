@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# SPDX-FileCopyrightText: : 2020-2024 The PyPSA-Eur Authors
+# SPDX-FileCopyrightText: Contributors to PyPSA-Eur <https://github.com/pypsa/pypsa-eur>
 #
 # SPDX-License-Identifier: MIT
 """
@@ -7,16 +6,17 @@ Concats pypsa networks of single investment periods to one network.
 """
 
 import logging
-from typing import List
 
 import numpy as np
 import pandas as pd
 import pypsa
 from _helpers import (
     configure_logging,
+    sanitize_custom_columns,
     set_scenario_config,
     update_config_from_wildcards,
 )
+from add_electricity import sanitize_carriers
 from add_existing_baseyear import add_build_year_to_new_assets
 from pypsa.descriptors import expand_series
 from six import iterkeys
@@ -33,6 +33,7 @@ def get_missing(df, n, c):
         df: pandas DataFrame, static values of pypsa components
         n : pypsa Network to which new assets should be added
         c : string, pypsa component.list_name (e.g. "generators")
+
     Return:
         pd.DataFrame with static values of missing assets
     """
@@ -439,7 +440,7 @@ def apply_time_segmentation_perfect(
         import tsam.timeseriesaggregation as tsam
     except ImportError:
         raise ModuleNotFoundError(
-            "Optional dependency 'tsam' not found." "Install via 'pip install tsam'"
+            "Optional dependency 'tsam' not found.Install via 'pip install tsam'"
         )
 
     # get all time-dependent data
@@ -487,7 +488,7 @@ def apply_time_segmentation_perfect(
     return n
 
 
-def update_heat_pump_efficiency(n: pypsa.Network, years: List[int]):
+def update_heat_pump_efficiency(n: pypsa.Network, years: list[int]):
     """
     Update the efficiency of heat pumps from previous years to current year
     (e.g. 2030 heat pumps receive 2040 heat pump COPs in 2030).
@@ -498,7 +499,7 @@ def update_heat_pump_efficiency(n: pypsa.Network, years: List[int]):
     ----------
     n : pypsa.Network
         The concatenated network.
-    years : List[int]
+    years : list[int]
         List of planning horizon years.
 
     Returns
@@ -515,9 +516,9 @@ def update_heat_pump_efficiency(n: pypsa.Network, years: List[int]):
             (year, slice(None)), heat_pump_idx.str[:-4] + str(year)
         ]
         # in <year>, set the efficiency of all heat pumps to the correct efficiency
-        n.links_t["efficiency"].loc[
-            (year, slice(None)), heat_pump_idx
-        ] = correct_efficiency.values
+        n.links_t["efficiency"].loc[(year, slice(None)), heat_pump_idx] = (
+            correct_efficiency.values
+        )
 
 
 if __name__ == "__main__":
@@ -543,7 +544,7 @@ if __name__ == "__main__":
         f"Concat networks of investment period {years} with social discount rate of {social_discountrate * 100}%"
     )
 
-    # concat prenetworks of planning horizon to single network ------------
+    # concat prepared networks of planning horizon to single network ------------
     n = concat_networks(years)
 
     # temporal aggregate
@@ -575,4 +576,6 @@ if __name__ == "__main__":
     update_heat_pump_efficiency(n=n, years=years)
 
     # export network
+    sanitize_custom_columns(n)
+    sanitize_carriers(n, snakemake.config)
     n.export_to_netcdf(snakemake.output[0])
