@@ -128,6 +128,8 @@ electricity:
     enable: false
     by_country: false
 
+  transmission_limit: vopt
+
 pci-pmi-projects:
   enable: false
   haversine_distance: true
@@ -160,8 +162,6 @@ custom_constraints:
 
 debug:
   solve_network_temp_reduction: false
-
-  transmission_limit: vopt
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
 atlite:
