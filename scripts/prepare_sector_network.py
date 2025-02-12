@@ -4924,6 +4924,7 @@ if __name__ == "__main__":
             ll="vopt",
             sector_opts="",
             planning_horizons="2030",
+            configfiles=["/home/bobby/projects/pci-pmi-projects/config/config.test.yaml"],
         )
 
     configure_logging(snakemake)
