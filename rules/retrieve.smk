@@ -705,3 +705,48 @@ if config["enable"]["retrieve"]:
                     with open(output_path, "wb") as f:
                         f.write(response.content)
 
+
+if config["enable"]["retrieve"]:
+
+    rule retrieve_pci_pmi_geojson:
+        input:
+            lines_electricity_transmission=storage(
+                "https://raw.githubusercontent.com/bobbyxng/pci-pmi-projects/main/resources/geojson/lines_electricity_transmission.geojson",
+                keep_local=True,
+            ),
+            links_co2_pipeline=storage(
+                "https://raw.githubusercontent.com/bobbyxng/pci-pmi-projects/main/resources/geojson/links_co2_pipeline.geojson",
+                keep_local=True,
+            ),
+            links_electricity_transmission=storage(
+                "https://raw.githubusercontent.com/bobbyxng/pci-pmi-projects/main/resources/geojson/links_electricity_transmission.geojson",
+                keep_local=True,
+            ),
+            links_h2_pipeline=storage(
+                "https://raw.githubusercontent.com/bobbyxng/pci-pmi-projects/main/resources/geojson/links_h2_pipeline.geojson",
+                keep_local=True,
+            ),
+            storage_units_electricity=storage(
+                "https://raw.githubusercontent.com/bobbyxng/pci-pmi-projects/main/resources/geojson/storage_units_electricity.geojson",
+                keep_local=True,
+            ),
+            stores_co2=storage(
+                "https://raw.githubusercontent.com/bobbyxng/pci-pmi-projects/main/resources/geojson/stores_co2.geojson",
+                keep_local=True,
+            ),
+            stores_h2=storage(
+                "https://raw.githubusercontent.com/bobbyxng/pci-pmi-projects/main/resources/geojson/stores_h2.geojson",
+                keep_local=True,
+            ),
+        output:
+            lines_electricity_transmission="data/pci-pmi-projects/lines_electricity_transmission.geojson",
+            links_co2_pipeline="data/pci-pmi-projects/links_co2_pipeline.geojson",
+            links_electricity_transmission="data/pci-pmi-projects/links_electricity_transmission.geojson",
+            links_h2_pipeline="data/pci-pmi-projects/links_h2_pipeline.geojson",
+            storage_units_electricity="data/pci-pmi-projects/storage_units_electricity.geojson",
+            stores_co2="data/pci-pmi-projects/stores_co2.geojson",
+            stores_h2="data/pci-pmi-projects/stores_h2.geojson",         
+        retries: 1
+        run:
+            for key in input.keys():
+                move(input[key], output[key])
