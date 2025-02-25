@@ -675,6 +675,16 @@ rule add_electricity:
         ),
         load=resources("electricity_demand_base_s.nc"),
         busmap=resources("busmap_base_s_{clusters}.csv"),
+        pci_pmi_stor_elec=lambda w: (
+            "data/pci-pmi-projects/storage_units_electricity.geojson"
+            if config_provider("pci_pmi_projects", "enable")(w) and "storage_units_electricity" in config_provider("pci_pmi_projects", "include")(w)
+            else []
+        ),
+        pci_pmi_stor_h2=lambda w: (
+            "data/pci-pmi-projects/stores_h2.geojson"
+            if config_provider("pci_pmi_projects", "enable")(w) and "stores_h2" in config_provider("pci_pmi_projects", "include")(w)
+            else []
+        ),
     output:
         resources("networks/base_s_{clusters}_elec.nc"),
     log:
