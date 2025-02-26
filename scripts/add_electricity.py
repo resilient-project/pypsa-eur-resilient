@@ -325,7 +325,7 @@ def load_and_aggregate_powerplants(
     )
 
     # Add PCI-PMI PHS
-    if pci_pmi_stor_elec:
+    if pci_pmi_stor_elec is not None:
         logger.info("Adding PCI-PMI PHS to power plant data.")
         ppl = pd.concat([ppl, pci_pmi_stor_elec.loc[pci_pmi_stor_elec.carrier=="PHS"]], axis=0)
 
