@@ -269,7 +269,7 @@ def load_costs(tech_costs, config, max_hours, Nyears=1.0):
 
 def load_and_aggregate_powerplants(
     ppl_fn: str,
-    pci_pmi_stor_elec: pd.DataFrame,
+    pcipmi_stor_elec: pd.DataFrame,
     costs: pd.DataFrame,
     consider_efficiency_classes: bool = False,
     aggregation_strategies: dict = None,
@@ -325,9 +325,9 @@ def load_and_aggregate_powerplants(
     )
 
     # Add PCI-PMI PHS
-    if pci_pmi_stor_elec is not None:
+    if pcipmi_stor_elec is not None:
         logger.info("Adding PCI-PMI PHS to power plant data.")
-        ppl = pd.concat([ppl, pci_pmi_stor_elec.loc[pci_pmi_stor_elec.carrier=="PHS"]], axis=0)
+        ppl = pd.concat([ppl, pcipmi_stor_elec.loc[pcipmi_stor_elec.carrier=="PHS"]], axis=0)
 
     strategies = {
         **DEFAULT_ONE_PORT_STRATEGIES,
@@ -1075,8 +1075,8 @@ def attach_stores(
         )
 
 
-def load_pci_pmi_storage_units(
-    pci_pmi_stor_elec_fn: str,
+def load_pcipmi_storage_units(
+    pcipmi_stor_elec_fn: str,
     regions: gpd.GeoDataFrame,
     costs,
 ) -> pd.DataFrame:
@@ -1085,7 +1085,7 @@ def load_pci_pmi_storage_units(
 
     Parameters
     ----------
-        - pci_pmi_stor_elec_fn (str): Path to the PCI-PMI storage units geojson
+        - pcipmi_stor_elec_fn (str): Path to the PCI-PMI storage units geojson
         - regions (gpd.GeoDataFrame): GeoDataFrame containing the bus regions
     
     Returns
@@ -1093,7 +1093,7 @@ def load_pci_pmi_storage_units(
         - df (pd.DataFrame): DataFrame containing the PCI-PMI storage units, mapped to buses
     """
     columns = ["bus", "carrier", "p_nom", "build_year", "lifetime", "capital_cost", "marginal_cost", "efficiency", "max_hours", "country"]
-    gdf = gpd.read_file(pci_pmi_stor_elec_fn)
+    gdf = gpd.read_file(pcipmi_stor_elec_fn)
     
     gdf["p_nom"] = gdf["p_nom_discharge_MW"].astype(int)
     gdf["build_year"] = gdf["year"].astype(int)
@@ -1112,12 +1112,12 @@ def load_pci_pmi_storage_units(
     return df
 
 
-def add_pci_pmi_stores_h2(
-    pci_pmi_stor_h2_fn: str,
+def add_pcipmi_stores_h2(
+    pcipmi_stor_h2_fn: str,
     regions: gpd.GeoDataFrame,
     costs
 ):
-    gdf = gpd.read_file(pci_pmi_stor_h2_fn)
+    gdf = gpd.read_file(pcipmi_stor_h2_fn)
     gdf["bus"] = gpd.sjoin_nearest(gdf.to_crs("EPSG:3035"), regions.to_crs("EPSG:3035"), how="left")["name"]
 
 
@@ -1153,19 +1153,19 @@ if __name__ == "__main__":
     )
 
     # PCI storage units
-    if snakemake.input.pci_pmi_stor_elec:
-        pci_pmi_stor_elec = load_pci_pmi_storage_units(
-            snakemake.input.pci_pmi_stor_elec,
+    if snakemake.input.pcipmi_stor_elec:
+        pcipmi_stor_elec = load_pcipmi_storage_units(
+            snakemake.input.pcipmi_stor_elec,
             regions,
             costs
         )
     else: 
-        pci_pmi_stor_elec = None
+        pcipmi_stor_elec = None
 
     # TODO: Fix lifetime and build_year aggregation
     ppl = load_and_aggregate_powerplants(
         snakemake.input.powerplants,
-        pci_pmi_stor_elec,
+        pcipmi_stor_elec,
         costs,
         params.consider_efficiency_classes,
         params.aggregation_strategies,

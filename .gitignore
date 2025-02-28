@@ -78,3 +78,6 @@ merger-todos.md
 *.html
 # private dev folder
 dev/*
+
+# Snakemake DAG
+dag.*
