@@ -1241,31 +1241,31 @@ rule build_pcipmi_projects:
         regions_onshore=resources("regions_onshore_base_s_{clusters}.geojson"),
         regions_offshore=resources("regions_offshore_base_s_{clusters}.geojson"),
         scope=resources("europe_shape.geojson"),
-        links_co2_pipeline = "data/pcipmi-projects/links_co2_pipeline.geojson",
-        links_h2_pipeline = "data/pcipmi-projects/links_h2_pipeline.geojson",
-        stores_co2 = "data/pcipmi-projects/stores_co2.geojson",
-        stores_h2 = "data/pcipmi-projects/stores_h2.geojson",
+        links_co2_pipeline = "data/pcipmi_projects/links_co2_pipeline.geojson",
+        links_h2_pipeline = "data/pcipmi_projects/links_h2_pipeline.geojson",
+        stores_co2 = "data/pcipmi_projects/stores_co2.geojson",
+        stores_h2 = "data/pcipmi_projects/stores_h2.geojson",
     output:
-        buses_pcipmi=resources(
-            "pcipmi-projects/buses_pcipmi_s_{clusters}_{opts}_{planning_horizons}.csv"
+        buses_pcipmi_offshore=resources(
+            "pcipmi_projects/buses_pcipmi_offshore_s_{clusters}_{opts}.csv"
         ),
         links_h2_pipeline=resources(
-            "pcipmi-projects/links_h2_pipeline_s_{clusters}_{opts}_{planning_horizons}.csv"
+            "pcipmi_projects/links_h2_pipeline_s_{clusters}_{opts}.csv"
         ),
         links_co2_pipeline=resources(
-            "pcipmi-projects/links_co2_pipeline_s_{clusters}_{opts}_{planning_horizons}.csv"
+            "pcipmi_projects/links_co2_pipeline_s_{clusters}_{opts}.csv"
         ),
         stores_h2=resources(
-            "pcipmi-projects/stores_h2_s_{clusters}_{opts}_{planning_horizons}.csv"
+            "pcipmi_projects/stores_h2_s_{clusters}_{opts}.csv"
         ),
         stores_co2=resources(
-            "pcipmi-projects/stores_co2_s_{clusters}_{opts}_{planning_horizons}.csv"
+            "pcipmi_projects/stores_co2_s_{clusters}_{opts}.csv"
         ),
     log:
-        logs("build_pcipmi_projects_s_{clusters}_{opts}_{planning_horizons}.log"),
+        logs("build_pcipmi_projects_s_{clusters}_{opts}.log"),
     benchmark:
         benchmarks(
-            "build_pcipmi_projects_s_{clusters}_{opts}_{planning_horizons}"
+            "build_pcipmi_projects_s_{clusters}_{opts}"
         )
     threads: 1
     resources:

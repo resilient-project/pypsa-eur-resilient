@@ -739,13 +739,13 @@ if config["enable"]["retrieve"]:
                 keep_local=True,
             ),
         output:
-            lines_electricity_transmission="data/pcipmi-projects/lines_electricity_transmission.geojson",
-            links_co2_pipeline="data/pcipmi-projects/links_co2_pipeline.geojson",
-            links_electricity_transmission="data/pcipmi-projects/links_electricity_transmission.geojson",
-            links_h2_pipeline="data/pcipmi-projects/links_h2_pipeline.geojson",
-            storage_units_electricity="data/pcipmi-projects/storage_units_electricity.geojson",
-            stores_co2="data/pcipmi-projects/stores_co2.geojson",
-            stores_h2="data/pcipmi-projects/stores_h2.geojson",         
+            lines_electricity_transmission="data/pcipmi_projects/lines_electricity_transmission.geojson",
+            links_co2_pipeline="data/pcipmi_projects/links_co2_pipeline.geojson",
+            links_electricity_transmission="data/pcipmi_projects/links_electricity_transmission.geojson",
+            links_h2_pipeline="data/pcipmi_projects/links_h2_pipeline.geojson",
+            storage_units_electricity="data/pcipmi_projects/storage_units_electricity.geojson",
+            stores_co2="data/pcipmi_projects/stores_co2.geojson",
+            stores_h2="data/pcipmi_projects/stores_h2.geojson",         
         retries: 1
         run:
             for key in input.keys():

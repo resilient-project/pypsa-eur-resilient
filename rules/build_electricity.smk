@@ -676,7 +676,7 @@ rule add_electricity:
         load=resources("electricity_demand_base_s.nc"),
         busmap=resources("busmap_base_s_{clusters}.csv"),
         pcipmi_stor_elec=lambda w: (
-            "data/pcipmi-projects/storage_units_electricity.geojson"
+            "data/pcipmi_projects/storage_units_electricity.geojson"
             if config_provider("pcipmi_projects", "enable")(w) and "storage_units_electricity" in config_provider("pcipmi_projects", "include")(w)
             else []
         ),

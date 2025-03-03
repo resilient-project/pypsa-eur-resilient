@@ -474,10 +474,9 @@ def _cluster_close_buses(
 
 
 def _aggregate_units(gdf):
-    gdf = gdf.groupby(["bus"]).agg(
+    gdf = gdf.groupby(["bus", "year"]).agg(
         {
             "e_nom": "sum",
-            "build_year": "max",
             "carrier": "first",
             "tags": lambda x: list(x.index),
             "geometry": lambda x: unary_union(x).centroid,
@@ -487,8 +486,6 @@ def _aggregate_units(gdf):
     gdf.reset_index(inplace=True)
     gdf["id"] = gdf.apply(lambda row: f"{row['bus']}", axis=1)
     gdf = gpd.GeoDataFrame(gdf, geometry="geometry", crs=GEO_CRS)
-
-    gdf.set_index("id", inplace=True)
 
     return gdf
 
@@ -533,7 +530,6 @@ if __name__ == "__main__":
             ll="v1.05",
             clusters=90,
             opts="",
-            planning_horizons="2030",
         )
 
     configure_logging(snakemake)
@@ -542,7 +538,6 @@ if __name__ == "__main__":
     line_length_factor = snakemake.params.line_length_factor
     haversine_distance = snakemake.params["pcipmi_projects"]["haversine_distance"]
     linetype_380 = snakemake.config["lines"]["types"][380]
-    investment_year = int(snakemake.wildcards.planning_horizons)
 
     n = pypsa.Network(snakemake.input.network)
     regions_onshore = gpd.read_file(snakemake.input.regions_onshore).set_index("name")
@@ -640,133 +635,68 @@ if __name__ == "__main__":
     stores_h2 = stores_h2[~stores_h2["pci_code"].isin(exclude_projects)]
     # rename injection to e_nom
     stores_h2.rename(columns={"injection_withdrawal_MW": "p_nom", "storage_capacity_MWh": "e_nom"}, inplace=True)
-    
     stores_h2 = _map_points_to_closest_region(
         stores_h2,
         regions_onshore,
         max_distance=OFFSHORE_BUS_RADIUS,
     )
-    stores_h2 = _map_points_to_closest_region(
-        stores_h2,
+
+    stores_co2 = gpd.read_file(snakemake.input.stores_co2).set_index("id")
+    stores_co2["tags"] = stores_co2["tags"].apply(json.loads)
+    stores_co2["pci_code"] = stores_co2["tags"].apply(lambda x: x["pci_code"]).astype(str)
+    stores_co2 = stores_co2[~stores_co2["pci_code"].isin(exclude_projects)]
+    stores_co2.rename(columns={"injection_rate_Mtpa": "e_nom"}, inplace=True)
+    stores_co2["e_nom"] = stores_co2["e_nom"] * 1e6  # Convert from Mtpa to tpa
+    stores_co2 = _map_points_to_closest_region(
+        stores_co2,
         buses_co2_offshore,
         max_distance=CLUSTER_TOL * 2,
     )
-    components["stores_co2"] = _map_points_to_closest_region(
-        components["stores_co2"],
+    stores_co2 = _map_points_to_closest_region(
+        stores_co2,
         regions_onshore,
         max_distance=CLUSTER_TOL * 2,
     )
-    components["stores_co2"] = _aggregate_units(
-        components["stores_co2"],
-    )
-
-    # Set p_nom of co2_pipeline to the max of all co2 stores
-    components["links_co2_pipeline"]["p_nom"] = (
-        components["stores_co2"]["e_nom"].sum() / 8760
-    ).round(0)
-
-    ## DEBUG
-    map = None
-    map = regions_onshore.explore(m=map, color="grey")
-    map = buses_hydrogen_offshore.explore(m=map)
-    map = components["links_hydrogen_pipeline"][["bus0", "bus1", "geometry"]].explore(
-        m=map, color="red"
-    )
-    map = components["stores_hydrogen"].explore(m=map, color="green")
-    map
-
-    map = None
-    map = regions_onshore.explore(m=map, color="grey")
-    map = buses_co2_offshore.explore(m=map)
-    map = components["links_co2_pipeline"][["bus0", "bus1", "geometry"]].explore(
-        m=map, color="red"
-    )
-    map = components["stores_co2"].explore(m=map, color="green")
-    map
 
     # Recalculate length/distances if activated
     if haversine_distance:
-        logger.info("Recalculating line lengths with haversine distance.")
-        components["lines_electricity_transmission"] = _calculate_haversine_distance(
+        links_h2_pipeline = _calculate_haversine_distance(
             buses_coords,
-            components["lines_electricity_transmission"],
+            links_h2_pipeline,
             line_length_factor,
         )
-        components["links_electricity_transmission"] = _calculate_haversine_distance(
+        links_co2_pipeline = _calculate_haversine_distance(
             buses_coords,
-            components["links_electricity_transmission"],
-            line_length_factor,
-        )
-        components["links_hydrogen_pipeline"] = _calculate_haversine_distance(
-            buses_coords,
-            components["links_hydrogen_pipeline"],
-            line_length_factor,
-        )
-        components["links_co2_pipeline"] = _calculate_haversine_distance(
-            buses_coords,
-            components["links_co2_pipeline"],
+            links_co2_pipeline,
             line_length_factor,
         )
 
-    buses_pcipmi_offshore = pd.concat([buses_hydrogen_offshore, buses_co2_offshore])
+    buses_pcipmi_offshore = pd.concat([buses_h2_offshore, buses_co2_offshore])
 
     ### add carrier suffixes to all components
-    components["links_hydrogen_pipeline"]["bus0"] = (
-        components["links_hydrogen_pipeline"]["bus0"] + " H2"
-    )
-    components["links_hydrogen_pipeline"]["bus1"] = (
-        components["links_hydrogen_pipeline"]["bus1"] + " H2"
-    )
-    components["stores_hydrogen"].index = (
-        components["stores_hydrogen"].index + " H2 Store"
-    )
-    components["stores_hydrogen"]["bus"] = components["stores_hydrogen"]["bus"] + " H2"
-    components["links_co2_pipeline"]["bus0"] = (
-        components["links_co2_pipeline"]["bus0"] + " co2 stored"
-    )
-    components["links_co2_pipeline"]["bus1"] = (
-        components["links_co2_pipeline"]["bus1"] + " co2 stored"
-    )
-    components["stores_co2"].index = components["stores_co2"].index + " co2 sequestered"
-    components["stores_co2"]["bus"] = (
-        components["stores_co2"]["bus"] + " co2 sequestered"
-    )
+    links_h2_pipeline["bus0"] = links_h2_pipeline["bus0"] + " H2"
+    links_h2_pipeline["bus1"] = links_h2_pipeline["bus1"] + " H2"
+    links_co2_pipeline["bus0"] = links_co2_pipeline["bus0"] + " co2 stored"
+    links_co2_pipeline["bus1"] = links_co2_pipeline["bus1"] + " co2 stored"
+
+    stores_h2.index = stores_h2.index + " H2 Store"
+    stores_h2["bus"] = stores_h2["bus"] + " H2"
+    stores_co2.index = stores_co2.index + " co2 sequestered"
+    stores_co2["bus"] = stores_co2["bus"] + " co2 sequestered"
 
     ### EXPORT
-    ### Buses
     logger.info("Exporting added PCI/PMI buses to resources folder.")
     buses_pcipmi_offshore.to_csv(snakemake.output.buses_pcipmi_offshore, index=True)
 
-    ### Projects
-    logger.info("Exporting PCI/PMI projects to resources folder.")
-    logger.info(
-        f" - Electricity transmission line (AC) components: {len(components["lines_electricity_transmission"])}"
-    )
-    components["lines_electricity_transmission"][COLUMNS_LINES].to_csv(
-        snakemake.output.lines_electricity_transmission, index=True
-    )
-    logger.info(
-        f" - Electricity transmission links (DC) components: {len(components["links_electricity_transmission"])}"
-    )
-    components["links_electricity_transmission"][COLUMNS_LINKS].to_csv(
-        snakemake.output.links_electricity_transmission, index=True
-    )
-    logger.info(
-        f" - Hydrogen pipeline components: {len(components['links_hydrogen_pipeline'])}"
-    )
-    components["links_hydrogen_pipeline"][COLUMNS_LINKS].to_csv(
-        snakemake.output.links_hydrogen_pipeline, index=True
-    )
-    logger.info(f" - CO2 pipeline projects: {len(components['links_co2_pipeline'])}")
-    components["links_co2_pipeline"][COLUMNS_LINKS].to_csv(
-        snakemake.output.links_co2_pipeline, index=True
-    )
+    logger.info(f" - H2 pipeline components: {len(links_h2_pipeline)}")
+    links_h2_pipeline[COLUMNS_LINKS].to_csv(snakemake.output.links_h2_pipeline, index=True)
+    
+    logger.info(f" - CO2 pipeline components: {len(links_co2_pipeline)}")
+    links_co2_pipeline[COLUMNS_LINKS].to_csv(snakemake.output.links_co2_pipeline, index=True)
 
     ### Export storages and stores
     logger.info("Exporting storage units and stores to resources folder.")
-    components["stores_hydrogen"][COLUMNS_STORES].to_csv(
-        snakemake.output.stores_hydrogen, index=True
-    )
-    components["stores_co2"][COLUMNS_STORES].to_csv(
-        snakemake.output.stores_co2, index=True
-    )
+    logger.info(f" - H2 stores: {len(stores_h2)}")
+    stores_h2[COLUMNS_STORES].to_csv(snakemake.output.stores_h2, index=True)
+    logger.info(f" - CO2 stores: {len(stores_co2)}")
+    stores_co2[COLUMNS_STORES].to_csv(snakemake.output.stores_co2, index=True)
