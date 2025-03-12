@@ -298,11 +298,11 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "add_brownfield",
-            clusters="39",
+            clusters="adm",
             opts="",
-            ll="vopt",
+            ll="v1.05",
             sector_opts="",
-            planning_horizons=2050,
+            planning_horizons=2040,
         )
 
     configure_logging(snakemake)
@@ -334,6 +334,9 @@ if __name__ == "__main__":
     )
 
     disable_grid_expansion_if_limit_hit(n)
+
+    # Activate inactive links commissioned by modelling year
+    b_inactive_links = n_p.links.loc[n_p.links.active==False]
 
     n.meta = dict(snakemake.config, **dict(wildcards=dict(snakemake.wildcards)))
     n.export_to_netcdf(snakemake.output[0])

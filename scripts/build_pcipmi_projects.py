@@ -79,6 +79,30 @@ def _map_endpoints_to_closest_region(
     coords=0,
     lines=True,
 ):
+    """
+    Maps endpoints in a GeoDataFrame to their closest regions within a specified maximum distance.
+    
+    Parameters
+    ----------
+    gdf : GeoDataFrame
+        GeoDataFrame containing geometries (line geometries if lines=True, point geometries otherwise).
+    regions : GeoDataFrame
+        GeoDataFrame containing region geometries with a 'name' column.
+    max_distance : float, optional
+        Maximum allowed distance between points and regions. Points farther than this 
+        will have their region set to None. Default is OFFSHORE_BUS_RADIUS.
+    coords : int, optional
+        Index of the coordinate to extract from line geometries when lines=True. Default is 0.
+    lines : bool, optional
+        Whether gdf contains line geometries. If True, points are extracted from line
+        geometries using coords. If False, gdf geometries are treated as points. Default is True.
+    
+    Returns
+    -------
+    pandas.Series
+        Series containing the name of the closest region for each endpoint, or None if
+        the closest region is farther than max_distance.
+    """
     if lines:
         gdf_points = gdf.geometry.apply(lambda x: Point(x.coords[coords]))
     else:
@@ -158,20 +182,6 @@ def _map_points_to_closest_region(
     )
 
     return gdf
-
-
-def _simplify_lines_to_380(lines, linetype):
-    lines = lines.copy()
-    logger.info("Mapping all AC lines onto a single 380 kV layer")
-
-    lines["type"] = linetype
-    lines["v_nom"] = 380
-    i_nom_380 = pypsa.Network().line_types["i_nom"][linetype_380]
-    lines.loc[:, "num_parallel"] = lines["s_nom"] / (
-        np.sqrt(3) * lines["v_nom"] * i_nom_380
-    )
-
-    return lines
 
 
 def _drop_redundant_lines_links(lines):

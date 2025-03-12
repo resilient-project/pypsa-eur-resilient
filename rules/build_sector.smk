@@ -1084,6 +1084,21 @@ def input_heat_source_power(w):
     }
 
 
+def input_pcipmi_projects(w):
+    pcipmi_projects = config_provider("pcipmi_projects")(w)
+    if pcipmi_projects["enable"]:
+        components = pcipmi_projects["include"] + ["buses_pcipmi_offshore"]
+        inputs = {
+            project_type: resources(
+                f"pcipmi_projects/{project_type}"
+                + "_s_{clusters}_{opts}.csv"
+            )
+            for project_type in components if project_type != "storage_units_electricity"
+        }
+        return inputs
+    return {}
+
+
 rule prepare_sector_network:
     params:
         time_resolution=config_provider("clustering", "temporal", "resolution_sector"),
@@ -1114,9 +1129,12 @@ rule prepare_sector_network:
         limited_heat_sources=config_provider(
             "sector", "district_heating", "limited_heat_sources"
         ),
+        pipelines=config_provider("pipelines"),
+        pcipmi_projects=config_provider("pcipmi_projects"),
     input:
         unpack(input_profile_offwind),
         unpack(input_heat_source_power),
+        unpack(input_pcipmi_projects),
         **rules.cluster_gas_network.output,
         **rules.build_gas_input_locations.output,
         snapshot_weightings=resources(
