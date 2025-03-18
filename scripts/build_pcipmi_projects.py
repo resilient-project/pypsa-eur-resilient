@@ -32,6 +32,7 @@ DISTANCE_CRS = "EPSG:3035"
 GEO_CRS = "EPSG:4326"
 OFFSHORE_BUS_RADIUS = 5000
 CLUSTER_TOL = 25000
+EXCLUDE_PROJECTS = ["9.8"]
 
 COLUMNS_LINES = [
     "bus0",
@@ -397,34 +398,36 @@ def _split_to_overpassing_segments(
 
 def _create_unique_ids(df):
     """
-    Create unique IDs for each project, starting with the PCI code and adding a
+    Create unique IDs for each project, starting with the index and adding a
     two-digit numerical suffix "-01", "-02", etc. only if there are multiple
     geometries for the same project.
 
     Parameters:
-        df (pd.DataFrame): The input DataFrame containing the 'pci_code' column.
+        df (pd.DataFrame): The input DataFrame.
 
     Returns:
         df (pd.DataFrame): An indexed DataFrame with unique IDs for each project.
     """
+    df = df.copy().reset_index()
+
     # Count the occurrences of each 'pci_code'
-    pci_code_counts = df["pci_code"].value_counts()
+    counts = df["id"].value_counts()
 
-    # Generate cumulative counts within each 'pci_code' group
-    df["count"] = df.groupby("pci_code").cumcount() + 1  # Start counting from 1, not 0
+    # Generate cumulative counts within each group
+    df["count"] = df.groupby("id").cumcount() + 1  # Start counting from 1, not 0
 
-    # Add a two-digit suffix if the 'pci_code' appears more than once
+    # Add a two-digit suffix if the id appears more than once
     df["suffix"] = df.apply(
         lambda row: (
             f"-{str(row['count']).zfill(2)}"
-            if pci_code_counts[row["pci_code"]] > 1
+            if counts[row["id"]] > 1
             else ""
         ),
         axis=1,
     )
 
-    # Create the 'id' column by combining 'pci_code' and suffix
-    df["id"] = "PCI-" + df["pci_code"] + df["suffix"]
+    # Create the 'id' 
+    df["id"] = df["id"] + df["suffix"]
 
     # Clean up by dropping the helper columns
     df = df.drop(columns=["count", "suffix"])
@@ -502,6 +505,20 @@ def _aggregate_units(gdf):
 
 def _aggregate_links(gdf):
 
+    # only keep the one with the maximum length after group
+    gdf = gdf.groupby(["pci_code", "bus0", "bus1"]).agg(
+        {
+            "build_year": "first",
+            "carrier": "first",
+            "length": "max",
+            "p_nom": "first",
+            "tags": "first",
+            "underground": "first",
+            "underwater_fraction": "max",
+            "geometry": "first",
+        }
+    ).reset_index().set_index("pci_code")
+
     gdf = gdf.groupby(["bus0", "bus1"]).agg(
         {
             "build_year": "max",
@@ -516,7 +533,7 @@ def _aggregate_links(gdf):
     )
 
     gdf.reset_index(inplace=True)
-    gdf["id"] = gdf.apply(lambda row: f"{row['tags'][0]}", axis=1)
+    gdf["id"] = gdf.apply(lambda row: f"PCI-{row['tags'][0]}", axis=1)
     # Append +x if length of tags is greater than 1
     gdf["id"] = gdf.apply(
         lambda row: (
@@ -538,7 +555,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "build_pcipmi_projects",
             ll="v1.05",
-            clusters=90,
+            clusters="adm",
             opts="",
         )
 
@@ -546,7 +563,7 @@ if __name__ == "__main__":
     set_scenario_config(snakemake)
 
     line_length_factor = snakemake.params.line_length_factor
-    haversine_distance = snakemake.params["pcipmi_projects"]["haversine_distance"]
+    haversine_distance = True
     linetype_380 = snakemake.config["lines"]["types"][380]
 
     n = pypsa.Network(snakemake.input.network)
@@ -557,7 +574,7 @@ if __name__ == "__main__":
     buses_coords = n.buses.loc[n.buses.carrier == "AC", ["x", "y"]].copy()
     
     # Exclude projects
-    exclude_projects = snakemake.params.exclude_projects
+    exclude_projects = EXCLUDE_PROJECTS
 
     # H2 pipelines
     links_h2_pipeline = gpd.read_file(snakemake.input.links_h2_pipeline).set_index("id")
@@ -593,8 +610,8 @@ if __name__ == "__main__":
         links_h2_pipeline, 
         regions_offshore
     )
-    links_h2_pipeline = _create_unique_ids(links_h2_pipeline)
     links_h2_pipeline = _aggregate_links(links_h2_pipeline)
+    links_h2_pipeline = _create_unique_ids(links_h2_pipeline)
 
     ### CO2 pipelines
     links_co2_pipeline = gpd.read_file(snakemake.input.links_co2_pipeline).set_index("id")
@@ -635,8 +652,8 @@ if __name__ == "__main__":
         links_co2_pipeline, 
         regions_offshore,
     )
-    links_co2_pipeline = _create_unique_ids(links_co2_pipeline)
     links_co2_pipeline = _aggregate_links(links_co2_pipeline)
+    links_co2_pipeline = _create_unique_ids(links_co2_pipeline)
 
     ### Map stores and storage units
     stores_h2 = gpd.read_file(snakemake.input.stores_h2).set_index("id")

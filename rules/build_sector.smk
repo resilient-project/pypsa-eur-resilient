@@ -526,7 +526,7 @@ rule build_sequestration_potentials:
         regions_offshore=resources("regions_offshore_base_s_{clusters}.geojson"),
     output:
         sequestration_potential=resources(
-            "co2_sequestration_potential_base_s_{clusters}.csv"
+            "co2_sequestration_potential_base_s_{clusters}.geojson"
         ),
     threads: 1
     resources:
@@ -1129,7 +1129,7 @@ rule prepare_sector_network:
         limited_heat_sources=config_provider(
             "sector", "district_heating", "limited_heat_sources"
         ),
-        pipelines=config_provider("pipelines"),
+        carrier_networks=config_provider("carrier_networks"),
         pcipmi_projects=config_provider("pcipmi_projects"),
     input:
         unpack(input_profile_offwind),
@@ -1157,7 +1157,7 @@ rule prepare_sector_network:
             else []
         ),
         sequestration_potential=lambda w: (
-            resources("co2_sequestration_potential_base_s_{clusters}.csv")
+            resources("co2_sequestration_potential_base_s_{clusters}.geojson")
             if config_provider(
                 "sector", "regional_co2_sequestration_potential", "enable"
             )(w)
@@ -1227,6 +1227,22 @@ rule prepare_sector_network:
         direct_heat_source_utilisation_profiles=resources(
             "direct_heat_source_utilisation_profiles_base_s_{clusters}_{planning_horizons}.nc"
         ),
+        pcipmi_links_co2_pipeline=lambda w: (
+            resources("pcipmi_projects/links_co2_pipeline_s_{clusters}_{opts}.csv")
+            if (
+                config_provider("carrier_networks", "CO2", "enable")(w) and
+                config_provider("carrier_networks", "CO2", "include", "pcipmi")(w)
+                )
+            else []
+        ),
+        pcipmi_links_h2_pipeline=lambda w: (
+            resources("pcipmi_projects/links_h2_pipeline_s_{clusters}_{opts}.csv")
+            if (
+                config_provider("carrier_networks", "H2", "enable")(w) and
+                config_provider("carrier_networks", "H2", "include", "pcipmi")(w)
+                )
+            else []
+        ),
     output:
         resources(
             "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc"
@@ -1250,10 +1266,7 @@ rule prepare_sector_network:
 
 rule build_pcipmi_projects:
     params:
-        pcipmi_projects=config_provider("pcipmi_projects"),
         line_length_factor=config_provider("lines", "length_factor"),
-        planning_horizons=config_provider("scenario", "planning_horizons"),
-        exclude_projects=config_provider("pcipmi_projects", "exclude_projects"),
     input:
         network=resources("networks/base_s_{clusters}_elec_{opts}.nc"), 
         regions_onshore=resources("regions_onshore_base_s_{clusters}.geojson"),

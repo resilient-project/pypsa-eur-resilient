@@ -122,7 +122,7 @@ def define_spatial(nodes, options):
             spatial.gas.biogas_to_gas_cc = nodes + " biogas to gas CC"
         else:
             spatial.gas.biogas_to_gas_cc = ["EU biogas to gas CC"]
-        if options.get("co2_spatial", options["co2_network"]):
+        if options.get("co2_spatial", carrier_networks["CO2"]["enable"]):
             spatial.gas.industry_cc = nodes + " gas for industry CC"
         else:
             spatial.gas.industry_cc = ["gas for industry CC"]
@@ -786,7 +786,7 @@ def add_co2_tracking(n, costs, options, sequestration_potential_file=None):
         )
 
 
-def add_co2_network(n, costs, co2_network_cost_factor=1.0):
+def add_co2_network(n, costs, cost_factor=1.0):
     """
     Add CO2 transport network to the PyPSA network.
 
@@ -802,7 +802,7 @@ def add_co2_network(n, costs, co2_network_cost_factor=1.0):
         Cost assumptions for different technologies. Must contain entries for
         'CO2 pipeline' and 'CO2 submarine pipeline' with 'capital_cost' and 'lifetime'
         columns
-    co2_network_cost_factor : float, optional
+    cost_factor : float, optional
         Factor to scale the capital costs of the CO2 network, default 1.0
 
     Returns
@@ -833,7 +833,7 @@ def add_co2_network(n, costs, co2_network_cost_factor=1.0):
         * co2_links.length
     )
     capital_cost = cost_onshore + cost_submarine
-    capital_cost *= co2_network_cost_factor
+    capital_cost *= cost_factor
 
     n.add(
         "Link",
@@ -1551,7 +1551,6 @@ def add_storage_and_grids(
         - hydrogen_underground_storage : bool
         - gas_network : bool
         - H2_retrofit : bool
-        - H2_network : bool
         - methanation : bool
         - coal_cc : bool
         - SMR_cc : bool
@@ -1825,7 +1824,7 @@ def add_storage_and_grids(
             lifetime=costs.at["H2 (g) pipeline repurposed", "lifetime"],
         )
 
-    if options["H2_network"]:
+    if carrier_networks["H2"]["enable"]:
         logger.info("Add options for new hydrogen pipelines.")
 
         h2_pipes = create_network_topology(
@@ -4381,7 +4380,7 @@ def add_industry(
         unit="t_co2",
     )
 
-    if options["co2_spatial"] or options["co2_network"]:
+    if options["co2_spatial"] or carrier_networks["CO2"]["enable"]:
         p_set = (
             -industrial_demand.loc[nodes, "process emission"].rename(
                 index=lambda x: x + " process emissions"
@@ -5242,7 +5241,6 @@ def add_pcipmi_links(
         "Link",
         projects.index,
         p_min_pu=-1,  # allow all PCI/PMI projects to be used in both directions
-        p_nom_min=projects.p_nom.values,
         capital_cost=capital_cost_carrier * projects.length.values,
         lifetime=lifetime_carrier,
         p_nom_extendable=False,
@@ -5309,6 +5307,7 @@ if __name__ == "__main__":
 
     options = snakemake.params.sector
     cf_industry = snakemake.params.industry
+    carrier_networks = snakemake.params.carrier_networks
     pcipmi_projects = snakemake.params.pcipmi_projects
 
     investment_year = int(snakemake.wildcards.planning_horizons)
@@ -5346,8 +5345,7 @@ if __name__ == "__main__":
     }
     
     # PCI-PMI projects
-    if pcipmi_projects.get("enable", False):
-        spatial_pcipmi = add_pcipmi_buses_offshore(n, snakemake.input.buses_pcipmi_offshore)
+    spatial_pcipmi = add_pcipmi_buses_offshore(n, snakemake.input.buses_pcipmi_offshore)
     
     patch_electricity_network(n, costs, carriers_to_keep, profiles, landfall_lengths)
 
@@ -5372,6 +5370,9 @@ if __name__ == "__main__":
         options,
         sequestration_potential_file=snakemake.input.sequestration_potential,
     )
+
+    # if pcipmi_projects["enable"] and ("stores_co2" in pcipmi_projects["include"]):
+
 
     add_generation(n, costs)
 
@@ -5471,10 +5472,10 @@ if __name__ == "__main__":
     if not options["electricity_transmission_grid"]:
         decentral(n)
 
-    if not options["H2_network"]:
+    if not carrier_networks["H2"]["enable"]:
         remove_h2_network(n)
 
-    if pcipmi_projects.get("enable", False):
+    if carrier_networks["H2"]["enable"] and carrier_networks["H2"]["include"]["pcipmi"]:
         add_pcipmi_h2_buses(
             n,
             costs,
@@ -5495,13 +5496,11 @@ if __name__ == "__main__":
             "H2 pipeline",
         )
 
-    if options["co2_network"]:
+    if carrier_networks["CO2"]["enable"]:
         add_co2_network(
             n,
             costs,
-            co2_network_cost_factor=snakemake.config["sector"][
-                "co2_network_cost_factor"
-            ],
+            cost_factor=carrier_networks["CO2"]["options"]["cost_factor"],
         )
 
     if options["allam_cycle_gas"]:
@@ -5587,6 +5586,12 @@ if __name__ == "__main__":
     maybe_adjust_costs_and_potentials(
         n, snakemake.params["adjustments"], investment_year
     )
+
+    # PCI-PMI study settings
+
+
+
+
 
     n.meta = dict(snakemake.config, **dict(wildcards=dict(snakemake.wildcards)))
 
