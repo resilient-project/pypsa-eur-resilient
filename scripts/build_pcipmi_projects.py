@@ -562,7 +562,7 @@ if __name__ == "__main__":
     configure_logging(snakemake)
     set_scenario_config(snakemake)
 
-    line_length_factor = snakemake.params.line_length_factor
+    line_length_factor = 1 # snakemake.params.line_length_factor
     haversine_distance = True
     linetype_380 = snakemake.config["lines"]["types"][380]
 

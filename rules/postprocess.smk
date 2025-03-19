@@ -171,7 +171,7 @@ rule make_summary:
             (
                 RESULTS
                 + "maps/base_s_{clusters}_{opts}_{sector_opts}-h2_network_{planning_horizons}.pdf"
-                if config_provider("sector", "H2_network")(w)
+                if config_provider("carrier_networks", "H2", "enable")(w)
                 else []
             ),
             **config["scenario"],
@@ -275,3 +275,39 @@ rule plot_base_statistics:
         + "figures/.statistics_plots_base_s_{clusters}_elec_{opts}",
     script:
         "../scripts/plot_statistics.py"
+
+
+rule plot_balance_map:
+    params:
+        plotting=config_provider("plotting"),
+    input:
+        network=RESULTS
+        + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+        regions=resources("regions_onshore_base_s_{clusters}.geojson"),
+    output:
+        map=RESULTS
+        + "maps/base_s_{clusters}_{opts}_{sector_opts}-balance_map_{carrier}_{planning_horizons}.pdf",
+    threads: 2
+    resources:
+        mem_mb=10000,
+    log:
+        RESULTS
+        + "logs/plot_balance_map/base_s_{clusters}_{opts}_{sector_opts}_{carrier}_{planning_horizons}.log",
+    benchmark:
+        (
+            RESULTS
+            + "benchmarks/plot_balance_map/base_s_{clusters}_{opts}_{sector_opts}_{carrier}_{planning_horizons}"
+        )
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_balance_map.py"
+
+
+rule plot_balance_maps_h2:
+    input:
+        expand(
+            RESULTS + "maps/base_s_{clusters}_{opts}_{sector_opts}-balance_map_H2_{planning_horizons}.pdf",
+            **config["scenario"],
+            run=config["run"]["name"],
+        )

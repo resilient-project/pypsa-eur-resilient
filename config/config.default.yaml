@@ -326,6 +326,35 @@ transmission_projects:
     #- under_consideration
   new_link_capacity: zero #keep or zero
 
+carrier_networks:
+  CO2:
+    enable: false
+    include:
+      greenfield: true
+      pcipmi: true
+    extendable:
+      greenfield: ['national', 'international']
+      pcipmi: []
+    p_nom_max: .inf
+    options:
+      cost_factor: 1.0
+  H2:
+    enable: false
+    include:
+      greenfield: true
+      pcipmi: true
+    extendable:
+      greenfield: ['national', 'international']
+      pcipmi: []
+    p_nom_max: .inf
+      
+pcipmi_projects:
+  enable: true
+  include: 
+    - storage_units_electricity
+    - stores_co2
+    - stores_h2
+
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#transformers
 transformers:
   x: 0.1
@@ -651,8 +680,6 @@ sector:
   co2_sequestration_cost: 10
   co2_sequestration_lifetime: 50
   co2_spatial: false
-  co2_network: false
-  co2_network_cost_factor: 1
   cc_fraction: 0.9
   hydrogen_underground_storage: true
   hydrogen_underground_storage_locations:
@@ -696,7 +723,6 @@ sector:
       compression_per_1000km: 0.01
     electricity distribution grid:
       efficiency_static: 0.97
-  H2_network: true
   gas_network: false
   H2_retrofit: false
   H2_retrofit_capacity_per_CH4: 0.6

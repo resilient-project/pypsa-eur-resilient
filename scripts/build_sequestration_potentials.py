@@ -90,7 +90,7 @@ def allocate_sequestration_potential(
     # Rename "name" to "bus_onshore"
     overlay.rename(columns={"name": "bus_onshore"}, inplace=True)
 
-    return overlay[["bus_onshore", "total_estimate_Mt", "geometry"]]
+    return overlay[["bus_onshore", "total_estimate_Mt", "x", "y", "geometry"]]
 
 
 if __name__ == "__main__":
