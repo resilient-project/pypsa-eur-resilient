@@ -353,7 +353,7 @@ def add_lifetime_wind_solar(n, costs):
         n.generators.loc[gen_i, "lifetime"] = costs.at[carrier, "lifetime"]
 
 
-def haversine(p, factor=1.5):
+def haversine(p, n, factor=1.5):
     coord0 = n.buses.loc[p.bus0, ["x", "y"]].values
     coord1 = n.buses.loc[p.bus1, ["x", "y"]].values
     return factor * haversine_pts(coord0, coord1)
@@ -804,7 +804,8 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
         sequestration_links["bus1"] = sequestration_potential.index
 
         length_factor = carrier_networks["CO2"]["options"]["length_factor"]
-        sequestration_links["length"] = haversine(sequestration_links, factor=length_factor).round(0)
+        sequestration_links["length"] = sequestration_links.apply(haversine, axis=1, args=(n,length_factor))
+
         sequestration_links.index = sequestration_links["bus1"] + " pipeline"
 
         n.add(
@@ -6226,7 +6227,7 @@ if __name__ == "__main__":
             clusters="adm",
             ll="v1.05",
             sector_opts="",
-            planning_horizons="2050",
+            planning_horizons="2030",
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
