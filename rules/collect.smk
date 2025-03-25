@@ -81,3 +81,16 @@ rule plot_balance_maps:
             run=config["run"]["name"],
             carrier=config_provider("plotting", "balance_map", "bus_carriers")(w),
         ),
+
+
+rule plot_capacity_maps:
+    input:
+        lambda w: expand(
+            (
+                RESULTS
+                + "maps/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}-capacity_map_{carrier}.pdf"
+            ),
+            **config["scenario"],
+            run=config["run"]["name"],
+            carrier=config_provider("plotting", "capacity_map", "bus_carriers")(w),
+        ),

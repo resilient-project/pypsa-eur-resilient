@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 """
-Create energy balance maps for the defined carriers.
+Create maps of installed capacities for the defined carriers.
 """
 
 import geopandas as gpd
@@ -19,6 +19,7 @@ from packaging.version import Version, parse
 from plot_power_network import load_projection
 from pypsa.plot import add_legend_lines, add_legend_patches, add_legend_semicircles
 from pypsa.statistics import get_transmission_carriers
+from pypsa.statistics.expressions import get_transmission_branches
 
 SEMICIRCLE_CORRECTION_FACTOR = 2 if parse(pypsa.__version__) <= Version("0.33.2") else 1
 
@@ -27,7 +28,7 @@ if __name__ == "__main__":
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "plot_balance_map",
+            "plot_capacity_map",
             clusters="adm",
             opts="",
             sector_opts="",
@@ -57,12 +58,12 @@ if __name__ == "__main__":
 
     # get balance map plotting parameters
     boundaries = config["map"]["boundaries"]
-    config = config["balance_map"][carrier]
+    config = config["capacity_map"][carrier]
     conversion = config["unit_conversion"]
 
     if carrier not in n.buses.carrier.unique():
         raise ValueError(
-            f"Carrier {carrier} is not in the network. Remove from configuration `plotting: balance_map: bus_carriers`."
+            f"Carrier {carrier} is not in the network. Remove from configuration `plotting: capacity_map: bus_carriers`."
         )
 
     # for plotting change bus to location
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     n.buses["y"] = n.buses.location.map(n.buses.y)
 
     # bus_sizes according to energy balance of bus carrier
-    eb = n.statistics.energy_balance(bus_carrier=carrier, groupby=["bus", "carrier"])
+    eb = n.statistics.optimal_capacity(bus_carrier=carrier, groupby=["bus", "carrier"])
 
     # remove energy balance of transmission carriers which relate to losses
     transmission_carriers = get_transmission_carriers(n, bus_carrier=carrier).rename(
@@ -113,6 +114,10 @@ if __name__ == "__main__":
     branch_width_factor = config["branch_factor"]
     flow_size_factor = config["flow_factor"]
 
+    # line and links widths according to optimal capacity
+    pipelines = get_transmission_branches(n, bus_carrier=carrier)
+    optimal_transmission_capacity = n.links.loc[pipelines.get_level_values(1), "p_nom_opt"]
+
     # get prices per region as colormap
     buses = n.buses.query("carrier in @carrier").index
 
@@ -146,9 +151,9 @@ if __name__ == "__main__":
         bus_sizes=bus_sizes * bus_size_factor,
         bus_colors=colors,
         bus_split_circles=True,
-        line_widths=line_widths * branch_width_factor,
-        link_widths=link_widths * branch_width_factor,
-        flow=flow * flow_size_factor,
+        line_widths=0,
+        link_widths=optimal_transmission_capacity * branch_width_factor,
+        flow=flow*flow_size_factor,
         ax=ax,
         margin=0.2,
         color_geomap={"border": "darkgrey", "coastline": "darkgrey"},
