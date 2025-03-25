@@ -28,11 +28,11 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_balance_map",
-            clusters="10",
+            clusters="adm",
             opts="",
             sector_opts="",
-            planning_horizons="2050",
-            carrier="H2",
+            planning_horizons="2030",
+            carrier="co2 stored",
         )
 
     configure_logging(snakemake)
@@ -115,20 +115,17 @@ if __name__ == "__main__":
 
     # get prices per region as colormap
     buses = n.buses.query("carrier in @carrier").index
-    weights = n.snapshot_weightings.generators
-    prices = weights @ n.buses_t.marginal_price[buses] / weights.sum()
-    price = prices.rename(n.buses.location).groupby(level="Bus").mean()
 
-    if carrier == "co2 stored" and "CO2Limit" in n.global_constraints.index:
-        co2_price = n.global_constraints.loc["CO2Limit", "mu"]
-        price = price - co2_price
+    demand = n.statistics.energy_balance(bus_carrier=carrier, aggregate_time=False, groupby=["bus", "carrier"]).clip(lower=0).groupby("bus").sum().reindex(buses).rename(n.buses.location).T
+    price = n.buses_t.marginal_price.reindex(buses, axis=1).rename(n.buses.location, axis=1)
+    weigthed_prices=(demand*price).sum()/demand.sum()
 
     # if only one price is available, use this price for all regions
-    if price.size == 1:
-        regions["price"] = price.values[0]
-        shift = round(price.values[0] / 20, 0)
+    if weigthed_prices.size == 1:
+        regions["price"] = weigthed_prices.values[0]
+        shift = round(weigthed_prices.values[0] / 20, 0)
     else:
-        regions["price"] = price.reindex(regions.index).fillna(0)
+        regions["price"] = weigthed_prices.reindex(regions.index).fillna(0)
         shift = 0
 
     vmin, vmax = regions.price.min() - shift, regions.price.max() + shift

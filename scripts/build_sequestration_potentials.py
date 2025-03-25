@@ -52,7 +52,7 @@ def allocate_sequestration_potential(
     buffer_shapes["poi"].crs = buffer_shapes.crs
     buffer_shapes["id"] = buffer_shapes.groupby("name").cumcount()
     buffer_shapes.reset_index(inplace=True)
-    buffer_shapes["id"] = buffer_shapes["name"] + " co2 sequestration " + buffer_shapes["id"].astype(str) if buffer_shapes["id"].max() > 0 else buffer_shapes["name"]
+    buffer_shapes["id"] = buffer_shapes["name"] + " offshore " + buffer_shapes["id"].astype(str) if buffer_shapes["id"].max() > 0 else buffer_shapes["name"]
     buffer_shapes.set_index("name", inplace=True)
 
     overlay["cluster"] = overlay.apply(

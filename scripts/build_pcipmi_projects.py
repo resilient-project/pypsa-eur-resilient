@@ -657,6 +657,7 @@ if __name__ == "__main__":
 
     ### Map stores and storage units
     stores_h2 = gpd.read_file(snakemake.input.stores_h2).set_index("id")
+    stores_h2["build_year"] = stores_h2["year"] # Update build_years
     stores_h2["tags"] = stores_h2["tags"].apply(json.loads)
     stores_h2["pci_code"] = stores_h2["tags"].apply(lambda x: x["pci_code"]).astype(str)
     stores_h2 = stores_h2[~stores_h2["pci_code"].isin(exclude_projects)]
@@ -669,6 +670,7 @@ if __name__ == "__main__":
     )
 
     stores_co2 = gpd.read_file(snakemake.input.stores_co2).set_index("id")
+    stores_co2["build_year"] = stores_co2["year"] # Update build_years
     stores_co2["tags"] = stores_co2["tags"].apply(json.loads)
     stores_co2["pci_code"] = stores_co2["tags"].apply(lambda x: x["pci_code"]).astype(str)
     stores_co2 = stores_co2[~stores_co2["pci_code"].isin(exclude_projects)]
@@ -706,9 +708,9 @@ if __name__ == "__main__":
     links_co2_pipeline["bus0"] = links_co2_pipeline["bus0"] + " co2 stored"
     links_co2_pipeline["bus1"] = links_co2_pipeline["bus1"] + " co2 stored"
 
-    stores_h2.index = stores_h2.index + " H2 Store"
+    stores_h2.index = "PCI-" + stores_h2.index + " H2 Store"
     stores_h2["bus"] = stores_h2["bus"] + " H2"
-    stores_co2.index = stores_co2.index + " co2 sequestered"
+    stores_co2.index = "PCI-" + stores_co2.index + " co2 sequestered"
     stores_co2["bus"] = stores_co2["bus"] + " co2 sequestered"
 
     ### EXPORT

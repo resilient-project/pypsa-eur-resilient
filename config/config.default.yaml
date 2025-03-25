@@ -334,6 +334,7 @@ carrier_networks:
     p_nom_max: .inf
     options:
       cost_factor: 1.0
+      length_factor: 1.0
   H2:
     enable: false
     include:
