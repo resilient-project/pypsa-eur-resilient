@@ -112,7 +112,7 @@ if config["foresight"] != "perfect":
             regions=resources("regions_onshore_base_s_{clusters}.geojson"),
         output:
             RESULTS
-            + "maps/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}-balance_map_{carrier}.pdf",
+            + "maps/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}-balance_map_{carrier}.jpg",
         threads: 1
         resources:
             mem_mb=8000,

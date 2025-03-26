@@ -31,7 +31,7 @@ if __name__ == "__main__":
             clusters="adm",
             opts="",
             sector_opts="",
-            planning_horizons="2050",
+            planning_horizons="2040",
             carrier="co2 stored",
         )
 
