@@ -14,6 +14,27 @@ remote:
   ssh: ""
   path: ""
 
+# PCI-PMI policy paper settings
+pcipmi_policy_paper:
+  co2_sequestration_min_mt:
+    enable: false
+    targets:
+      2030: 50
+      2040: 150
+      2050: 250
+  h2_production_min_mt:
+    enable: false
+    targets: 
+      2030: 10
+      2040:
+      2050:
+  electrolyser_capacity_min_gw:
+    enable: false
+    targets:
+      2030: 
+      2040:
+      2050:
+
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
   prefix: ""
@@ -335,6 +356,7 @@ carrier_networks:
     options:
       cost_factor: 1.0
       length_factor: 1.0
+      delay: 0
   H2:
     enable: false
     include:
@@ -344,6 +366,8 @@ carrier_networks:
       greenfield: ['national', 'international']
       pcipmi: []
     p_nom_max: .inf
+    options:
+      delay: 0
       
 pcipmi_projects:
   enable: true
@@ -351,6 +375,8 @@ pcipmi_projects:
     - storage_units_electricity
     - stores_co2
     - stores_h2
+  options:
+    delay: 0 
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#transformers
 transformers:

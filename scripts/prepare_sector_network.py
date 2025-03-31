@@ -6121,7 +6121,8 @@ def add_pcipmi_links(
     links_path: str,
     investment_year: int,
     costs: pd.DataFrame,
-    carrier,
+    carrier: str,
+    carrier_networks: dict,
 ) -> None:
     """
     Add PCI-PMI links to the network.
@@ -6129,13 +6130,19 @@ def add_pcipmi_links(
     if carrier == "H2 pipeline":
         capital_cost_carrier = costs.at["H2 (g) pipeline", "capital_cost"]
         lifetime_carrier = costs.at["H2 (g) pipeline", "lifetime"]
+        delay = carrier_networks["H2"]["options"]["delay"]
 
     if carrier == "CO2 pipeline":
         capital_cost_carrier = costs.at["CO2 pipeline", "capital_cost"]
         lifetime_carrier = costs.at["CO2 pipeline", "lifetime"]
+        delay = carrier_networks["CO2"]["options"]["delay"]
 
-    logger.info(f"Activating PCI/PMI {carrier}s commissioned by {investment_year}.")
     projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
+    logger.info(f"Activating PCI/PMI {carrier}s commissioned by {investment_year}.")
+    
+    # Add delay
+    projects["build_year"] = projects["build_year"] + delay
+    logger.info(f"Adding a delay of {delay} years to the build year.")
 
     # Drop existing links that have the same bus0 and bus1 as the PCI/PMI projects
     existing_links = n.links.query("carrier == @carrier").copy()
@@ -6256,9 +6263,18 @@ def add_pcipmi_stores(
     stores_path: str,
     investment_year: int,
     costs: pd.DataFrame,
+    pcipmi_projects: dict,
 ) -> None:
     stores = pd.read_csv(stores_path, index_col=0)
     carrier = stores.carrier.unique()[0]
+
+    # Adding stores
+    logger.info(f"Adding PCI/PMI stores: Carrier {carrier}.")
+
+    delay = pcipmi_projects["options"]["delay"]
+    # Add delay
+    stores["build_year"] = stores["build_year"] + delay
+    logger.info(f"Adding a delay of {delay} years to the build year.")
 
     if carrier == "H2 Store":
         capital_cost_carrier = costs.at["hydrogen storage underground", "capital_cost"]
@@ -6611,6 +6627,7 @@ if __name__ == "__main__":
             investment_year,
             costs,
             "H2 pipeline",
+            carrier_networks,
         )
 
     if pcipmi_projects["enable"] and "stores_h2" in pcipmi_projects["include"]:
@@ -6619,6 +6636,7 @@ if __name__ == "__main__":
             snakemake.input.stores_h2,
             investment_year,
             costs,
+            pcipmi_projects,
         )
 
     if carrier_networks["CO2"]["enable"]:
@@ -6639,6 +6657,7 @@ if __name__ == "__main__":
             investment_year,
             costs,
             "CO2 pipeline",
+            carrier_networks,
         )
     
     if pcipmi_projects["enable"] and "stores_co2" in pcipmi_projects["include"]:
@@ -6648,6 +6667,7 @@ if __name__ == "__main__":
             snakemake.input.stores_co2,
             investment_year,
             costs,
+            pcipmi_projects,
         )
 
     # Drop PCI-PMI offshore elec buses

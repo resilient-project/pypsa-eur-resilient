@@ -1129,6 +1129,77 @@ def add_co2_atmosphere_constraint(n, snapshots):
             n.model.add_constraints(lhs <= rhs, name=f"GlobalConstraint-{name}")
 
 
+def add_co2_sequestration_min_mt_constraint(n, targets, year):
+    """
+    Adds constraints on the total CO2 sequestration target in Mt (convert to t).
+    """
+    year = int(year)
+    target = targets[year] * 1e6  # Mt to t
+
+    logger.info(
+        f"Adding constraint for {year} minimum CO2 sequestration target of {targets[year]} Mt p.a."
+    )
+    cname = "co2_sequestration_min_mt"
+    valid_components = n.stores[n.stores.carrier == "co2 sequestered"].index
+    last_snapshot = (
+        n.model["Store-e"].loc[:, valid_components].indexes.get("snapshot")[-1]
+    )
+
+    nom = n.model["Store-e"].loc[last_snapshot, valid_components]
+
+    lhs = nom.sum()
+
+    if cname in n.global_constraints.index:
+        logger.warning(
+            f"Global constraint {cname} already exists. Dropping and adding it again."
+        )
+        n.global_constraints.drop(cname, inplace=True)
+
+    rhs = target
+
+    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
+    n.add(
+        "GlobalConstraint",
+        cname,
+        constant=rhs,
+        sense=">=",
+        type="",
+        investment_period=year,
+        carrier_attribute="e",
+    )
+
+
+def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
+    """
+    Adds constraints on the total installed capacity of electrolyser links in GW (convert to MW).
+    """
+    logger.info(f"Adding constraint for total electrolyser target of {targets} GW.")
+    cname = "total_electrolyser_target"
+
+    valid_components = n.links[n.links.carrier == "H2 Electrolysis"].index
+    nom = n.model["Link-p_nom"].loc[valid_components]
+
+    lhs = nom.sum()
+
+    if cname in n.global_constraints.index:
+        logger.warning(
+            f"Global constraint {cname} already exists. Dropping and adding it again."
+        )
+        n.global_constraints.drop(cname, inplace=True)
+
+    rhs = target
+
+    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
+    n.add(
+        "GlobalConstraint",
+        cname,
+        constant=rhs,
+        sense=">=",
+        type="investment_minimum",
+        carrier_attribute="p_nom",
+    )
+
+
 def extra_functionality(
     n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None
 ) -> None:
@@ -1198,6 +1269,19 @@ def extra_functionality(
 
     if config["sector"]["imports"]["enable"]:
         add_import_limit_constraint(n, snapshots)
+
+    if pcipmi_policy_paper["co2_sequestration_min_mt"]["enable"]:
+        add_co2_sequestration_min_mt_constraint(
+            n,
+            pcipmi_policy_paper["co2_sequestration_min_mt"]["targets"],
+            planning_horizons,
+        )
+    
+    if pcipmi_policy_paper["electrolyser_capacity_min_gw"]["enable"]:
+        add_electrolyser_capacity_min_gw_constraint(n, pcipmi_policy_paper["electrolyser_capacity_min_gw"]["targets"])
+
+    # if pcipmi_policy_paper["h2_production_min_mt"]["enable"]:
+    #     add_h2_production_min_mt_constraint(n, pcipmi_policy_paper["h2_production_min_mt"]["targets"])
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality
@@ -1354,17 +1438,18 @@ if __name__ == "__main__":
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "solve_sector_network",
+            "solve_sector_network_myopic",
             opts="",
-            clusters="5",
-            configfiles="config/test/config.overnight.yaml",
-            ll="v1.0",
+            clusters="adm",
+            ll="v1.05",
             sector_opts="",
             planning_horizons="2030",
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)
     update_config_from_wildcards(snakemake.config, snakemake.wildcards)
+
+    pcipmi_policy_paper = snakemake.params["pcipmi_policy_paper"]
 
     solve_opts = snakemake.params.solving["options"]
 
@@ -1410,3 +1495,5 @@ if __name__ == "__main__":
             allow_unicode=True,
             sort_keys=False,
         )
+
+# %%

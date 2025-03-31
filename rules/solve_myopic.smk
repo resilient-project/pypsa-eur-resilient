@@ -110,6 +110,7 @@ ruleorder: add_existing_baseyear > add_brownfield
 
 rule solve_sector_network_myopic:
     params:
+        pcipmi_policy_paper=config_provider("pcipmi_policy_paper"),
         solving=config_provider("solving"),
         foresight=config_provider("foresight"),
         co2_sequestration_potential=config_provider(
