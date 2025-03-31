@@ -2097,7 +2097,7 @@ def add_storage_and_grids(
             lifetime=costs.at["H2 (g) pipeline repurposed", "lifetime"],
         )
 
-    if carrier_networks["H2"]["enable"]:
+    if carrier_networks["H2"]["enable"] and carrier_networks["H2"]["include"]["greenfield"]:
         logger.info("Add options for new hydrogen pipelines.")
 
         h2_pipes = create_network_topology(
@@ -6639,7 +6639,7 @@ if __name__ == "__main__":
             pcipmi_projects,
         )
 
-    if carrier_networks["CO2"]["enable"]:
+    if carrier_networks["CO2"]["enable"] and carrier_networks["CO2"]["include"]["greenfield"]:
         add_co2_network(
             n,
             costs,
