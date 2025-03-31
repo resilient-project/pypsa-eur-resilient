@@ -6319,22 +6319,52 @@ def add_pcipmi_stores(
     n.stores.loc[b_future_store, "active"] = False
 
 
-# def update_link_extendability(n, carrier_networks):
-#     links = n.links.copy()
-#     links["country0"] = links.bus0.map(n.buses.country)
-#     links["country1"] = links.bus1.map(n.buses.country)
+def update_link_extendability(
+    n: pypsa.Network,
+    carrier_networks: dict,
+) -> None:
+    n.buses.country = n.buses.index.str[:2]
+    links = n.links.copy()
+    links["country0"] = links.bus0.map(n.buses.country)
+    links["country1"] = links.bus1.map(n.buses.country)
 
-#     b_is_pcipmi = links.index.str.startswith("PCI")
-#     b_is_national = links.country0 == links.country1
-#     b_is_h2_pipeline = links.carrier == "H2 pipeline"
-#     b_is_co2_pipeline = links.carrier == "CO2 pipeline"
-#     b_is_offshore = n.links.index.str.contains("offshore")
+    b_is_pcipmi = links.index.str.startswith("PCI")
+    b_is_national = links.country0 == links.country1
+    b_is_h2_pipeline = links.carrier == "H2 pipeline"
+    b_is_co2_pipeline = links.carrier == "CO2 pipeline"
+    b_is_offshore = n.links.index.str.contains("offshore")
 
-#     if carrier_networks["CO2"]["enable"] and carrier_networks["CO2"]["extendable"]: 
-#         extendable = carrier_networks["CO2"]["extendable"]
-#         n.links.loc[]
+    if carrier_networks["CO2"]["enable"] and carrier_networks["CO2"]["extendable"]: 
+        extendable = carrier_networks["CO2"]["extendable"]
 
+        # Default to false, offshore always to true
+        n.links.loc[b_is_co2_pipeline, "p_nom_extendable"] = False
+        n.links.loc[b_is_co2_pipeline & b_is_offshore, "p_nom_extendable"] = True
+
+        if "national" in extendable["greenfield"]:
+            n.links.loc[b_is_co2_pipeline & ~b_is_pcipmi & b_is_national, "p_nom_extendable"] = True
+        if "international" in extendable["greenfield"]:
+            n.links.loc[b_is_co2_pipeline & ~b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True
+        if "national" in extendable["pcipmi"]:
+            n.links.loc[b_is_co2_pipeline & b_is_pcipmi & b_is_national, "p_nom_extendable"] = True
+        if "international" in extendable["pcipmi"]:
+            n.links.loc[b_is_co2_pipeline & b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True
     
+    if carrier_networks["H2"]["enable"] and carrier_networks["H2"]["extendable"]:
+        extendable = carrier_networks["H2"]["extendable"]
+
+        # Default to false, offshore always to true
+        n.links.loc[b_is_h2_pipeline, "p_nom_extendable"] = False
+        n.links.loc[b_is_h2_pipeline & b_is_offshore, "p_nom_extendable"] = True
+
+        if "national" in extendable["greenfield"]:
+            n.links.loc[b_is_h2_pipeline & ~b_is_pcipmi & b_is_national, "p_nom_extendable"] = True
+        if "international" in extendable["greenfield"]:
+            n.links.loc[b_is_h2_pipeline & ~b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True
+        if "national" in extendable["pcipmi"]:
+            n.links.loc[b_is_h2_pipeline & b_is_pcipmi & b_is_national, "p_nom_extendable"] = True
+        if "international" in extendable["pcipmi"]:
+            n.links.loc[b_is_h2_pipeline & b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True    
 
 
 if __name__ == "__main__":
@@ -6713,7 +6743,7 @@ if __name__ == "__main__":
 
     # PCI-PMI study settings
     # update extendability of links
-    # update_link_extendability(n, carrier_networks)
+    update_link_extendability(n, carrier_networks)
 
     n.meta = dict(snakemake.config, **dict(wildcards=dict(snakemake.wildcards)))
 

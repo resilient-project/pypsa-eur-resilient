@@ -97,7 +97,7 @@ if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("build_sequestration_potentials", clusters="adm")
+        snakemake = mock_snakemake("build_clustered_co2_sequestration_potentials", clusters="adm")
 
     configure_logging(snakemake)
     set_scenario_config(snakemake)
@@ -105,9 +105,6 @@ if __name__ == "__main__":
     cf = snakemake.params.sequestration_potential
 
     gdf = gpd.read_file(snakemake.input.sequestration_potential)
-
-    # Drop duplicates
-    gdf.drop_duplicates(subset="ID", inplace=True)
 
     regions = gpd.read_file(snakemake.input.regions_offshore)
     if cf["include_onshore"]:
