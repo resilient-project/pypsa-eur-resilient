@@ -1139,7 +1139,7 @@ def add_co2_sequestration_min_mt_constraint(n, targets, year):
     logger.info(
         f"Adding constraint for {year} minimum CO2 sequestration target of {targets[year]} Mt p.a."
     )
-    cname = "co2_sequestration_min_mt"
+    cname = "co2_sequestration_min"
     valid_components = n.stores[n.stores.carrier == "co2 sequestered"].index
     last_snapshot = (
         n.model["Store-e"].loc[:, valid_components].indexes.get("snapshot")[-1]
@@ -1173,8 +1173,11 @@ def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
     """
     Adds constraints on the total installed capacity of electrolyser links in GW (convert to MW).
     """
-    logger.info(f"Adding constraint for total electrolyser target of {targets} GW.")
-    cname = "total_electrolyser_target"
+    year = int(year)
+    target = targets[year] * 1e3  # GW to MW
+
+    logger.info(f"Adding constraint for total electrolyser target of {targets[year]} GW.")
+    cname = "electrolyser_capacity_min"
 
     valid_components = n.links[n.links.carrier == "H2 Electrolysis"].index
     nom = n.model["Link-p_nom"].loc[valid_components]
@@ -1197,6 +1200,45 @@ def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
         sense=">=",
         type="investment_minimum",
         carrier_attribute="p_nom",
+    )
+
+
+def add_h2_production_min_mt_constraint(n, targets, year):
+    """
+    Adds constraints on the minimum H2 production target in Mt (convert to MWh).
+    """
+    year = int(year)
+    target = targets[year] * 1e6  # Mt to t
+    energy_content_h2 = 33.33  # MWh/t
+    target_mwh = target * energy_content_h2
+    logger.info(
+        f"Adding constraint for total H2 production target of {targets[year]} Mt p.a. equivalent to {target_mwh} MWh p.a."
+    )
+    cname = "h2_production_min"
+    valid_components = n.links[n.links.carrier == "H2 Electrolysis"].index
+
+    lhs = (
+        n.model["Link-p"].loc[:, valid_components]
+        * n.links.loc[valid_components].efficiency
+        * n.snapshot_weightings.generators
+    ).sum()
+
+    if cname in n.global_constraints.index:
+        logger.warning(
+            f"Global constraint {cname} already exists. Dropping and adding it again."
+        )
+        n.global_constraints.drop(cname, inplace=True)
+
+    rhs = target_mwh
+
+    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
+    n.add(
+        "GlobalConstraint",
+        cname,
+        constant=rhs,
+        sense=">=",
+        type="production_minimum",
+        carrier_attribute="p",
     )
 
 
@@ -1278,10 +1320,18 @@ def extra_functionality(
         )
     
     if pcipmi_policy_paper["electrolyser_capacity_min_gw"]["enable"]:
-        add_electrolyser_capacity_min_gw_constraint(n, pcipmi_policy_paper["electrolyser_capacity_min_gw"]["targets"])
+        add_electrolyser_capacity_min_gw_constraint(
+            n, 
+            pcipmi_policy_paper["electrolyser_capacity_min_gw"]["targets"],
+            planning_horizons,
+        )
 
-    # if pcipmi_policy_paper["h2_production_min_mt"]["enable"]:
-    #     add_h2_production_min_mt_constraint(n, pcipmi_policy_paper["h2_production_min_mt"]["targets"])
+    if pcipmi_policy_paper["h2_production_min_mt"]["enable"]:
+        add_h2_production_min_mt_constraint(
+            n, 
+            pcipmi_policy_paper["h2_production_min_mt"]["targets"],
+            planning_horizons,
+        )
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality
