@@ -1179,7 +1179,9 @@ def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
     logger.info(f"Adding constraint for total electrolyser target of {targets[year]} GW.")
     cname = "electrolyser_capacity_min"
 
-    valid_components = n.links[n.links.carrier == "H2 Electrolysis"].index
+    existing_capacity = n.links[(n.links.carrier == "H2 Electrolysis") & (n.links.p_nom_extendable == False)].p_nom.sum()
+    
+    valid_components = n.links[(n.links.carrier == "H2 Electrolysis") & (n.links.p_nom_extendable == True)].index
     nom = n.model["Link-p_nom"].loc[valid_components]
 
     lhs = nom.sum()
@@ -1190,7 +1192,7 @@ def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
         )
         n.global_constraints.drop(cname, inplace=True)
 
-    rhs = target
+    rhs = target-existing_capacity
 
     n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
     n.add(
@@ -1493,7 +1495,7 @@ if __name__ == "__main__":
             clusters="adm",
             ll="v1.05",
             sector_opts="",
-            planning_horizons="2030",
+            planning_horizons="2040",
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)
