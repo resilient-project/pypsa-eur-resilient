@@ -21,19 +21,19 @@ pcipmi_policy_paper:
     targets:
       2030: 50
       2040: 150
-      2050: 250
+      2050: 250 # https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:52024DC0062
   h2_production_min_mt:
     enable: false
     targets: 
       2030: 10
       2040: 27.5
-      2050: 35
+      2050: 45 # https://www.isi.fraunhofer.de/en/blog/2023/europa-energiesystem-2050-wasserstoff-industrie.html
   electrolyser_capacity_min_gw:
     enable: false
     targets:
-      2030: 100
-      2040: 275
-      2050: 350
+      2030: 40
+      2040: 110 # proportional based on 2030
+      2050: 180 # proportional based on 2030
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
