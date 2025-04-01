@@ -360,15 +360,16 @@ def _split_to_overpassing_segments(
     # Do the following splitting operation only for lines that overpass multiple regions
     crosses_multiple = gdf_split.geometry.apply(lambda line: count_intersections(line, regions_dist.geometry)) > 2
 
-    gdf_points = _find_points_on_line_overpassing_region(gdf_split.loc[crosses_multiple], regions_dist)
-    gdf_points = gpd.GeoDataFrame(gdf_points, crs=distance_crs)
+    if crosses_multiple.any():
+        gdf_points = _find_points_on_line_overpassing_region(gdf_split.loc[crosses_multiple], regions_dist)
+        gdf_points = gpd.GeoDataFrame(gdf_points, crs=distance_crs)
 
-    gdf_points["buffer"] = gdf_points["geometry"].buffer(buffer_radius)
+        gdf_points["buffer"] = gdf_points["geometry"].buffer(buffer_radius)
 
-    # Split linestrings of gdf by union of points[buffer]
-    gdf_split["geometry"] = gdf_split["geometry"].apply(
-        lambda x: x.difference(gdf_points["buffer"].union_all())
-    )
+        # Split linestrings of gdf by union of points[buffer]
+        gdf_split["geometry"] = gdf_split["geometry"].apply(
+            lambda x: x.difference(gdf_points["buffer"].union_all())
+        )
 
     # Drop empty geometries
     gdf_split = gdf_split[~gdf_split["geometry"].is_empty]
@@ -393,7 +394,6 @@ def _split_to_overpassing_segments(
     gdf_split.set_index("id", inplace=True)
 
     return gdf_split
-
 
 
 def _create_unique_ids(df):
