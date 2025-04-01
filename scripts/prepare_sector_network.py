@@ -6291,7 +6291,7 @@ def add_pcipmi_stores(
         co2_buses = pd.Series(stores.bus.unique())
         # check which buses are not in n.buses
         missing_co2_buses = pd.DataFrame(co2_buses[~co2_buses.isin(n.buses.index)])
-        missing_co2_buses.index = missing_co2_buses[0].str.split(" ").str[0]
+        missing_co2_buses.index = missing_co2_buses[0].str.replace(" co2 sequestered", "")
     
         n.add(
             "Bus",
@@ -6390,10 +6390,11 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "prepare_sector_network",
             opts="",
-            clusters="adm",
+            clusters="70",
             ll="v1.05",
             sector_opts="",
             planning_horizons="2030",
+            configfiles=["config/config.greenfield.yaml"],
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
