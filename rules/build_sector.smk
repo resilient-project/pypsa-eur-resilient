@@ -1108,18 +1108,18 @@ def input_heat_source_power(w):
 
 
 def input_pcipmi_projects(w):
-    pcipmi_projects = config_provider("pcipmi_projects")(w)
-    if pcipmi_projects["enable"]:
-        components = pcipmi_projects["include"] + ["buses_pcipmi_offshore"]
-        inputs = {
-            project_type: resources(
-                f"pcipmi_projects/{project_type}"
-                + "_s_{clusters}_{opts}.csv"
-            )
-            for project_type in components if project_type != "storage_units_electricity"
-        }
-        return inputs
-    return {}
+    # pcipmi_projects = config_provider("pcipmi_projects")(w)
+    # if pcipmi_projects["enable"]:
+    components = pcipmi_projects["include"] + ["buses_pcipmi_offshore"]
+    inputs = {
+        project_type: resources(
+            f"pcipmi_projects/{project_type}"
+            + "_s_{clusters}_{opts}.csv"
+        )
+        for project_type in components if project_type != "storage_units_electricity"
+    }
+    return inputs
+    # return {}
 
 
 rule prepare_sector_network:
