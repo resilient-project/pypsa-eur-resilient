@@ -1108,7 +1108,7 @@ def input_heat_source_power(w):
 
 
 def input_pcipmi_projects(w):
-    # pcipmi_projects = config_provider("pcipmi_projects")(w)
+    pcipmi_projects = config_provider("pcipmi_projects")(w)
     # if pcipmi_projects["enable"]:
     components = pcipmi_projects["include"] + ["buses_pcipmi_offshore"]
     inputs = {
