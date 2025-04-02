@@ -28,11 +28,13 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_balance_map",
-            clusters="adm",
+            clusters="70",
             opts="",
             sector_opts="",
-            planning_horizons="2040",
+            planning_horizons="2030",
             carrier="co2 stored",
+            configfiles=["/home/bobby/projects/pci-pmi-policy-paper/config/investment-all-targets.config.yaml"],
+            run="pcipmi-delay-10years",
         )
 
     configure_logging(snakemake)
@@ -81,7 +83,11 @@ if __name__ == "__main__":
     )
     components = transmission_carriers.unique("component")
     carriers = transmission_carriers.unique("carrier")
-    eb.loc[components] = eb.loc[components].drop(index=carriers, level="carrier")
+    
+    # only carriers that are also in the energy balance
+    carriers_in_eb = carriers[carriers.isin(eb.index.get_level_values("carrier"))]
+
+    eb.loc[components] = eb.loc[components].drop(index=carriers_in_eb, level="carrier")
     eb = eb.dropna()
     bus_sizes = eb.groupby(level=["bus", "carrier"]).sum().div(conversion)
     bus_sizes = bus_sizes.sort_values(ascending=False)
