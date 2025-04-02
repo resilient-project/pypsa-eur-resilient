@@ -12,7 +12,7 @@ logging:
 
 remote:
   ssh: z1
-  path: scratch/projects/pci-pmi-policy-targets
+  path: scratch/projects/pcipmi-policy-targets/workflow/pypsa-eur-resilient
 
 # PCI-PMI policy paper settings
 pcipmi_policy_paper:
