@@ -1251,7 +1251,7 @@ def add_h2_production_min_mt_constraint(n, targets, year):
 
 
 def extra_functionality(
-    n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None, dispatch_only: bool = False
+    n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None, co2_atmosphere_constraint: bool = True, dispatch_only: bool = False
 ) -> None:
     """
     Add custom constraints and functionality.
@@ -1312,7 +1312,9 @@ def extra_functionality(
         add_carbon_budget_constraint(n, snapshots)
         add_retrofit_gas_boiler_constraint(n, snapshots)
     else:
-        add_co2_atmosphere_constraint(n, snapshots)
+        if co2_atmosphere_constraint:
+            logger.info("Adding CO2 atmosphere constraint to network.")
+            add_co2_atmosphere_constraint(n, snapshots)
 
     if config["sector"]["enhanced_geothermal"]["enable"]:
         add_flexible_egs_constraint(n)
@@ -1387,6 +1389,7 @@ def solve_network(
     solving: dict,
     rule_name: str | None = None,
     planning_horizons: str | None = None,
+    co2_atmosphere_constraint: bool = True,
     dispatch_only: bool = False,
     **kwargs,
 ) -> None:
@@ -1435,7 +1438,7 @@ def solve_network(
     )
     kwargs["solver_name"] = solving["solver"]["name"]
     kwargs["extra_functionality"] = partial(
-        extra_functionality, planning_horizons=planning_horizons, dispatch_only=dispatch_only
+        extra_functionality, planning_horizons=planning_horizons, co2_atmosphere_constraint=co2_atmosphere_constraint, dispatch_only=dispatch_only
     )
     kwargs["transmission_losses"] = cf_solving.get("transmission_losses", False)
     kwargs["linearized_unit_commitment"] = cf_solving.get(

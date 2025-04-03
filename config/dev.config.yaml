@@ -37,17 +37,11 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "investment-all-targets"
-  name:
-  - pcipmi
-  - pcipmi-delay-10years
-  - pcipmi-national-expansion
-  - pcipmi-national-international-expansion
-  - no-pipelines
-  - greenfield-pipelines
+  prefix: ""
+  name: dev-pcipmi-national-expansion
   scenarios:
-    enable: true
-    file: config/investment-all-targets.scenarios.yaml
+    enable: falseworkflow/pypsa-eur-resilient/config/investment-all-targets.config.yaml
+    file:
   disable_progressbar: false
   shared_resources:
     policy: false
@@ -265,12 +259,12 @@ clustering:
     SE: 0.05
   temporal:
     resolution_elec: false
-    resolution_sector: 2190seg
+    resolution_sector: 169h
 
 solving:
-  mem_mb: 200000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
+  mem_mb: 100000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
   memory_logging_frequency: 30 # in seconds
-  runtime: 48h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
+  runtime: 15h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
   options:
     custom_extra_functionality: false # Has to be set to false, otherwise the imported solve_network function will not work correctly
 
