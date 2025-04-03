@@ -58,6 +58,30 @@ run:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#foresight
 foresight: myopic
 
+# Solve two-step operations
+solve_operations:
+  columns:
+    - ops_all_targets_no_pipes
+    - ops_ghg_target_same_infra
+  definitions:
+    ops_all_targets_no_pipes:
+      options:
+        remove_co2_pipelines: true
+        remove_h2_pipelines: true
+      overwrite_config: false
+    ops_ghg_target_same_infra:
+      options: 
+        remove_co2_pipelines: false
+        remove_h2_pipelines: false
+      overwrite_config:
+        pcipmi_policy_paper:
+          co2_sequestration_min_mt:
+            enable: false
+          h2_production_min_mt:
+            enable: false
+          electrolyser_capacity_min_gw:
+            enable: false
+
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#scenario
 # Wildcard docs in https://pypsa-eur.readthedocs.io/en/latest/wildcards.html
 scenario:
@@ -214,6 +238,8 @@ solving:
   mem_mb: 200000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
   memory_logging_frequency: 30 # in seconds
   runtime: 48h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
+  options:
+    custom_extra_functionality: false # Has to be set to false, otherwise the imported solve_network function will not work correctly
 
 plotting:
   balance_map:

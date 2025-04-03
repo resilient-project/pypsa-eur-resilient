@@ -1182,28 +1182,34 @@ def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
     existing_capacity = n.links[(n.links.carrier == "H2 Electrolysis") & (n.links.p_nom_extendable == False)].p_nom.sum()
     
     valid_components = n.links[(n.links.carrier == "H2 Electrolysis") & (n.links.p_nom_extendable == True)].index
-    nom = n.model["Link-p_nom"].loc[valid_components]
+    
+    if not valid_components.empty:
+        nom = n.model["Link-p_nom"].loc[valid_components]
 
-    lhs = nom.sum()
+        lhs = nom.sum()
 
-    if cname in n.global_constraints.index:
-        logger.warning(
-            f"Global constraint {cname} already exists. Dropping and adding it again."
+        if cname in n.global_constraints.index:
+            logger.warning(
+                f"Global constraint {cname} already exists. Dropping and adding it again."
+            )
+            n.global_constraints.drop(cname, inplace=True)
+
+        rhs = target-existing_capacity
+
+        n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
+        n.add(
+            "GlobalConstraint",
+            cname,
+            constant=rhs,
+            sense=">=",
+            type="investment_minimum",
+            carrier_attribute="p_nom",
         )
-        n.global_constraints.drop(cname, inplace=True)
-
-    rhs = target-existing_capacity
-
-    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
-    n.add(
-        "GlobalConstraint",
-        cname,
-        constant=rhs,
-        sense=">=",
-        type="investment_minimum",
-        carrier_attribute="p_nom",
-    )
-
+    else:
+        logger.warning(
+            f"No electrolyser links found for {year}. Skipping constraint addition."
+        )
+        return
 
 def add_h2_production_min_mt_constraint(n, targets, year):
     """
@@ -1245,7 +1251,7 @@ def add_h2_production_min_mt_constraint(n, targets, year):
 
 
 def extra_functionality(
-    n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None
+    n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None, dispatch_only: bool = False
 ) -> None:
     """
     Add custom constraints and functionality.
@@ -1294,7 +1300,7 @@ def extra_functionality(
             r"urban central heat|urban decentral heat|rural heat",
             case=False,
             na=False,
-        ).any():
+        ).any() and not dispatch_only:
             add_TES_energy_to_power_ratio_constraints(n)
             add_TES_charger_ratio_constraints(n)
 
@@ -1314,26 +1320,27 @@ def extra_functionality(
     if config["sector"]["imports"]["enable"]:
         add_import_limit_constraint(n, snapshots)
 
-    if pcipmi_policy_paper["co2_sequestration_min_mt"]["enable"]:
-        add_co2_sequestration_min_mt_constraint(
-            n,
-            pcipmi_policy_paper["co2_sequestration_min_mt"]["targets"],
-            planning_horizons,
-        )
-    
-    if pcipmi_policy_paper["electrolyser_capacity_min_gw"]["enable"]:
-        add_electrolyser_capacity_min_gw_constraint(
-            n, 
-            pcipmi_policy_paper["electrolyser_capacity_min_gw"]["targets"],
-            planning_horizons,
-        )
+    if config["pcipmi_policy_paper"]:
+        if config["pcipmi_policy_paper"]["co2_sequestration_min_mt"]["enable"]:
+            add_co2_sequestration_min_mt_constraint(
+                n,
+                config["pcipmi_policy_paper"]["co2_sequestration_min_mt"]["targets"],
+                planning_horizons,
+            )
+        
+        if config["pcipmi_policy_paper"]["electrolyser_capacity_min_gw"]["enable"]:
+            add_electrolyser_capacity_min_gw_constraint(
+                n, 
+                config["pcipmi_policy_paper"]["electrolyser_capacity_min_gw"]["targets"],
+                planning_horizons,
+            )
 
-    if pcipmi_policy_paper["h2_production_min_mt"]["enable"]:
-        add_h2_production_min_mt_constraint(
-            n, 
-            pcipmi_policy_paper["h2_production_min_mt"]["targets"],
-            planning_horizons,
-        )
+        if config["pcipmi_policy_paper"]["h2_production_min_mt"]["enable"]:
+            add_h2_production_min_mt_constraint(
+                n, 
+                config["pcipmi_policy_paper"]["h2_production_min_mt"]["targets"],
+                planning_horizons,
+            )
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality
@@ -1380,6 +1387,7 @@ def solve_network(
     solving: dict,
     rule_name: str | None = None,
     planning_horizons: str | None = None,
+    dispatch_only: bool = False,
     **kwargs,
 ) -> None:
     """
@@ -1427,7 +1435,7 @@ def solve_network(
     )
     kwargs["solver_name"] = solving["solver"]["name"]
     kwargs["extra_functionality"] = partial(
-        extra_functionality, planning_horizons=planning_horizons
+        extra_functionality, planning_horizons=planning_horizons, dispatch_only=dispatch_only
     )
     kwargs["transmission_losses"] = cf_solving.get("transmission_losses", False)
     kwargs["linearized_unit_commitment"] = cf_solving.get(
@@ -1446,8 +1454,10 @@ def solve_network(
         logger.info("No expandable lines found. Skipping iterative solving.")
 
     # add to network for extra_functionality
-    n.config = config
-    n.params = params
+    if not hasattr(n, "config"):
+        n.config = config
+    if not hasattr(n, "params"):
+        n.params = params
 
     if rolling_horizon and rule_name == "solve_operations_network":
         kwargs["horizon"] = cf_solving.get("horizon", 365)
