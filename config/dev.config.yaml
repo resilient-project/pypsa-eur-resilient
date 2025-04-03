@@ -38,10 +38,10 @@ pcipmi_policy_paper:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
   prefix: ""
-  name: dev-pcipmi-national-expansion
+  name: pcipmi-national-expansion
   scenarios:
-    enable: falseworkflow/pypsa-eur-resilient/config/investment-all-targets.config.yaml
-    file:
+    enable: false
+    file: ""
   disable_progressbar: false
   shared_resources:
     policy: false
@@ -218,11 +218,11 @@ sector:
   co2_sequestration_potential:
     2020: 0
     2025: 0
-    2030: 286
-    2035: 286
-    2040: 286
-    2045: 286
-    2050: 286
+    2030: 400
+    2035: 400
+    2040: 400
+    2045: 400
+    2050: 400
   co2_sequestration_cost: 10
   co2_sequestration_lifetime: 50
   co2_spatial: true
@@ -259,7 +259,7 @@ clustering:
     SE: 0.05
   temporal:
     resolution_elec: false
-    resolution_sector: 169h
+    resolution_sector: 49h
 
 solving:
   mem_mb: 100000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
@@ -273,7 +273,7 @@ plotting:
     bus_carriers:
     - AC
     - H2
-    - co2 stored
+    - co2_stored
     H2:
       unit: TWh
       unit_conversion: 1_000_000
@@ -290,7 +290,7 @@ plotting:
       branch_sizes:
       - 40
       - 20
-    co2 stored:
+    co2_stored:
       unit: Mt
       unit_conversion: 1_000_000
       cmap: Purples

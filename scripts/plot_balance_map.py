@@ -31,10 +31,10 @@ if __name__ == "__main__":
             clusters="70",
             opts="",
             sector_opts="",
-            planning_horizons="2030",
-            carrier="co2 stored",
-            configfiles=["/home/bobby/projects/pci-pmi-policy-paper/config/investment-all-targets.config.yaml"],
-            run="pcipmi-delay-10years",
+            planning_horizons="2040",
+            carrier="co2_stored",
+            configfiles=["config/investment-all-targets.config.yaml"],
+            run="pcipmi",
         )
 
     configure_logging(snakemake)
@@ -59,7 +59,10 @@ if __name__ == "__main__":
 
     # get balance map plotting parameters
     boundaries = config["map"]["boundaries"]
+
     config = config["balance_map"][carrier]
+
+    carrier = carrier.replace("_", " ") # TODO long-term fix
     conversion = config["unit_conversion"]
 
     if carrier not in n.buses.carrier.unique():

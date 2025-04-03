@@ -124,7 +124,7 @@ if __name__ == "__main__":
             ll="v1.05",
             sector_opts="",
             planning_horizons="2050",
-            column="ops___ghg_target___stranded_invest",
+            column="ops___ghg_h2_target___no_pipes_short_term_invest",
             run="pcipmi",
             configfiles=["config/investment-all-targets.config.yaml"]
         )
