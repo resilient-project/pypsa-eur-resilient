@@ -58,7 +58,7 @@ solve_operations:
   columns:
     - ops___ghg_target___stranded_invest
     - ops___ghg_h2_target___no_pipes_short_term_invest
-    - ops___ghg_emission_price_h2_target___no_pipes_missing_targets
+    - ops___emission_price_h2_target___no_pipes_short_term_invest
     # - ops___emission_price
     # - ops___emission_price_120percent
     # - ops___emission_price_80percent
@@ -100,7 +100,7 @@ solve_operations:
             enable: true
           electrolyser_capacity_min_gw:
             enable: false
-    ops___ghg_h2_target____no_pipes_short_term_invest_emission_price:
+    ops___emission_price_h2_target___no_pipes_short_term_invest:
       options:
         allow_load_shedding: 10000 # EUR/MWh
         allow_investments: true # all assets except for pipelines

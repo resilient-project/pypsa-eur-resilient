@@ -198,7 +198,7 @@ if __name__ == "__main__":
             ll="v1.05",
             sector_opts="",
             planning_horizons="2040",
-            column="ops___ghg_h2_target___no_pipes_short_term_invest",
+            column="ops___emission_price_h2_target___no_pipes_short_term_invest",
             run="pcipmi-national-expansion",
             configfiles=["config/dev.config.yaml"]
         )
@@ -222,8 +222,6 @@ if __name__ == "__main__":
     additional_settings = dict()
     additional_settings["capacity_constraints"] = False
     additional_settings["co2_atmosphere_constraint"] = True
-
-    # solve_opts["load_shedding"] = False # load shedding always on
 
     n = pypsa.Network(snakemake.input.network)
 
@@ -285,7 +283,7 @@ if __name__ == "__main__":
         # Load shedding
         if solve_operations_col["options"].get("allow_load_shedding", False):
             config["solving"]["options"]["load_shedding"] = True
-            marginal_cost = solve_operations_col["options"]["load_shedding"]*1
+            marginal_cost = solve_operations_col["options"]["allow_load_shedding"]*1
             add_load_shedding(n, marginal_cost)
         
 

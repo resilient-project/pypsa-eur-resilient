@@ -37,7 +37,7 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "first-run"
+  prefix: "investment-all-targets"
   name:
   - pcipmi
   - pcipmi-delay-10years
@@ -60,22 +60,20 @@ foresight: myopic
 
 # Solve two-step operations
 solve_operations:
-  resample_temporal_resolution: false
+  resample_temporal_resolution: 5
   columns:
     - ops___ghg_target___stranded_invest
     - ops___ghg_h2_target___no_pipes_short_term_invest
-    - ops___emission_price_h2_target___no_pipes_short_term_invest
+    # - ops___ghg_emission_price_h2_target___no_pipes_missing_targets
   definitions:
     ops___ghg_target___stranded_invest:
-      options:
-        allow_load_shedding: false
-        allow_investments: false # all assets except for pipelines
-        fix_all_capacities: true # ["Generator", "Line", "Link", "Store"]
-        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
+      options: 
         remove_co2_pipelines: false
         remove_h2_pipelines: false
-        remove_co2_sequestration: false
+        remove_co2_sequestration_sites: false
+        p_nom_extendable: false 
         use_emission_price: false
+        co2_shedding: false
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
@@ -86,14 +84,12 @@ solve_operations:
             enable: false
     ops___ghg_h2_target___no_pipes_short_term_invest:
       options:
-        allow_load_shedding: 10000 # EUR/MWh
-        allow_investments: true # all assets except for pipelines
-        fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
-        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: true
         remove_h2_pipelines: true
-        remove_co2_sequestration: true
+        remove_co2_sequestration_sites: true
+        p_nom_extendable: true
         use_emission_price: false
+        co2_shedding: 10000 # per tCO2/h
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
@@ -102,22 +98,20 @@ solve_operations:
             enable: true
           electrolyser_capacity_min_gw:
             enable: false
-    ops___emission_price_h2_target___no_pipes_short_term_invest:
+    ops___ghg_emission_price_h2_target___no_pipes_missing_targets:
       options:
-        allow_load_shedding: 10000 # EUR/MWh
-        allow_investments: true # all assets except for pipelines
-        fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
-        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: true
         remove_h2_pipelines: true
-        remove_co2_sequestration: true
+        remove_co2_sequestration_sites: true
+        p_nom_extendable: false
         use_emission_price: true
+        co2_shedding: 10000 # per tCO2/h
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
             enable: false
           h2_production_min_mt:
-            enable: true
+            enable: false
           electrolyser_capacity_min_gw:
             enable: false
 
@@ -146,7 +140,7 @@ enable:
 electricity:
   conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
   renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
-  transmission_limit: v1.0
+  transmission_limit: v1.05 # TODO set to 1.0
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#transmission_projects
 transmission_projects:
@@ -230,11 +224,11 @@ sector:
   co2_sequestration_potential:
     2020: 0
     2025: 0
-    2030: 400
-    2035: 400
-    2040: 400
-    2045: 400
-    2050: 400
+    2030: 286 # TODO: change to 400 (sum of potential)
+    2035: 286
+    2040: 286
+    2045: 286
+    2050: 286
   co2_sequestration_cost: 10
   co2_sequestration_lifetime: 50
   co2_spatial: true
@@ -274,13 +268,12 @@ clustering:
     resolution_sector: 2190seg
 
 solving:
-  mem_mb: 180000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
+  mem_mb: 200000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
   memory_logging_frequency: 30 # in seconds
-  runtime: 40h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
+  runtime: 48h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
   options:
     assign_all_duals: true
     custom_extra_functionality: false # Has to be set to false, otherwise the imported solve_network function will not work correctly
-    noisy_costs: true
 
 plotting:
   balance_map:
