@@ -1146,27 +1146,10 @@ def add_co2_sequestration_min_mt_constraint(n, targets, year):
     )
 
     nom = n.model["Store-e"].loc[last_snapshot, valid_components]
-
     lhs = nom.sum()
-
-    if cname in n.global_constraints.index:
-        logger.warning(
-            f"Global constraint {cname} already exists. Dropping and adding it again."
-        )
-        n.global_constraints.drop(cname, inplace=True)
-
     rhs = target
 
-    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
-    n.add(
-        "GlobalConstraint",
-        cname,
-        constant=rhs,
-        sense=">=",
-        type="",
-        investment_period=year,
-        carrier_attribute="e",
-    )
+    n.model.add_constraints(lhs >= rhs, name=cname)
 
 
 def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
@@ -1185,31 +1168,16 @@ def add_electrolyser_capacity_min_gw_constraint(n, targets, year):
     
     if not valid_components.empty:
         nom = n.model["Link-p_nom"].loc[valid_components]
-
         lhs = nom.sum()
-
-        if cname in n.global_constraints.index:
-            logger.warning(
-                f"Global constraint {cname} already exists. Dropping and adding it again."
-            )
-            n.global_constraints.drop(cname, inplace=True)
-
         rhs = target-existing_capacity
 
-        n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
-        n.add(
-            "GlobalConstraint",
-            cname,
-            constant=rhs,
-            sense=">=",
-            type="investment_minimum",
-            carrier_attribute="p_nom",
-        )
+        n.model.add_constraints(lhs >= rhs, name="cname")
     else:
         logger.warning(
             f"No electrolyser links found for {year}. Skipping constraint addition."
         )
         return
+
 
 def add_h2_production_min_mt_constraint(n, targets, year):
     """
@@ -1230,28 +1198,26 @@ def add_h2_production_min_mt_constraint(n, targets, year):
         * n.links.loc[valid_components].efficiency
         * n.snapshot_weightings.generators
     ).sum()
-
-    if cname in n.global_constraints.index:
-        logger.warning(
-            f"Global constraint {cname} already exists. Dropping and adding it again."
-        )
-        n.global_constraints.drop(cname, inplace=True)
-
     rhs = target_mwh
 
-    n.model.add_constraints(lhs >= rhs, name=f"GlobalConstraint-{cname}")
-    n.add(
-        "GlobalConstraint",
-        cname,
-        constant=rhs,
-        sense=">=",
-        type="production_minimum",
-        carrier_attribute="p",
-    )
+    n.model.add_constraints(lhs >= rhs, name=cname)
+
+
+def add_empty_co2_atmosphere_store_constraint(n):
+    """
+    Ensures that the CO2 atmosphere store at the last snapshot is empty.
+    """
+    logger.info("Adding constraint for empty CO2 atmosphere store at the last snapshot.")
+    cname = "empty_co2_atmosphere_store"
+
+    last_snapshot = n.snapshots.values[-1]
+    lhs = n.model["Store-e"].loc[last_snapshot, "co2 atmosphere"]
+
+    n.model.add_constraints(lhs == 0, name=cname)
 
 
 def extra_functionality(
-    n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None, co2_atmosphere_constraint: bool = True, dispatch_only: bool = False
+    n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None, additional_settings: dict = {}
 ) -> None:
     """
     Add custom constraints and functionality.
@@ -1300,7 +1266,7 @@ def extra_functionality(
             r"urban central heat|urban decentral heat|rural heat",
             case=False,
             na=False,
-        ).any() and not dispatch_only:
+        ).any() and additional_settings.get("capacity_constraints", True):
             add_TES_energy_to_power_ratio_constraints(n)
             add_TES_charger_ratio_constraints(n)
 
@@ -1312,7 +1278,7 @@ def extra_functionality(
         add_carbon_budget_constraint(n, snapshots)
         add_retrofit_gas_boiler_constraint(n, snapshots)
     else:
-        if co2_atmosphere_constraint:
+        if additional_settings.get("co2_atmosphere_constraint", True):
             logger.info("Adding CO2 atmosphere constraint to network.")
             add_co2_atmosphere_constraint(n, snapshots)
 
@@ -1343,6 +1309,9 @@ def extra_functionality(
                 config["pcipmi_policy_paper"]["h2_production_min_mt"]["targets"],
                 planning_horizons,
             )
+    
+    if additional_settings.get("empty_co2_atmosphere_store_constraint", False):
+        add_empty_co2_atmosphere_store_constraint(n)
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality
@@ -1389,8 +1358,7 @@ def solve_network(
     solving: dict,
     rule_name: str | None = None,
     planning_horizons: str | None = None,
-    co2_atmosphere_constraint: bool = True,
-    dispatch_only: bool = False,
+    additional_settings: dict = {},
     **kwargs,
 ) -> None:
     """
@@ -1438,7 +1406,7 @@ def solve_network(
     )
     kwargs["solver_name"] = solving["solver"]["name"]
     kwargs["extra_functionality"] = partial(
-        extra_functionality, planning_horizons=planning_horizons, co2_atmosphere_constraint=co2_atmosphere_constraint, dispatch_only=dispatch_only
+        extra_functionality, planning_horizons=planning_horizons, additional_settings=additional_settings
     )
     kwargs["transmission_losses"] = cf_solving.get("transmission_losses", False)
     kwargs["linearized_unit_commitment"] = cf_solving.get(
@@ -1505,10 +1473,10 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "solve_sector_network_myopic",
             opts="",
-            clusters="adm",
-            ll="v1.05",
+            clusters="70",
             sector_opts="",
-            planning_horizons="2040",
+            planning_horizons="2030",
+            configfiles=["config/dev.config.yaml"]
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)

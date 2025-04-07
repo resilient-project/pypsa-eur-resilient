@@ -54,12 +54,28 @@ foresight: myopic
 
 # Solve two-step operations
 solve_operations:
-  resample_temporal_resolution: 5
+  resample_temporal_resolution: false
   columns:
-    - ops___ghg_target___stranded_invest
-    - ops___ghg_h2_target___no_pipes_short_term_invest
+    # - ops___ghg_target___stranded_invest
+    # - ops___ghg_h2_target___no_pipes_short_term_invest
     # - ops___ghg_emission_price_h2_target___no_pipes_missing_targets
+    - ops___emission_price
+    - ops___emission_price_120percent
+    - ops___emission_price_80percent
+    - ops___keep_budget
   definitions:
+    ops___emission_price:
+      options:
+        use_emission_price: true
+    ops___emission_price_120percent:
+      options:
+        use_emission_price: 1.2
+    ops___emission_price_80percent:
+      options:
+        use_emission_price: 0.8
+    ops___keep_budget:
+      options:
+        use_emission_price: false
     ops___ghg_target___stranded_invest:
       options: 
         remove_co2_pipelines: false
@@ -134,7 +150,7 @@ enable:
 electricity:
   conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
   renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
-  transmission_limit: v1.05
+  transmission_limit: v1.0
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#transmission_projects
 transmission_projects:
@@ -259,14 +275,16 @@ clustering:
     SE: 0.05
   temporal:
     resolution_elec: false
-    resolution_sector: 49h
+    resolution_sector: 200h
 
 solving:
   mem_mb: 100000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
   memory_logging_frequency: 30 # in seconds
   runtime: 15h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
   options:
+    assign_all_duals: true
     custom_extra_functionality: false # Has to be set to false, otherwise the imported solve_network function will not work correctly
+    noisy_costs: true
 
 plotting:
   balance_map:

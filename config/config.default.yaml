@@ -11,8 +11,8 @@ logging:
   format: '%(levelname)s:%(name)s:%(message)s'
 
 remote:
-  ssh: ""
-  path: ""
+  ssh: z1
+  path: scratch/projects/pcipmi-policy-targets/workflow/pypsa-eur-resilient
 
 # PCI-PMI policy paper settings
 pcipmi_policy_paper:
@@ -51,6 +51,11 @@ run:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#foresight
 foresight: overnight
+
+solve_operations:
+  resample_temporal_resolution: 5
+  columns: ""
+  definitions:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#scenario
 # Wildcard docs in https://pypsa-eur.readthedocs.io/en/latest/wildcards.html
@@ -967,6 +972,7 @@ adjustments:
 solving:
   #tmpdir: "path/to/tmp"
   options:
+    assign_all_duals: true
     clip_p_max_pu: 1.e-2
     load_shedding: false
     curtailment_mode: false

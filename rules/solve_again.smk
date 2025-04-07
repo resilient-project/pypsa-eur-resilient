@@ -5,7 +5,6 @@
 
 rule solve_operations_sector_network:
     params:
-        options=config_provider("solving", "options"),
         solving=config_provider("solving"),
         co2_sequestration_potential=config_provider(
             "sector", "co2_sequestration_potential", default=200
