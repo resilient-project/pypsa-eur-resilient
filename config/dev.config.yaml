@@ -56,14 +56,68 @@ foresight: myopic
 solve_operations:
   resample_temporal_resolution: false
   columns:
-    # - ops___ghg_target___stranded_invest
-    # - ops___ghg_h2_target___no_pipes_short_term_invest
-    # - ops___ghg_emission_price_h2_target___no_pipes_missing_targets
-    - ops___emission_price
-    - ops___emission_price_120percent
-    - ops___emission_price_80percent
-    - ops___keep_budget
+    - ops___ghg_target___stranded_invest
+    - ops___ghg_h2_target___no_pipes_short_term_invest
+    - ops___ghg_emission_price_h2_target___no_pipes_missing_targets
+    # - ops___emission_price
+    # - ops___emission_price_120percent
+    # - ops___emission_price_80percent
+    # - ops___keep_budget
   definitions:
+    ops___ghg_target___stranded_invest:
+      options:
+        allow_load_shedding: false
+        allow_investments: false # all assets except for pipelines
+        fix_all_capacities: true # ["Generator", "Line", "Link", "Store"]
+        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
+        remove_co2_pipelines: false
+        remove_h2_pipelines: false
+        remove_co2_sequestration: false
+        use_emission_price: false
+      overwrite_config:
+        pcipmi_policy_paper:
+          co2_sequestration_min_mt:
+            enable: false
+          h2_production_min_mt:
+            enable: false
+          electrolyser_capacity_min_gw:
+            enable: false
+    ops___ghg_h2_target___no_pipes_short_term_invest:
+      options:
+        allow_load_shedding: 10000 # EUR/MWh
+        allow_investments: true # all assets except for pipelines
+        fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
+        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
+        remove_co2_pipelines: true
+        remove_h2_pipelines: true
+        remove_co2_sequestration: true
+        use_emission_price: false
+      overwrite_config:
+        pcipmi_policy_paper:
+          co2_sequestration_min_mt:
+            enable: false
+          h2_production_min_mt:
+            enable: true
+          electrolyser_capacity_min_gw:
+            enable: false
+    ops___ghg_h2_target____no_pipes_short_term_invest_emission_price:
+      options:
+        allow_load_shedding: 10000 # EUR/MWh
+        allow_investments: true # all assets except for pipelines
+        fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
+        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
+        remove_co2_pipelines: true
+        remove_h2_pipelines: true
+        remove_co2_sequestration: true
+        use_emission_price: true
+      overwrite_config:
+        pcipmi_policy_paper:
+          co2_sequestration_min_mt:
+            enable: false
+          h2_production_min_mt:
+            enable: true
+          electrolyser_capacity_min_gw:
+            enable: false
     ops___emission_price:
       options:
         use_emission_price: true
@@ -76,54 +130,6 @@ solve_operations:
     ops___keep_budget:
       options:
         use_emission_price: false
-    ops___ghg_target___stranded_invest:
-      options: 
-        remove_co2_pipelines: false
-        remove_h2_pipelines: false
-        remove_co2_sequestration_sites: false
-        p_nom_extendable: false 
-        use_emission_price: false
-        co2_shedding: false
-      overwrite_config:
-        pcipmi_policy_paper:
-          co2_sequestration_min_mt:
-            enable: false
-          h2_production_min_mt:
-            enable: false
-          electrolyser_capacity_min_gw:
-            enable: false
-    ops___ghg_h2_target___no_pipes_short_term_invest:
-      options:
-        remove_co2_pipelines: true
-        remove_h2_pipelines: true
-        remove_co2_sequestration_sites: true
-        p_nom_extendable: true
-        use_emission_price: false
-        co2_shedding: 10000 # per tCO2/h
-      overwrite_config:
-        pcipmi_policy_paper:
-          co2_sequestration_min_mt:
-            enable: false
-          h2_production_min_mt:
-            enable: true
-          electrolyser_capacity_min_gw:
-            enable: false
-    ops___ghg_emission_price_h2_target___no_pipes_missing_targets:
-      options:
-        remove_co2_pipelines: true
-        remove_h2_pipelines: true
-        remove_co2_sequestration_sites: true
-        p_nom_extendable: false
-        use_emission_price: true
-        co2_shedding: 10000 # per tCO2/h
-      overwrite_config:
-        pcipmi_policy_paper:
-          co2_sequestration_min_mt:
-            enable: false
-          h2_production_min_mt:
-            enable: false
-          electrolyser_capacity_min_gw:
-            enable: false
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#scenario
 # Wildcard docs in https://pypsa-eur.readthedocs.io/en/latest/wildcards.html
