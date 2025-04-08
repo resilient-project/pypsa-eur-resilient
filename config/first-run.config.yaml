@@ -288,6 +288,22 @@ plotting:
     - AC
     - H2
     - co2_stored
+    AC:
+      unit: TWh
+      unit_conversion: 1_000_000
+      cmap: Greens
+      vmin:
+      vmax:
+      region_unit: €/MWh
+      bus_factor: 0.002
+      branch_factor: 0.15
+      flow_factor: 100
+      bus_sizes:
+      - 200
+      - 100
+      branch_sizes:
+      - 200
+      - 100
     H2:
       unit: TWh
       unit_conversion: 1_000_000
@@ -296,7 +312,7 @@ plotting:
       vmax: 100
       region_unit: €/MWh
       bus_factor: 0.002
-      branch_factor: 0.04
+      branch_factor: 0.06
       flow_factor: 25
       bus_sizes:
       - 50
@@ -313,7 +329,7 @@ plotting:
       region_unit: €/t_${CO_2}$
       bus_factor: 0.03
       branch_factor: 0.1
-      flow_factor: 150
+      flow_factor: 45
       bus_sizes:
       - 50
       - 10
@@ -330,7 +346,7 @@ plotting:
       region_unit: €/MWh
       bus_factor: 0.002
       branch_factor: 0.0003
-      flow_factor: 50
+      flow_factor: 45
       bus_sizes:
       - 50
       - 25
