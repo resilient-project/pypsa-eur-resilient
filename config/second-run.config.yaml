@@ -47,7 +47,7 @@ run:
   - greenfield-pipelines
   scenarios:
     enable: true
-    file: config/first-run.scenarios.yaml
+    file: config/second-run.scenarios.yaml
   disable_progressbar: false
   shared_resources:
     policy: false
