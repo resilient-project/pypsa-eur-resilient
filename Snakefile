@@ -25,7 +25,7 @@ copy_default_files(workflow)
 configfile: "config/config.default.yaml"
 configfile: "config/plotting.default.yaml"
 configfile: "config/config.yaml"
-
+configfile: "config/grouping.yaml"
 
 run = config["run"]
 scenarios = get_scenarios(run)

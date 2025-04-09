@@ -823,6 +823,8 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
             offshore_index,
             bus0=offshore_index + " co2 stored",
             bus1=offshore_index + " co2 sequestered",
+            marginal_cost=options["co2_sequestration_cost"],
+            capital_cost=0.1, # TODO: needed?
             carrier="co2 sequestered",
             efficiency=1.0,
             p_nom_extendable=True,
@@ -850,12 +852,12 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
 
         sequestration_potential.index = sequestration_potential.index.str.replace("stored", "sequestered")
 
+        # Note moved capital costs to OPEX in links connecting CO2 stores to sequestration sites
         n.add(
             "Store",
             sequestration_potential.index,
-            e_nom_extendable=True,
-            e_nom_max=sequestration_potential["e_nom_max"],
-            capital_cost=options["co2_sequestration_cost"],
+            e_nom_extendable=False,
+            e_nom=sequestration_potential["e_nom_max"],
             marginal_cost=-0.1,
             bus=sequestration_potential.index,
             lifetime=options["co2_sequestration_lifetime"],
@@ -6253,6 +6255,8 @@ def add_pcipmi_co2_buses(
         nodes + " co2 sequestered",
         bus0=nodes + " co2 stored",
         bus1=nodes + " co2 sequestered",
+        marginal_cost=options["co2_sequestration_cost"],
+        capital_cost=0.1, # TODO: needed?
         carrier="co2 sequestered",
         efficiency=1.0,
         p_nom_extendable=True,
@@ -6264,6 +6268,7 @@ def add_pcipmi_stores(
     investment_year: int,
     costs: pd.DataFrame,
     pcipmi_projects: dict,
+    options: dict,
 ) -> None:
     stores = pd.read_csv(stores_path, index_col=0)
     carrier = stores.carrier.unique()[0]
@@ -6283,8 +6288,8 @@ def add_pcipmi_stores(
         marginal_cost = 0
 
     if carrier == "co2 sequestered":
-        capital_cost_carrier = costs.at["CO2 storage tank", "capital_cost"]
-        lifetime_carrier = costs.at["CO2 storage tank", "lifetime"]
+        capital_cost_carrier = 0
+        lifetime_carrier = options["co2_sequestration_lifetime"]
         e_cyclic = False
         marginal_cost = -0.1
 
@@ -6302,12 +6307,13 @@ def add_pcipmi_stores(
             y=n.buses.loc[missing_co2_buses.index, "y"].rename(lambda x: x + " co2 sequestered"),
         )
 
-        # Links
         n.add(
             "Link",
             missing_co2_buses[0],
             bus0=missing_co2_buses.index + " co2 stored",
             bus1=missing_co2_buses[0].values,
+            marginal_cost=options["co2_sequestration_cost"],
+            capital_cost=0.1, # TODO: needed?
             carrier="co2 sequestered",
             efficiency=1.0,
             p_nom_extendable=True,
@@ -6391,10 +6397,10 @@ if __name__ == "__main__":
             "prepare_sector_network",
             opts="",
             clusters="70",
-            ll="v1.05",
             sector_opts="",
             planning_horizons="2030",
-            configfiles=["config/config.greenfield.yaml"],
+            configfiles=["config/first-run.config.yaml"],
+            run="greenfield-pipelines"
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
@@ -6638,6 +6644,7 @@ if __name__ == "__main__":
             investment_year,
             costs,
             pcipmi_projects,
+            options,
         )
 
     if carrier_networks["CO2"]["enable"] and carrier_networks["CO2"]["include"]["greenfield"]:
@@ -6669,6 +6676,7 @@ if __name__ == "__main__":
             investment_year,
             costs,
             pcipmi_projects,
+            options,
         )
 
     # Drop PCI-PMI offshore elec buses
