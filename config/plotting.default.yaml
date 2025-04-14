@@ -4,13 +4,26 @@
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#plotting
 plotting:
-  font:
-    family: sans-serif
-    sans-serif: Roboto
-    size: 8
-  plot_totex_heatmap:
-    figsize: (12, 3)
-    dpi: 300
+  all:
+    font:
+      family: sans-serif
+      sans-serif: Roboto
+      size: 8
+  figures:
+    plot_delta_system_costs:
+      figsize: (10, 5)
+      dpi: 300
+      run_to_subtract: "no-pipelines"
+      run_order: 
+      - no-pipelines
+      - pcipmi-delay-10years
+      - pcipmi
+      - pcipmi-national-expansion
+      - pcipmi-national-international-expansion
+      - greenfield-pipelines
+    plot_totex_heatmap:
+      figsize: (10, 3)
+      dpi: 300
 
   map:
     boundaries: [-11, 30, 34, 71]

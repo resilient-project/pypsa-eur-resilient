@@ -15,6 +15,7 @@ import pypsa
 import seaborn as sns
 
 from _helpers import configure_logging, set_scenario_config
+from _tools import update_dict
 
 logger = logging.getLogger(__name__)
 
@@ -43,12 +44,14 @@ if __name__ == "__main__":
     configure_logging(snakemake)
     set_scenario_config(snakemake)
 
-    rule = snakemake.rule
     config = snakemake.config
+    plotting = config["plotting"]["all"]
+    plotting = update_dict(plotting, snakemake.params.plotting_fig)
+
     discount_rate = config["costs"]["fill_values"]["discount rate"]
-    figsize = ast.literal_eval(config["plotting"][rule]["figsize"])
-    fontsize = config["plotting"]["font"]["size"] 
-    dpi = config["plotting"][rule]["dpi"]
+    figsize = ast.literal_eval(plotting["figsize"])
+    fontsize = plotting["font"]["size"]
+    dpi = plotting["dpi"]
 
     # Create df of all runs
     df_runs = pd.DataFrame()
@@ -113,7 +116,7 @@ if __name__ == "__main__":
 
     # Plot 
     logger.info("Plotting heatmap of total system costs.")
-    plt.rc("font", **config["plotting"]["font"])
+    plt.rc("font", **plotting["font"])
     fig = plt.figure(figsize=figsize)
 
     # Define grid layout with width ratios
