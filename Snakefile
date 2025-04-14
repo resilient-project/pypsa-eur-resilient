@@ -41,6 +41,7 @@ resources = path_provider("resources/", RDIR, shared_resources, exclude_from_sha
 cutout_dir = config["atlite"]["cutout_directory"]
 CDIR = join(cutout_dir, ("" if run["shared_cutouts"] else RDIR))
 RESULTS = "results/" + RDIR
+PREFIX = config["run"]["prefix"]
 
 
 localrules:
@@ -64,6 +65,7 @@ include: "rules/solve_electricity.smk"
 include: "rules/postprocess.smk"
 include: "rules/development.smk"
 include: "rules/solve_again.smk"
+include: "rules/postprocess_paper.smk"
 
 
 if config["foresight"] == "overnight":

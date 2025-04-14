@@ -4,6 +4,14 @@
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#plotting
 plotting:
+  font:
+    family: sans-serif
+    sans-serif: Roboto
+    size: 8
+  plot_totex_heatmap:
+    figsize: (12, 3)
+    dpi: 300
+
   map:
     boundaries: [-11, 30, 34, 71]
     color_geomap:
