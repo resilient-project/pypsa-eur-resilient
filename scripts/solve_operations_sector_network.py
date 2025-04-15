@@ -177,6 +177,7 @@ def remove_onshore_pipelines(
     """
     logger.info(f"Removing {carrier}s from the network.")
     if carrier in n.links.carrier.values:
+        # TODO: fix by doing clean correction (underwater_fraction) in prepare_sector_network
         b_offshore_link = n.links.underwater_fraction>0
         b_carrier_link = n.links.carrier == carrier
         b_offshore_pci = b_offshore_link & b_carrier_link

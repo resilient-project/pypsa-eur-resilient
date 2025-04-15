@@ -63,7 +63,7 @@ solve_operations:
   resample_temporal_resolution: false
   columns:
     - ops___ghg_target___stranded_invest
-    # - ops___ghg_h2_target___no_pipes_short_term_invest
+    - ops___ghg_h2_target___no_pipes_short_term_invest
     # - ops___emission_price_h2_target___no_pipes_short_term_invest
   definitions:
     ops___ghg_target___stranded_invest:
