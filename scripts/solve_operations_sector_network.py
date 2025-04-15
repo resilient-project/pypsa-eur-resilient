@@ -160,7 +160,34 @@ def remove_pipelines(
         if sum_active == 0:
             logger.info(f"No active {carrier}s in the network.")
             return
-        n.links.drop(n.links.loc[n.links.carrier == carrier].index, inplace=True)
+        n.remove("Link", n.links.loc[n.links.carrier == carrier].index)
+        logger.info(f"Removed {sum_active} active {carrier}s from the network.")
+        n.carriers.drop(carrier, inplace=True)
+    else:
+        logger.warning(f"No {carrier}s found in the network.")
+        return
+    
+
+def remove_onshore_pipelines(
+    n: pypsa.Network,
+    carrier: str,
+) -> None:
+    """
+    Removes onshore carrier pipelines from the network.
+    """
+    logger.info(f"Removing {carrier}s from the network.")
+    if carrier in n.links.carrier.values:
+        b_offshore_link = n.links.underwater_fraction>0
+        b_carrier_link = n.links.carrier == carrier
+        b_offshore_pci = b_offshore_link & b_carrier_link
+        b_offshore_regular = n.links.index.str.contains("co2") & n.links.index.str.contains("offshore") & n.links.index.str.contains("pipeline")
+        b_to_drop = ~(b_offshore_pci | b_offshore_regular) & b_carrier_link
+
+        sum_active = n.links.loc[b_to_drop, "active"].sum()
+        if sum_active == 0:
+            logger.info(f"No active {carrier}s in the network.")
+            return
+        n.remove("Link", n.links.loc[b_to_drop].index)
         logger.info(f"Removed {sum_active} active {carrier}s from the network.")
         n.carriers.drop(carrier, inplace=True)
     else:
@@ -179,11 +206,11 @@ def remove_co2_sequestration(
         sum_active = n.stores.loc[n.stores.carrier == "co2 sequestered", "active"].sum()
         if sum_active == 0:
             logger.info("No active CO2 sequestration sites.")
-        n.stores.drop(n.stores.loc[n.stores.carrier == "co2 sequestered"].index, inplace=True)
+        n.remove("Store", n.stores.loc[n.stores.carrier == "co2 sequestered"].index)
         logger.info(f"Removed {sum_active} active CO2 sequestration sites.")
 
         # Dropping links to CO2 sequestration sites
-        n.links.drop(n.links.loc[n.links.carrier=="co2 sequestered"].index, inplace=True)
+        n.remove("Link", n.links.loc[n.links.carrier=="co2 sequestered"].index)
         n.carriers.drop("co2 sequestered", inplace=True)
 
 
@@ -197,10 +224,10 @@ if __name__ == "__main__":
             clusters="70",
             ll="v1.05",
             sector_opts="",
-            planning_horizons="2040",
+            planning_horizons="2050",
             column="ops___emission_price_h2_target___no_pipes_short_term_invest",
-            run="pcipmi-national-expansion",
-            configfiles=["config/dev.config.yaml"]
+            run="pcipmi-national-international-expansion",
+            configfiles=["config/second-run.config.yaml"]
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
@@ -270,6 +297,9 @@ if __name__ == "__main__":
         # Removing CO2 sequestration sites if they are present
         if solve_operations_col["options"].get("remove_co2_sequestration", False):
             remove_co2_sequestration(n)
+
+        if solve_operations_col["options"].get("remove_onshore_co2_pipelines", False):
+            remove_onshore_pipelines(n, carrier="CO2 pipeline")
 
         # Values from previous optimisation run  
 

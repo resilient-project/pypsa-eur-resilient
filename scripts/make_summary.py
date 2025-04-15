@@ -299,12 +299,14 @@ if __name__ == "__main__":
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "make_summary",
-            clusters="5",
+            "make_summary_column",
+            clusters="70",
             opts="",
             sector_opts="",
             planning_horizons="2030",
-            configfiles="config/test/config.overnight.yaml",
+            configfiles="config/first-run.config.yaml",
+            run="pcipmi",
+            column = "ops___ghg_h2_target___no_pipes_short_term_invest",
         )
 
     configure_logging(snakemake)
@@ -315,6 +317,38 @@ if __name__ == "__main__":
     assign_locations(n)
 
     n.statistics.set_parameters(nice_names=False, drop_zero=False)
+
+    # TODO temporary solution
+    # Drop sequestration stores
+    b_not_in_stores = not "co2 sequestered" in n.stores.carrier
+    if b_not_in_stores:
+        stores_t = n.stores_t.e.T.index.unique()
+        stores = n.stores.index.unique()
+        diff_stores = set(stores_t).difference(set(stores))
+
+        # Drop from all n.stores_t keys
+        for attr in n.stores_t.keys():
+            print(attr)
+            
+            intersection = diff_stores.intersection(set(n.stores_t[attr].T.index))
+            intersection = list(intersection)
+            
+            n.stores_t[attr] = n.stores_t[attr].drop(intersection, axis=1)
+
+    b_not_in_links = not "co2 sequestered" in n.links.carrier
+    if b_not_in_links:
+        links_t = n.links_t.p0.T.index.unique()
+        links = n.links.index.unique()
+        diff_links = set(links_t).difference(set(links))
+
+        # Drop from all n.links_t keys
+        for attr in n.links_t.keys():
+            print(attr)
+            
+            intersection = diff_links.intersection(set(n.links_t[attr].T.index))
+            intersection = list(intersection)
+            
+            n.links_t[attr] = n.links_t[attr].drop(intersection, axis=1)
 
     for output in OUTPUTS:
         globals()["calculate_" + output](n).to_csv(snakemake.output[output])
