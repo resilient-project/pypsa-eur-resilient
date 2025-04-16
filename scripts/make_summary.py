@@ -304,7 +304,7 @@ if __name__ == "__main__":
             opts="",
             sector_opts="",
             planning_horizons="2030",
-            configfiles="config/first-run.config.yaml",
+            configfiles="config/second-run.config.yaml",
             run="pcipmi",
             column = "ops___ghg_h2_target___no_pipes_short_term_invest",
         )

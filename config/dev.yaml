@@ -37,11 +37,17 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: ""
-  name: pcipmi-national-expansion
+  prefix: "second-run"
+  name:
+  # - pcipmi
+  # - pcipmi-delay-10years
+  # - pcipmi-national-expansion
+  - pcipmi-national-international-expansion
+  - no-pipelines
+  # - greenfield-pipelines
   scenarios:
-    enable: false
-    file: ""
+    enable: true
+    file: config/second-run.scenarios.yaml
   disable_progressbar: false
   shared_resources:
     policy: false
@@ -58,11 +64,7 @@ solve_operations:
   columns:
     - ops___ghg_target___stranded_invest
     - ops___ghg_h2_target___no_pipes_short_term_invest
-    - ops___emission_price_h2_target___no_pipes_short_term_invest
-    # - ops___emission_price
-    # - ops___emission_price_120percent
-    # - ops___emission_price_80percent
-    # - ops___keep_budget
+    # - ops___emission_price_h2_target___no_pipes_short_term_invest
   definitions:
     ops___ghg_target___stranded_invest:
       options:
@@ -71,6 +73,7 @@ solve_operations:
         fix_all_capacities: true # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
+        remove_onshore_co2_pipelines: false
         remove_h2_pipelines: false
         remove_co2_sequestration: false
         use_emission_price: false
@@ -88,9 +91,10 @@ solve_operations:
         allow_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
-        remove_co2_pipelines: true
+        remove_co2_pipelines: false
+        remove_onshore_co2_pipelines: true
         remove_h2_pipelines: true
-        remove_co2_sequestration: true
+        remove_co2_sequestration: false
         use_emission_price: false
       overwrite_config:
         pcipmi_policy_paper:
@@ -106,9 +110,10 @@ solve_operations:
         allow_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
-        remove_co2_pipelines: true
+        remove_co2_pipelines: false
+        remove_onshore_co2_pipelines: true
         remove_h2_pipelines: true
-        remove_co2_sequestration: true
+        remove_co2_sequestration: false
         use_emission_price: true
       overwrite_config:
         pcipmi_policy_paper:
@@ -118,18 +123,6 @@ solve_operations:
             enable: true
           electrolyser_capacity_min_gw:
             enable: false
-    ops___emission_price:
-      options:
-        use_emission_price: true
-    ops___emission_price_120percent:
-      options:
-        use_emission_price: 1.2
-    ops___emission_price_80percent:
-      options:
-        use_emission_price: 0.8
-    ops___keep_budget:
-      options:
-        use_emission_price: false
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#scenario
 # Wildcard docs in https://pypsa-eur.readthedocs.io/en/latest/wildcards.html
@@ -284,9 +277,9 @@ clustering:
     resolution_sector: 200h
 
 solving:
-  mem_mb: 100000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
+  mem_mb: 180000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
   memory_logging_frequency: 30 # in seconds
-  runtime: 15h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
+  runtime: 40h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
   options:
     assign_all_duals: true
     custom_extra_functionality: false # Has to be set to false, otherwise the imported solve_network function will not work correctly
@@ -298,6 +291,22 @@ plotting:
     - AC
     - H2
     - co2_stored
+    AC:
+      unit: TWh
+      unit_conversion: 1_000_000
+      cmap: Greens
+      vmin:
+      vmax:
+      region_unit: €/MWh
+      bus_factor: 0.002
+      branch_factor: 0.15
+      flow_factor: 100
+      bus_sizes:
+      - 200
+      - 100
+      branch_sizes:
+      - 200
+      - 100
     H2:
       unit: TWh
       unit_conversion: 1_000_000
@@ -306,7 +315,7 @@ plotting:
       vmax: 100
       region_unit: €/MWh
       bus_factor: 0.002
-      branch_factor: 0.04
+      branch_factor: 0.06
       flow_factor: 25
       bus_sizes:
       - 50
@@ -323,7 +332,7 @@ plotting:
       region_unit: €/t_${CO_2}$
       bus_factor: 0.03
       branch_factor: 0.1
-      flow_factor: 150
+      flow_factor: 45
       bus_sizes:
       - 50
       - 10
@@ -340,7 +349,7 @@ plotting:
       region_unit: €/MWh
       bus_factor: 0.002
       branch_factor: 0.0003
-      flow_factor: 50
+      flow_factor: 45
       bus_sizes:
       - 50
       - 25

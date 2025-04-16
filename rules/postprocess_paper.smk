@@ -61,7 +61,7 @@ rule make_summary_column:
         "../scripts/make_summary.py"
 
 
-rule make_global_summary_column:
+rule make_global_summary_columns:
     params:
         scenario=config_provider("scenario"),
         RDIR=RDIR,

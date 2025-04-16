@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_regret_matrix",
-            configfiles=["config/first-run.config.yaml"],
+            configfiles=["config/second-run.config.yaml"],
             )
 
     configure_logging(snakemake)
@@ -95,3 +95,17 @@ if __name__ == "__main__":
 
         secondary_runs[col].loc[:, ["capex", "opex"]] = secondary_runs[col]["path"].apply(get_costs)
         secondary_runs[col]["totex"] = secondary_runs[col]["capex"] + secondary_runs[col]["opex"]
+
+
+    df1 = df_runs_rows.copy()
+    df2 = secondary_runs[columns[0]].copy()
+    
+    common_cols = df1.columns.intersection(df2.columns)
+
+    # 2. Filter only numeric columns (int or float) from the common columns
+    numeric_cols = ["capex", "opex", "totex"]
+    non_numeric_cols = list(set(common_cols) - set(numeric_cols))
+
+    # 3. Subtract only on these columns
+    delta = df1[non_numeric_cols]
+    delta.loc[:, numeric_cols] = (1e2*(df1[numeric_cols] - df2[numeric_cols]) / df1[numeric_cols]).round(2)
