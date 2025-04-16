@@ -37,7 +37,7 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "dev
+  prefix: "dev"
   name:
   # - pcipmi
   # - pcipmi-delay-10years
