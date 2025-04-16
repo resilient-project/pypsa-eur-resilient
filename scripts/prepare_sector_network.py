@@ -844,7 +844,7 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
             "Link",
             sequestration_links.index,
             **sequestration_links,
-            carrier="co2 stored",
+            carrier="CO2 pipeline",
             efficiency=1.0,
             p_nom_extendable=True,
             capital_cost=costs.at["CO2 submarine pipeline", "capital_cost"] * sequestration_links["length"],
@@ -6399,8 +6399,8 @@ if __name__ == "__main__":
             clusters="70",
             sector_opts="",
             planning_horizons="2030",
-            configfiles=["config/first-run.config.yaml"],
-            run="greenfield-pipelines"
+            configfiles=["config/second-run.config.yaml"],
+            run="no-pipelines"
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
