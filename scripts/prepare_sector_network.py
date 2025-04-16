@@ -823,7 +823,6 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
             offshore_index,
             bus0=offshore_index + " co2 stored",
             bus1=offshore_index + " co2 sequestered",
-            marginal_cost=options["co2_sequestration_cost"],
             capital_cost=0.1, # TODO: needed?
             carrier="co2 sequestered",
             efficiency=1.0,
@@ -856,9 +855,10 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
         n.add(
             "Store",
             sequestration_potential.index,
-            e_nom_extendable=False,
-            e_nom=sequestration_potential["e_nom_max"],
+            e_nom_extendable=True,
+            e_nom_max=sequestration_potential["e_nom_max"],
             marginal_cost=-0.1,
+            capital_cost=options["co2_sequestration_cost"],
             bus=sequestration_potential.index,
             lifetime=options["co2_sequestration_lifetime"],
             carrier="co2 sequestered",
@@ -6255,7 +6255,6 @@ def add_pcipmi_co2_buses(
         nodes + " co2 sequestered",
         bus0=nodes + " co2 stored",
         bus1=nodes + " co2 sequestered",
-        marginal_cost=options["co2_sequestration_cost"],
         capital_cost=0.1, # TODO: needed?
         carrier="co2 sequestered",
         efficiency=1.0,
@@ -6312,7 +6311,6 @@ def add_pcipmi_stores(
             missing_co2_buses[0],
             bus0=missing_co2_buses.index + " co2 stored",
             bus1=missing_co2_buses[0].values,
-            marginal_cost=options["co2_sequestration_cost"],
             capital_cost=0.1, # TODO: needed?
             carrier="co2 sequestered",
             efficiency=1.0,
