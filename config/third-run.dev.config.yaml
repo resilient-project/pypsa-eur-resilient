@@ -39,10 +39,10 @@ pcipmi_policy_paper:
 run:
   prefix: "third-run-dev"
   name:
-  # - pcipmi
-  # - pcipmi-national-expansion
-  - pcipmi-national-international-expansion
   - no-pipelines-no-pcipmi
+  - pcipmi
+  - pcipmi-national-expansion
+  - pcipmi-national-international-expansion
   - greenfield-pipelines
   scenarios:
     enable: true
