@@ -257,12 +257,18 @@ clustering:
     level: 1
     FI: 2
     'NO': 2
+    AT: 0
     BA: 0
     BG: 0
     HR: 0
+    HU: 0
     RO: 0
     RS: 0
     XK: 0
+  administrative_options: # build_shapes
+    remove_small_baltic_islands: true
+    split_sardinia_sicily: true
+    merge_city_states: true
   focus_weights:
     FI: 0.05
     'NO': 0.05

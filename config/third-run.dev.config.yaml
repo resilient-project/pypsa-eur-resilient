@@ -39,8 +39,8 @@ pcipmi_policy_paper:
 run:
   prefix: "third-run"
   name:
-  - pcipmi
-  - pcipmi-national-expansion
+  # - pcipmi
+  # - pcipmi-national-expansion
   - pcipmi-national-international-expansion
   - no-pipelines-no-pcipmi
   - greenfield-pipelines
@@ -257,12 +257,18 @@ clustering:
     level: 1
     FI: 2
     'NO': 2
+    AT: 0
     BA: 0
     BG: 0
     HR: 0
+    HU: 0
     RO: 0
     RS: 0
     XK: 0
+  administrative_options: # build_shapes
+    remove_small_baltic_islands: true
+    split_sardinia_sicily: true
+    merge_city_states: true
   focus_weights:
     FI: 0.05
     'NO': 0.05
@@ -273,9 +279,9 @@ clustering:
     resolution_sector: 169h
 
 solving:
-  mem_mb: 50000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
+  mem_mb: 220000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
   memory_logging_frequency: 30 # in seconds
-  runtime: 5h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
+  runtime: 40h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
   options:
     assign_all_duals: true
     custom_extra_functionality: false # Has to be set to false, otherwise the imported solve_network function will not work correctly

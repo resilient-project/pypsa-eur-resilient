@@ -254,6 +254,7 @@ def create_regions(
     nuts3_pop,
     other_gdp,
     other_pop,
+    administrative_options,
 ):
     """
     Create regions by processing NUTS and non-NUTS geographical shapes.
@@ -385,6 +386,40 @@ def create_regions(
     # Only include countries in the config
     regions = regions.query("country in @country_list")
 
+    ### Custom administrative options:
+    if administrative_options.get("remove_small_baltic_islands", False):
+        logger.info("Removing small baltic islands: Bornholm, Aland Islands, Gotland")
+        if "DK014" in regions.index: # Bornholm
+            regions.drop("DK014", inplace=True)
+        if "FI200" in regions.index: # Aland Islands
+            regions.drop("FI200", inplace=True)
+        if "SE214" in regions.index: # Gotland
+            regions.drop("SE214", inplace=True)
+        
+        if administrative_options.get("split_sardinia_sicily", False):
+            logger.info("Splitting Sardinia and Sicily into separate regions.")
+            b_ITG = regions.level1 == "ITG"
+            regions.loc[b_ITG, "level1"] = regions.loc[b_ITG, "level2"]
+
+        if administrative_options.get("merge_city_states", False):
+            columns = ["level1", "level2"]
+            logger.info("Merging city states with larger surrounding region.")
+            logger.info("Berlin, Hamburg, Bremen, Bremerhaven, Madrid, London")
+            if "DE300" in regions.index:
+                regions.loc["DE300", columns] = regions.loc["DE40A", columns]
+            if "DE600" in regions.index:
+                regions.loc["DE600", columns] = regions.loc["DEF09", columns]
+            if "DE501" in regions.index:
+                regions.loc["DE501", columns] = regions.loc["DE936", columns]
+            if "DE502" in regions.index:
+                regions.loc["DE502", columns] = regions.loc["DE932", columns]
+            if "ES300" in regions.index:
+                regions.loc["ES300", columns] = regions.loc["ES425", columns]
+            if "GBI" in regions["level1"].values:
+                b_GBI = regions.level1 == "GBI"
+                regions.loc[b_GBI, "level1"] = regions.loc["GBJ25", "level1"]
+                regions.loc[b_GBI, "level2"] = regions.loc["GBJ25", "level2"]
+
     return regions
 
 
@@ -492,9 +527,15 @@ if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("build_shapes")
+        snakemake = mock_snakemake(
+            "build_shapes",
+            configfiles=["config/dev.config.yaml"],
+            run="pcipmi-national-international-expansion"
+            )
     configure_logging(snakemake)
     set_scenario_config(snakemake)
+
+    administrative_options = snakemake.params.administrative_options
 
     # Offshore regions
     offshore_shapes = eez(snakemake.input.eez, snakemake.params.countries)
@@ -513,6 +554,7 @@ if __name__ == "__main__":
         snakemake.input.nuts3_pop,
         snakemake.input.other_gdp,
         snakemake.input.other_pop,
+        administrative_options,
     )
 
     country_shapes = regions.groupby("country")["geometry"].apply(
