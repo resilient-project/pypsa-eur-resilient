@@ -37,7 +37,7 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "third-run"
+  prefix: "third-run-dev"
   name:
   # - pcipmi
   # - pcipmi-national-expansion
