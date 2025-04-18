@@ -66,9 +66,19 @@ def set_minimum_investment(
 
         c_in_build_year = n.static(c).loc[ext_i, "build_year"] == planning_horizons
 
-        if ext_i[c_in_build_year].any():
-            n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_min"] = n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_opt"]
-            n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_extendable"] = True
+        # Fix this TODO
+        # if ext_i[c_in_build_year].any():
+        #     n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_min"] = n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_opt"]
+        #     # For case where optimal capacity is slightly higher than maximum capacity due to solver tolerances
+        #     n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"] = max(
+        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_opt"],
+        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"],
+        #     )
+        #     if n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_min"] < n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"]:
+        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_extendable"] = True
+        #     if n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_min"] == n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"]:
+        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_extendable"] = False
+        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_nom"] = n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_opt"]
         
         if ext_i[~c_in_build_year].any():
             n.static(c).loc[ext_i[~c_in_build_year], nominal_attr] = n.static(c).loc[ext_i[~c_in_build_year], nominal_attr+"_opt"]
@@ -175,7 +185,7 @@ def remove_onshore_pipelines(
     """
     Removes onshore carrier pipelines from the network.
     """
-    logger.info(f"Removing {carrier}s from the network.")
+    logger.info(f"Removing onshore {carrier}s from the network.")
     if carrier in n.links.carrier.values:
         # TODO: fix by doing clean correction (underwater_fraction) in prepare_sector_network
         b_offshore_link = n.links.underwater_fraction>0
@@ -186,13 +196,13 @@ def remove_onshore_pipelines(
 
         sum_active = n.links.loc[b_to_drop, "active"].sum()
         if sum_active == 0:
-            logger.info(f"No active {carrier}s in the network.")
+            logger.info(f"No active onshore {carrier}s in the network.")
             return
         n.remove("Link", n.links.loc[b_to_drop].index)
-        logger.info(f"Removed {sum_active} active {carrier}s from the network.")
+        logger.info(f"Removed {sum_active} active onshore {carrier}s from the network.")
         n.carriers.drop(carrier, inplace=True)
     else:
-        logger.warning(f"No {carrier}s found in the network.")
+        logger.warning(f"No onshore {carrier}s found in the network.")
         return
 
 
@@ -222,13 +232,12 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "solve_operations_sector_network",
             opts="",
-            clusters="70",
-            ll="v1.05",
+            clusters="adm",
             sector_opts="",
-            planning_horizons="2050",
-            column="ops___emission_price_h2_target___no_pipes_short_term_invest",
+            planning_horizons="2040",
+            column="ops__no_pipes",
             run="pcipmi-national-international-expansion",
-            configfiles=["config/second-run.config.yaml"]
+            configfiles=["config/third-run.dev.config.yaml"]
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606

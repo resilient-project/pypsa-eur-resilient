@@ -505,6 +505,9 @@ def _aggregate_units(gdf):
 
 def _aggregate_links(gdf):
 
+    gdf['bus0'], gdf['bus1'] = zip(*gdf[['bus0', 'bus1']].apply(lambda x: sorted(x), axis=1))
+
+
     # only keep the one with the maximum length after group
     gdf = gdf.groupby(["pci_code", "bus0", "bus1"]).agg(
         {
@@ -554,9 +557,10 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "build_pcipmi_projects",
-            ll="v1.05",
             clusters="adm",
             opts="",
+            configfiles=["config/third-run.dev.config.yaml"],
+            run="pcipmi"
         )
 
     configure_logging(snakemake)

@@ -13,10 +13,9 @@ plotting:
     plot_delta_system_costs:
       figsize: (10, 5)
       dpi: 300
-      run_to_subtract: "no-pipelines"
+      run_to_subtract: "no-pipelines-no-pcipmi"
       run_order: 
-      - no-pipelines
-      - pcipmi-delay-10years
+      - no-pipelines-no-pcipmi
       - pcipmi
       - pcipmi-national-expansion
       - pcipmi-national-international-expansion
