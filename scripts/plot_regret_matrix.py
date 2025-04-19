@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_regret_matrix",
-            configfiles=["config/second-run.config.yaml"],
+            configfiles=["config/third-run.dev.config.yaml"],
             )
 
     configure_logging(snakemake)
@@ -109,3 +109,4 @@ if __name__ == "__main__":
     # 3. Subtract only on these columns
     delta = df1[non_numeric_cols]
     delta.loc[:, numeric_cols] = (1e2*(df1[numeric_cols] - df2[numeric_cols]) / df1[numeric_cols]).round(2)
+
