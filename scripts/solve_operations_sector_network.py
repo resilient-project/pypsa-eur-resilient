@@ -229,6 +229,76 @@ def remove_co2_sequestration(
         n.carriers.drop("co2 sequestered", inplace=True)
 
 
+def delay_pipelines(
+    n: pypsa.Network,
+    carrier: str,
+    delay: int,
+    planning_horizons: str,
+) -> None:
+    """
+    Delay pipelines by a given number of years.
+    """
+    planning_horizons = int(planning_horizons)
+    logger.info(f"Delaying onshore {carrier}s by {delay} years.")
+
+    if carrier in n.links.carrier.values:
+        b_carrier_link = n.links.carrier == carrier
+
+        n.links.loc[b_carrier_link, "build_year"] += delay
+        b_delayed = n.links.loc[b_carrier_link, "build_year"] > planning_horizons
+
+        sum_delayed = sum(b_delayed)
+
+        # Drop delayed links
+        n.remove("Link", b_delayed[b_delayed].index)
+
+        logger.info(f"Removed {sum_delayed} delayed {carrier}s from the network.")
+
+        if carrier not in n.links.carrier.values:
+            logger.info(f"Removing {carrier} from the network.")
+            n.carriers.drop(carrier, inplace=True)
+    else:
+        logger.warning(f"No onshore {carrier}s to delay.")
+        return
+
+
+def delay_onshore_pipelines(
+    n: pypsa.Network,
+    carrier: str,
+    delay: int,
+    planning_horizons: str,
+) -> None:
+    """
+    Delay onshore pipelines by a given number of years.
+    """
+    planning_horizons = int(planning_horizons)
+    logger.info(f"Delaying onshore {carrier}s by {delay} years.")
+
+    if carrier in n.links.carrier.values:
+        b_offshore_link = n.links.underwater_fraction>0
+        b_carrier_link = n.links.carrier == carrier
+        b_offshore_pci = b_offshore_link & b_carrier_link
+        b_offshore_regular = n.links.index.str.contains("co2") & n.links.index.str.contains("offshore") & n.links.index.str.contains("pipeline")
+        b_to_delay = ~(b_offshore_pci | b_offshore_regular) & b_carrier_link
+
+        n.links.loc[b_to_delay, "build_year"] += delay
+        b_delayed = n.links.loc[b_to_delay, "build_year"] > planning_horizons
+
+        sum_delayed = sum(b_delayed)
+
+        # Drop delayed links
+        n.remove("Link", b_delayed[b_delayed].index)
+
+        logger.info(f"Removed {sum_delayed} delayed onshore {carrier}s from the network.")
+
+        if carrier not in n.links.carrier.values:
+            logger.info(f"Removing {carrier} from the network.")
+            n.carriers.drop(carrier, inplace=True)
+    else:
+        logger.warning(f"No onshore {carrier}s to delay.")
+        return
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
@@ -238,8 +308,8 @@ if __name__ == "__main__":
             opts="",
             clusters="adm",
             sector_opts="",
-            planning_horizons="2050",
-            column="ops__no_pipes",
+            planning_horizons="2040",
+            column="ops__delay_pipes",
             run="pcipmi-national-international-expansion",
             configfiles=["config/third-run.dev.config.yaml"]
         )
@@ -329,6 +399,16 @@ if __name__ == "__main__":
             config["solving"]["options"]["load_shedding"] = True
             marginal_cost = solve_operations_col["options"]["allow_load_shedding"]*1
             add_load_shedding(n, marginal_cost)
+
+        # Delay onshore CO2 pipelines:
+        if solve_operations_col["options"].get("delay_onshore_co2_pipelines", False):
+            delay = solve_operations_col["options"]["delay_onshore_co2_pipelines"]*1
+            delay_onshore_pipelines(n, carrier="CO2 pipeline", delay=delay, planning_horizons=planning_horizons)
+
+        # Delay H2 pipelines:
+        if solve_operations_col["options"].get("delay_h2_pipelines", False):
+            delay = solve_operations_col["options"]["delay_h2_pipelines"]*1
+            delay_onshore_pipelines(n, carrier="H2 pipeline", delay=delay, planning_horizons=planning_horizons)
         
 
     #################################
@@ -370,8 +450,3 @@ if __name__ == "__main__":
 
     n.meta = dict(snakemake.config, **dict(wildcards=dict(snakemake.wildcards)))
     n.export_to_netcdf(snakemake.output[0])
-
-
-# negative_load = (n.generators_t.p.filter(like="load").sum(axis=0) > 0.0)
-# negative_load = negative_load[negative_load].index
-# n.generators_t.p.T.loc[negative_load]
