@@ -66,23 +66,27 @@ def set_minimum_investment(
 
         c_in_build_year = n.static(c).loc[ext_i, "build_year"] == planning_horizons
 
-        # Fix this TODO
-        # if ext_i[c_in_build_year].any():
-        #     n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_min"] = n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_opt"]
-        #     # For case where optimal capacity is slightly higher than maximum capacity due to solver tolerances
-        #     n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"] = max(
-        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_opt"],
-        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"],
-        #     )
-        #     if n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_min"] < n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"]:
-        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_extendable"] = True
-        #     if n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_min"] == n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_max"]:
-        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_extendable"] = False
-        #         n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_nom"] = n.static(c).loc[ext_i[c_in_build_year], nominal_attr+"_opt"]
-        
-        if ext_i[~c_in_build_year].any():
-            n.static(c).loc[ext_i[~c_in_build_year], nominal_attr] = n.static(c).loc[ext_i[~c_in_build_year], nominal_attr+"_opt"]
-            n.static(c).loc[ext_i[~c_in_build_year], nominal_attr+"_extendable"] = False
+        mask = ext_i[c_in_build_year]
+
+        if mask.any():
+            # For case where optimal capacity is slightly higher than maximum capacity due to solver tolerances
+            n.static(c).loc[mask, nominal_attr+"_opt"] = np.minimum(
+                n.static(c).loc[mask, nominal_attr+"_opt"],
+                n.static(c).loc[mask, nominal_attr+"_max"],
+            )
+
+            b_reached_max = n.static(c).loc[mask, nominal_attr+"_opt"] == n.static(c).loc[mask, nominal_attr+"_max"]
+
+
+            # If maximum potential is reached:
+            n.static(c).loc[b_reached_max[b_reached_max].index, nominal_attr] = n.static(c).loc[b_reached_max[b_reached_max].index, nominal_attr+"_opt"]
+
+            n.static(c).loc[b_reached_max[b_reached_max].index, nominal_attr+"_extendable"] = False
+
+            # If maximum potential is not reached:
+            n.static(c).loc[b_reached_max[~b_reached_max].index, nominal_attr+"_min"] = n.static(c).loc[b_reached_max[~b_reached_max].index, nominal_attr+"_opt"]
+
+            n.static(c).loc[b_reached_max[~b_reached_max].index, nominal_attr+"_extendable"] = True
 
 
 def fix_all_optimal_capacities(
@@ -234,7 +238,7 @@ if __name__ == "__main__":
             opts="",
             clusters="adm",
             sector_opts="",
-            planning_horizons="2040",
+            planning_horizons="2050",
             column="ops__no_pipes",
             run="pcipmi-national-international-expansion",
             configfiles=["config/third-run.dev.config.yaml"]
