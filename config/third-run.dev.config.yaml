@@ -61,7 +61,7 @@ foresight: myopic
 solve_operations:
   resample_temporal_resolution: false
   columns:
-    - ops__free_inv__ghg_target__free_inv
+    - ops__free_inv__ghg_target
     - ops__free_inv__no_pipes
     - ops__free_inv__no_pipes_emission_price
     - ops__free_inv__delay_pipes
