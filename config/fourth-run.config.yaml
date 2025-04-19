@@ -69,7 +69,7 @@ solve_operations:
     ops__ghg_target:
       options:
         allow_load_shedding: false
-        fix_minimum_investments: false # all assets except for pipelines
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -90,7 +90,7 @@ solve_operations:
     ops__no_pipes:
       options:
         allow_load_shedding: 10000 # EUR/MWh
-        fix_minimum_investments: false # all assets except for pipelines
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -107,11 +107,11 @@ solve_operations:
           h2_production_min_mt:
             enable: true
           electrolyser_capacity_min_gw:
-            enable: true
+            enable: false
     ops__delay_pipes:
       options:
         allow_load_shedding: 10000 # EUR/MWh
-        fix_minimum_investments: false # all assets except for pipelines
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -128,11 +128,11 @@ solve_operations:
           h2_production_min_mt:
             enable: true
           electrolyser_capacity_min_gw:
-            enable: true
+            enable: false
     ops__no_pipes_emission_price:
       options:
         allow_load_shedding: 10000 # EUR/MWh
-        fix_minimum_investments: false # all assets except for pipelines
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -145,9 +145,9 @@ solve_operations:
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
-            enable: false
+            enable: true
           h2_production_min_mt:
-            enable: false
+            enable: true
           electrolyser_capacity_min_gw:
             enable: false
 

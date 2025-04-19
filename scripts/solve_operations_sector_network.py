@@ -311,7 +311,7 @@ if __name__ == "__main__":
             planning_horizons="2040",
             column="ops__delay_pipes",
             run="pcipmi-national-international-expansion",
-            configfiles=["config/third-run.dev.config.yaml"]
+            configfiles=["config/fourth-run.config.yaml"]
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
@@ -389,7 +389,7 @@ if __name__ == "__main__":
 
         if solve_operations_col["options"].get("fix_minimum_investments", False):
             set_minimum_investment(n, planning_horizons)
-        if solve_operations_col["options"].get("fix_optimal_capacities", False):
+        if solve_operations_col["options"].get("fix_optimal_pipeline_capacities", False):
             fix_optimal_pipeline_capacities(n)
         if solve_operations_col["options"].get("fix_all_capacities", False):
             fix_all_optimal_capacities(n)
