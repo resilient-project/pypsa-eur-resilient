@@ -105,11 +105,11 @@ solve_operations:
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
-            enable: false
+            enable: true
           h2_production_min_mt:
-            enable: false
+            enable: true
           electrolyser_capacity_min_gw:
-            enable: false
+            enable: true
     ops__free_inv__delay_pipes:
       options:
         allow_load_shedding: 10000 # EUR/MWh
@@ -130,7 +130,7 @@ solve_operations:
           h2_production_min_mt:
             enable: true # changed
           electrolyser_capacity_min_gw:
-            enable: false
+            enable: true
     ops__free_inv__no_pipes_emission_price:
       options:
         allow_load_shedding: 10000 # EUR/MWh
@@ -149,7 +149,7 @@ solve_operations:
           co2_sequestration_min_mt:
             enable: false
           h2_production_min_mt:
-            enable: true
+            enable: false
           electrolyser_capacity_min_gw:
             enable: false
     ops__no_h2_pipes:
