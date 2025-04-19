@@ -387,7 +387,7 @@ if __name__ == "__main__":
 
         # Values from previous optimisation run  
 
-        if solve_operations_col["options"].get("allow_investments", False):
+        if solve_operations_col["options"].get("fix_minimum_investments", False):
             set_minimum_investment(n, planning_horizons)
         if solve_operations_col["options"].get("fix_optimal_capacities", False):
             fix_optimal_pipeline_capacities(n)
