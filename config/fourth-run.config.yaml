@@ -105,7 +105,7 @@ solve_operations:
           co2_sequestration_min_mt:
             enable: false
           h2_production_min_mt:
-            enable: true
+            enable: false
           electrolyser_capacity_min_gw:
             enable: false
     ops__delay_pipes:

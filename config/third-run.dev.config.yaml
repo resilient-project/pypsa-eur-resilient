@@ -126,9 +126,9 @@ solve_operations:
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
-            enable: false # changed
+            enable: true # changed
           h2_production_min_mt:
-            enable: false # changed
+            enable: true # changed
           electrolyser_capacity_min_gw:
             enable: false
     ops__no_pipes_emission_price:
