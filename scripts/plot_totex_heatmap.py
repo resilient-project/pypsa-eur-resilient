@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_totex_heatmap",
-            configfiles=["config/second-run.config.yaml"],
+            configfiles=["config/dev.config.yaml"],
             )
 
     configure_logging(snakemake)
