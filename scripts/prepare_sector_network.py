@@ -6143,6 +6143,18 @@ def add_pcipmi_links(
         delay = carrier_networks["CO2"]["options"]["delay"]
 
     projects = pd.read_csv(links_path, index_col=0, dtype={"bus0": str, "bus1": str})
+    
+    # TODO IMPORTANT: make this more robust for poland
+    if carrier == "H2 pipeline":
+        b_link_exists = False
+        if ("PL6 H2" in projects.bus0.values) and ("PL9 H2" in projects.bus1.values):
+            subset = projects.loc[projects.bus0 == "PL6 H2"]
+            subset = subset.loc[subset.bus1 == "PL9 H2"]
+            # if not empty, drop the link
+            if not subset.empty:
+                link_to_drop = subset.index
+                projects = projects.drop(link_to_drop)
+    
     logger.info(f"Activating PCI/PMI {carrier}s commissioned by {investment_year}.")
     
     # Add delay
@@ -6406,9 +6418,9 @@ if __name__ == "__main__":
             opts="",
             clusters="adm",
             sector_opts="",
-            planning_horizons="2030",
+            planning_horizons="2050",
             configfiles=["config/dev.config.yaml"],
-            run="greenfield-pipelines",
+            run="pcipmi-national-international-expansion",
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
