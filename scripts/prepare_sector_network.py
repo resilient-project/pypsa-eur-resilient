@@ -849,6 +849,7 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
             p_nom_extendable=True,
             capital_cost=costs.at["CO2 submarine pipeline", "capital_cost"] * sequestration_links["length"],
             underwater_fraction=1,
+            lifetime=costs.at["CO2 pipeline", "lifetime"],
         )
 
         sequestration_potential.index = sequestration_potential.index.str.replace("stored", "sequestered")
