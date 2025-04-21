@@ -6175,12 +6175,7 @@ def add_pcipmi_links(
 
     # Deactivate links newer than investment_year
     b_future_link = n.links["build_year"] > investment_year
-    # n.links.loc[b_future_link, "active"] = False
-    # Drop future link
-    n.remove(
-        "Link",
-        n.links.index[b_future_link],
-    )
+    n.links.loc[b_future_link, "active"] = False
 
 
 def add_pcipmi_h2_buses(
@@ -6345,12 +6340,7 @@ def add_pcipmi_stores(
 
     # Deactivate stores newer than investment_year
     b_future_store = n.stores["build_year"] > investment_year
-    # n.stores.loc[b_future_store, "active"] = False
-    # Drop future store
-    n.remove(
-        "Store",
-        n.stores.index[b_future_store],
-    )
+    n.stores.loc[b_future_store, "active"] = False
 
 
 def update_link_extendability(
@@ -6410,8 +6400,8 @@ if __name__ == "__main__":
             opts="",
             clusters="adm",
             sector_opts="",
-            planning_horizons="2030",
-            configfiles=["config/dev.config.yaml"],
+            planning_horizons="2050",
+            configfiles=["config/third-run.dev.config.yaml"],
             run="pcipmi"
         )
 
