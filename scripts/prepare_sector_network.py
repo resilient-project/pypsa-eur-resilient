@@ -6147,9 +6147,9 @@ def add_pcipmi_links(
     # TODO IMPORTANT: make this more robust for poland
     if carrier == "H2 pipeline":
         b_link_exists = False
-        if ("PL6 H2" in projects.bus0.values) and ("PL9 H2" in projects.bus1.values):
+        if ("PL6 H2" in projects.bus0.values) and ("PL8 H2" in projects.bus1.values):
             subset = projects.loc[projects.bus0 == "PL6 H2"]
-            subset = subset.loc[subset.bus1 == "PL9 H2"]
+            subset = subset.loc[subset.bus1 == "PL8 H2"]
             # if not empty, drop the link
             if not subset.empty:
                 link_to_drop = subset.index
