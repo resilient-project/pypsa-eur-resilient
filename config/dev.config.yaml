@@ -304,7 +304,7 @@ clustering:
     SE: 0.05
   temporal:
     resolution_elec: false
-    resolution_sector: 169h
+    resolution_sector: 337h
 
 solving:
   mem_mb: 7000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
