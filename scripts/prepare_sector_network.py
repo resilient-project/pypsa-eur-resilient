@@ -693,7 +693,7 @@ def add_eu_bus(n, x=-5.5, y=46):
     n.add("Carrier", "none")
 
 
-def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potential_file=None):
+def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potential_file=None, planning_horizons=None):
     """
     Add CO2 tracking components to the network including atmospheric CO2,
     CO2 storage, and sequestration infrastructure.
@@ -864,6 +864,7 @@ def add_co2_tracking(n, costs, options, carrier_networks, sequestration_potentia
             bus=sequestration_potential.index,
             lifetime=options["co2_sequestration_lifetime"],
             carrier="co2 sequestered",
+            build_year=planning_horizons[0],
         )
 
     else:
@@ -6371,8 +6372,10 @@ def update_link_extendability(
             n.links.loc[b_is_co2_pipeline & ~b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True
         if "national" in extendable["pcipmi"]:
             n.links.loc[b_is_co2_pipeline & b_is_pcipmi & b_is_national, "p_nom_extendable"] = True
+            n.links.loc[b_is_co2_pipeline & b_is_pcipmi & b_is_national, "build_year"] = 0 
         if "international" in extendable["pcipmi"]:
             n.links.loc[b_is_co2_pipeline & b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True
+            n.links.loc[b_is_co2_pipeline & b_is_pcipmi & ~b_is_national, "build_year"] = 0 
     
     if carrier_networks["H2"]["enable"] and carrier_networks["H2"]["extendable"]:
         extendable = carrier_networks["H2"]["extendable"]
@@ -6387,8 +6390,11 @@ def update_link_extendability(
             n.links.loc[b_is_h2_pipeline & ~b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True
         if "national" in extendable["pcipmi"]:
             n.links.loc[b_is_h2_pipeline & b_is_pcipmi & b_is_national, "p_nom_extendable"] = True
+            n.links.loc[b_is_h2_pipeline & b_is_pcipmi & b_is_national, "build_year"] = 0
         if "international" in extendable["pcipmi"]:
-            n.links.loc[b_is_h2_pipeline & b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True    
+            n.links.loc[b_is_h2_pipeline & b_is_pcipmi & ~b_is_national, "p_nom_extendable"] = True  
+            n.links.loc[b_is_h2_pipeline & b_is_pcipmi & ~b_is_national, "build_year"] = 0  
+            # TODO master: make PyPSA-Eur more robust wrt. to build_year zero for myopic.
 
 
 if __name__ == "__main__":
@@ -6400,9 +6406,9 @@ if __name__ == "__main__":
             opts="",
             clusters="adm",
             sector_opts="",
-            planning_horizons="2050",
-            configfiles=["config/third-run.dev.config.yaml"],
-            run="pcipmi"
+            planning_horizons="2030",
+            configfiles=["config/dev.config.yaml"],
+            run="greenfield-pipelines",
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
@@ -6415,7 +6421,6 @@ if __name__ == "__main__":
     pcipmi_projects = snakemake.params.pcipmi_projects
 
     investment_year = int(snakemake.wildcards.planning_horizons)
-
     n = pypsa.Network(snakemake.input.network)
 
     pop_layout = pd.read_csv(snakemake.input.clustered_pop_layout, index_col=0)
@@ -6484,6 +6489,7 @@ if __name__ == "__main__":
         options,
         carrier_networks,
         sequestration_potential_file=snakemake.input.sequestration_potential,
+        planning_horizons=snakemake.params.planning_horizons,
     )
 
     add_generation(

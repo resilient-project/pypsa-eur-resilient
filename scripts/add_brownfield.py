@@ -300,9 +300,10 @@ if __name__ == "__main__":
             "add_brownfield",
             clusters="adm",
             opts="",
-            ll="v1.05",
             sector_opts="",
             planning_horizons=2040,
+            configfiles=["config/fourth-run.config.yaml"],
+            run="greenfield-pipelines"
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
