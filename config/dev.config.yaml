@@ -37,7 +37,7 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "third-run-dev"
+  prefix: "dev"
   name:
   - no-pipelines-no-pcipmi
   - pcipmi
