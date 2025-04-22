@@ -5,12 +5,41 @@
 
 rule create_paper_plots:
     input:
-        totex_heatmap="results/" + PREFIX + "/plots/totex_heatmap.pdf",
+        pcipmi_map=expand(
+            "results/" + PREFIX + "/plots/map_adm_pcipmi.pdf",
+        ),
+        # totex_heatmap="results/" + PREFIX + "/plots/totex_heatmap.pdf",
         delta_system_costs=expand(
             "results/" + PREFIX + "/plots/delta_system_costs_{planning_horizons}.pdf",
             **config["scenario"],
         )
 
+
+
+rule plot_pcipmi_map:
+    params:
+        plotting_all=config_provider("plotting", "all"),
+        plotting_fig=config_provider("plotting", "figures", "plot_pcipmi_map"),
+    input:
+        regions_onshore = resources("regions_onshore_base_s_{clusters}.geojson"),
+        regions_offshore = resources("regions_offshore_base_s_{clusters}.geojson"),
+        sequestration_potential=resources(
+            "co2_sequestration_potential_base_s_{clusters}.geojson"
+        ),
+        links_co2_pipeline = "data/pcipmi_projects/links_co2_pipeline.geojson",
+        links_h2_pipeline = "data/pcipmi_projects/links_h2_pipeline.geojson",
+        stores_co2 = "data/pcipmi_projects/stores_co2.geojson",
+        stores_h2 = "data/pcipmi_projects/stores_h2.geojson",
+    output:
+        map="results/" + PREFIX + "/plots/map_{clusters}_{run}.pdf",
+    log:
+        "results/" + PREFIX + "/logs/plot_pcipmi_map_{clusters}_{run}.log",
+    benchmark:
+        "results/" + PREFIX + "/benchmark/plot_pcipmi_map_{clusters}_{run}",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_pcipmi_map.py"
 
 rule make_summary_column:
     input:

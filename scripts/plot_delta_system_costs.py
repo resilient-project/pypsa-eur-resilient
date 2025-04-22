@@ -37,8 +37,8 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_delta_system_costs",
-            planning_horizons=2050,
-            configfiles=["config/second-run.config.yaml"],
+            planning_horizons=2030,
+            configfiles=["config/run5.config.yaml"],
             )
 
     configure_logging(snakemake)

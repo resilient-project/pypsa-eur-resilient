@@ -8,8 +8,11 @@ plotting:
     font:
       family: sans-serif
       sans-serif: Roboto
-      size: 8
+      size: 10
   figures:
+    plot_pcipmi_map:
+      figsize: (9, 6)
+      dpi: 300
     plot_delta_system_costs:
       figsize: (10, 5)
       dpi: 300
