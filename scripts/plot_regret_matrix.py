@@ -173,3 +173,9 @@ if __name__ == "__main__":
                 ax.set_xlabel("Planning horizon", fontsize=fontsize)
 
     plt.tight_layout()
+
+    fig.savefig(
+        snakemake.output[0],
+        dpi=dpi,
+        bbox_inches="tight",
+    )
