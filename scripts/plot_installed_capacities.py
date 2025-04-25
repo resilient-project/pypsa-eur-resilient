@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_installed_capacities",
-            run="greenfield-pipelines",
+            run="pcipmi-national-international-expansion",
             configfiles=["config/dev.config.yaml"],
             )
 
@@ -101,8 +101,8 @@ if __name__ == "__main__":
     logger.info("Plotting delta system costs.")
     
     # Stacked bar plot
-    norm = 1e9
-    unit = "bn. € p.a."
+    norm = 1e6
+    unit = "TW p.a."
     colors = config["group_colors"]
 
     # fig, ax

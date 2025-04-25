@@ -8,7 +8,7 @@ rule create_paper_plots:
         pcipmi_map=expand(
             "results/" + PREFIX + "/plots/map_adm_pcipmi.pdf",
         ),
-        # totex_heatmap="results/" + PREFIX + "/plots/totex_heatmap.pdf",
+        totex_heatmap="results/" + PREFIX + "/plots/totex_heatmap.pdf",
         delta_system_costs=expand(
             "results/" + PREFIX + "/plots/delta_system_costs_{planning_horizons}.pdf",
             **config["scenario"],
@@ -169,25 +169,25 @@ rule plot_regret_matrix:
         "../scripts/plot_regret_heatmap.py"
 
 
-# rule plot_installed_capacities:
-#     params:
-#         plotting_all=config_provider("plotting", "all"),
-#         plotting_fig=config_provider("plotting", "figures", "plot_delta_system_costs"),
-#     input:
-#         expand(
-#             RESULTS 
-#             + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
-#             **config["scenario"],
-#             run=config["run"]["name"],
-#             allow_missing=True
-#         ),
-#     output:
-#         plot="results/" + PREFIX + "/plots/installed_capacities_{run}.pdf",
-#     log:
-#         "results/" + PREFIX + "/logs/plot_delta_system_costs_{run}.log",
-#     benchmark:
-#         "results/" + PREFIX + "/benchmark/plot_delta_system_costs_{run}",
-#     conda:
-#         "../envs/environment.yaml"
-#     script:
-#         "../scripts/plot_installed_capacities.py"
+rule plot_installed_capacities:
+    params:
+        plotting_all=config_provider("plotting", "all"),
+        plotting_fig=config_provider("plotting", "figures", "plot_delta_system_costs"),
+    input:
+        expand(
+            RESULTS 
+            + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+            **config["scenario"],
+            run=config["run"]["name"],
+            allow_missing=True
+        ),
+    output:
+        plot="results/" + PREFIX + "/plots/installed_capacities_{run}.pdf",
+    log:
+        "results/" + PREFIX + "/logs/plot_delta_system_costs_{run}.log",
+    benchmark:
+        "results/" + PREFIX + "/benchmark/plot_delta_system_costs_{run}",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_installed_capacities.py"

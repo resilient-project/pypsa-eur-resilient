@@ -64,7 +64,7 @@ solve_operations:
     - ops__ghg_target
     - ops__no_pipes
     - ops__delay_pipes
-    - ops__no_pipes_emission_price
+    # - ops__no_pipes_emission_price
   definitions:
     ops__ghg_target:
       options:

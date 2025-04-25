@@ -9,6 +9,25 @@ plotting:
       family: sans-serif
       sans-serif: Roboto
       size: 10
+    nice_names:
+      no-pipelines-no-pcipmi: "DI"
+      pcipmi: "PP"
+      pcipmi-national-expansion: "PPE"
+      pcipmi-national-international-expansion: "PPE+"
+      greenfield-pipelines: "OP"
+      ops__ghg_target: "Reduced targets"
+      ops__delay_pipes: "Delayed pipes"
+      ops__no_pipes: "No pipelines"
+    run_order: 
+      - no-pipelines-no-pcipmi
+      - pcipmi
+      - pcipmi-national-expansion
+      - pcipmi-national-international-expansion
+      - greenfield-pipelines
+    short_term_run_order: 
+      - ops__ghg_target
+      - ops__delay_pipes
+      - ops__no_pipes
   figures:
     plot_pcipmi_map:
       figsize: (9, 6)
@@ -27,7 +46,7 @@ plotting:
       figsize: (10, 3)
       dpi: 300
     plot_regret_matrix:
-      figsize: (10, 7)
+      figsize: (10, 4)
       dpi: 300
     plot_installed_capacities:
       figsize: (10, 5)
