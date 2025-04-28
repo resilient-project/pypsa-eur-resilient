@@ -34,10 +34,25 @@ if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("make_global_summary")
+        snakemake = mock_snakemake(
+            "make_global_summary_column",
+            clusters="adm",
+            opts="",
+            sector_opts="",
+            planning_horizons="2040",
+            configfiles="config/run5.config.yaml",
+            run="pcipmi-national-international-expansion",
+            column = "ops__no_pipes",
+            )
 
     configure_logging(snakemake)
     set_scenario_config(snakemake)
+
+    # Inject column name if rule name is "make_global_summary_column"
+    column_str = ""
+    if snakemake.rule == "make_global_summary_column":
+        column_str = snakemake.wildcards.column
+        column_str = column_str+"/"
 
     for kind in snakemake.output.keys():
         logger.info(f"Creating global summary for {kind}")
@@ -45,7 +60,7 @@ if __name__ == "__main__":
         summaries_dict = {
             (cluster, opt + sector_opt, planning_horizon): "results/"
             + snakemake.params.RDIR
-            + f"csvs/individual/{kind}_s_{cluster}_{opt}_{sector_opt}_{planning_horizon}.csv"
+            + f"csvs/{column_str}individual/{kind}_s_{cluster}_{opt}_{sector_opt}_{planning_horizon}.csv"
             for cluster in snakemake.params.scenario["clusters"]
             for opt in snakemake.params.scenario["opts"]
             for sector_opt in snakemake.params.scenario["sector_opts"]
