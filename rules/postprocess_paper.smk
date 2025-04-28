@@ -15,7 +15,6 @@ rule create_paper_plots:
         )
 
 
-
 rule plot_pcipmi_map:
     params:
         plotting_all=config_provider("plotting", "all"),
@@ -89,6 +88,224 @@ rule make_summary_column:
     script:
         "../scripts/make_summary.py"
 
+
+rule make_global_summary_column:
+    params:
+        scenario=config_provider("scenario"),
+        RDIR=RDIR,
+    input:
+        nodal_costs=expand(
+            RESULTS
+            + "csvs/{column}/individual/nodal_costs_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        nodal_capacities=expand(
+            RESULTS
+            + "csvs/{column}/individual/nodal_capacities_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        nodal_capacity_factors=expand(
+            RESULTS
+            + "csvs/{column}/individual/nodal_capacity_factors_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        capacity_factors=expand(
+            RESULTS
+            + "csvs/{column}/individual/capacity_factors_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        costs=expand(
+            RESULTS
+            + "csvs/{column}/individual/costs_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        capacities=expand(
+            RESULTS
+            + "csvs/{column}/individual/capacities_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        curtailment=expand(
+            RESULTS
+            + "csvs/{column}/individual/curtailment_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        energy=expand(
+            RESULTS
+            + "csvs/{column}/individual/energy_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        energy_balance=expand(
+            RESULTS
+            + "csvs/{column}/individual/energy_balance_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        nodal_energy_balance=expand(
+            RESULTS
+            + "csvs/{column}/individual/nodal_energy_balance_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        prices=expand(
+            RESULTS
+            + "csvs/{column}/individual/prices_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        weighted_prices=expand(
+            RESULTS
+            + "csvs/{column}/individual/weighted_prices_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        market_values=expand(
+            RESULTS
+            + "csvs/{column}/individual/market_values_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+        metrics=expand(
+            RESULTS
+            + "csvs/{column}/individual/metrics_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
+    output:
+        costs=RESULTS + "csvs/{column}/costs.csv",
+        capacities=RESULTS + "csvs/{column}/capacities.csv",
+        energy=RESULTS + "csvs/{column}/energy.csv",
+        energy_balance=RESULTS + "csvs/{column}/energy_balance.csv",
+        capacity_factors=RESULTS + "csvs/{column}/capacity_factors.csv",
+        metrics=RESULTS + "csvs/{column}/metrics.csv",
+        curtailment=RESULTS + "csvs/{column}/curtailment.csv",
+        prices=RESULTS + "csvs/{column}/prices.csv",
+        weighted_prices=RESULTS + "csvs/{column}/weighted_prices.csv",
+        market_values=RESULTS + "csvs/{column}/market_values.csv",
+        nodal_costs=RESULTS + "csvs/{column}/nodal_costs.csv",
+        nodal_capacities=RESULTS + "csvs/{column}/nodal_capacities.csv",
+        nodal_energy_balance=RESULTS + "csvs/{column}/nodal_energy_balance.csv",
+        nodal_capacity_factors=RESULTS + "csvs/{column}/nodal_capacity_factors.csv",
+    threads: 1
+    resources:
+        mem_mb=8000,
+    log:
+        RESULTS + "logs/make_global_summary_column_{column}.log",
+    benchmark:
+        RESULTS + "benchmarks/make_global_summary_{column}"
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/make_global_summary.py"
+
+
+rule make_global_summary_columns:
+    input:
+        costs=expand(
+            RESULTS + "csvs/{column}/costs.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        capacities=expand(
+            RESULTS + "csvs/{column}/capacities.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        energy=expand(
+            RESULTS + "csvs/{column}/energy.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        energy_balance=expand(
+            RESULTS + "csvs/{column}/energy_balance.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        capacity_factors=expand(
+            RESULTS + "csvs/{column}/capacity_factors.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        metrics=expand(
+            RESULTS + "csvs/{column}/metrics.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        curtailment=expand(
+            RESULTS + "csvs/{column}/curtailment.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        prices=expand(
+            RESULTS + "csvs/{column}/prices.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        weighted_prices=expand(
+            RESULTS + "csvs/{column}/weighted_prices.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        market_values=expand(
+            RESULTS + "csvs/{column}/market_values.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        nodal_costs=expand(
+            RESULTS + "csvs/{column}/nodal_costs.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        nodal_capacities=expand(
+            RESULTS + "csvs/{column}/nodal_capacities.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        nodal_energy_balance=expand(
+            RESULTS + "csvs/{column}/nodal_energy_balance.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        nodal_capacity_factors=expand(
+            RESULTS + "csvs/{column}/nodal_capacity_factors.csv",
+            **config["scenario"],
+            allow_missing=True,
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
 
 rule plot_totex_heatmap:
     params:
