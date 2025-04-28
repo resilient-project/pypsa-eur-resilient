@@ -307,6 +307,60 @@ rule make_global_summary_columns:
             column=config["solve_operations"]["columns"]
         ),
 
+
+rule plot_summary_column:
+    params:
+        countries=config_provider("countries"),
+        planning_horizons=config_provider("scenario", "planning_horizons"),
+        emissions_scope=config_provider("energy", "emissions"),
+        plotting=config_provider("plotting"),
+        foresight=config_provider("foresight"),
+        co2_budget=config_provider("co2_budget"),
+        sector=config_provider("sector"),
+        RDIR=RDIR,
+    input:
+        costs=RESULTS + "csvs/{column}/costs.csv",
+        energy=RESULTS + "csvs/{column}/energy.csv",
+        balances=RESULTS + "csvs/{column}/energy_balance.csv",
+        eurostat="data/eurostat/Balances-April2023",
+        co2="data/bundle/eea/UNFCCC_v23.csv",
+    output:
+        costs=RESULTS + "graphs/{column}/costs.svg",
+        energy=RESULTS + "graphs/{column}/energy.svg",
+        balances=RESULTS + "graphs/{column}/balances-energy.svg",
+    threads: 2
+    resources:
+        mem_mb=10000,
+    log:
+        RESULTS + "logs/plot_summary_{column}.log",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_summary.py"
+
+
+rule plot_summary_columns:
+    input:
+        costs=expand(
+            RESULTS + "graphs/{column}/costs.svg",
+            **config["scenario"],
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        energy=expand(
+            RESULTS + "graphs/{column}/energy.svg",
+            **config["scenario"],
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+        balances=expand(
+            RESULTS + "graphs/{column}/balances-energy.svg",
+            **config["scenario"],
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+
+
 rule plot_totex_heatmap:
     params:
         plotting_all=config_provider("plotting", "all"),
