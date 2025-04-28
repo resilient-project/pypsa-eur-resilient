@@ -361,6 +361,45 @@ rule plot_summary_columns:
         ),
 
 
+rule plot_balance_map_column:
+    params:
+        plotting=config_provider("plotting"),
+    input:
+        network=RESULTS
+        + "networks/{column}/base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+        regions=resources("regions_onshore_base_s_{clusters}.geojson"),
+    output:
+        RESULTS
+        + "maps/{column}/base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}-balance_map_{carrier}.jpg",
+    threads: 1
+    resources:
+        mem_mb=8000,
+    log:
+        RESULTS
+        + "logs/plot_balance_map/{column}base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}_{carrier}.log",
+    benchmark:
+        (
+            RESULTS
+            + "benchmarks/plot_balance_map/{column}/base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}_{carrier}"
+        )
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_balance_map.py"
+
+
+rule plot_balance_map_columns:
+    input:
+        lambda w: expand(
+                RESULTS
+                + "maps/{column}/base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}-balance_map_{carrier}.jpg",
+                **config["scenario"],
+                run=config["run"]["name"],
+                column=config["solve_operations"]["columns"],
+                carrier=config_provider("plotting", "balance_map", "bus_carriers")(w),
+            ),
+
+
 rule plot_totex_heatmap:
     params:
         plotting_all=config_provider("plotting", "all"),
