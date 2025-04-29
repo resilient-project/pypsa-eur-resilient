@@ -20,16 +20,38 @@ from _tools import update_dict
 logger = logging.getLogger(__name__)
 
 
-def get_costs(path):
+def import_costs(
+    df: pd.DataFrame,
+) -> pd.DataFrame:
     """
-    Extracts the total system costs from the given PyPSA network.
+    Import costs from long-term and short-term runs.
     """
-    n = pypsa.Network(path)
+
+    costs_list = []
+    for i, path in enumerate(df["path"]):
+        cost = pd.read_csv(
+            path, index_col=list(range(3)), header=list(range(3))
+        )
+        # Rename three columns to
+        cost.columns = cost.columns.get_level_values('planning_horizon')
+        planning_horizons = cost.columns
+
+        cost.reset_index(inplace=True)
+        cost = cost.melt(
+            id_vars=["cost", "component", "carrier"],
+            value_vars=planning_horizons,
+            var_name="planning_horizon",
+            value_name="value",
+        )
+        cost["name"] = df["name"].iloc[i]
+        cost["lt_run"] = df["lt_run"].iloc[i]
+
+        # Append to cost
+        costs_list.append(cost)
     
-    return pd.Series({
-        "capex": n.statistics.capex().sum(),
-        "opex": n.statistics.opex().sum(),
-    })
+    costs = pd.concat(costs_list)
+
+    return costs
 
 
 if __name__ == "__main__":
@@ -56,123 +78,88 @@ if __name__ == "__main__":
     opts = config["scenario"]["opts"][0]
     sector_opts = config["scenario"]["sector_opts"][0]
 
+    st_order = [col for col in plotting["short_term_run_order"]]
+
+
     # Create df of all runs (rows)
-    df_runs_rows = pd.DataFrame()
-    df_runs_rows["path"] = snakemake.input.rows
-    df_runs_rows["prefix"] = df_runs_rows["path"].apply(lambda x: x.split("/")[-4])
-    df_runs_rows["name"] = df_runs_rows["path"].apply(lambda x: x.split("/")[-3])
-    df_runs_rows["planning_horizon"] = df_runs_rows["path"].apply(
-        lambda x: x.split("/")[-1]
-        .replace(".nc", "")
-        .split("_")[-1]
-    ).astype(int)
-    
-    df_runs_rows["clusters"] = df_runs_rows["path"].apply(
-        lambda x: x.split("/")[-1]
-        .replace(".nc", "")
-        .split("_")[-4]
+    longterm = pd.DataFrame()
+    longterm["path"] = snakemake.input.longterm
+    longterm["prefix"] = longterm["path"].apply(lambda x: x.split("/")[-4])
+    longterm["name"] = longterm["path"].apply(lambda x: x.split("/")[-3])
+    longterm["lt_run"] = longterm["name"]
+
+    shortterm = pd.DataFrame()
+    shortterm["path"] = snakemake.input.shortterm
+    shortterm["name"] = shortterm["path"].apply(lambda x: x.split("/")[-2])
+    shortterm["lt_run"] = shortterm["path"].apply(lambda x: x.split("/")[-4])
+
+    index_cols = ["lt_run", "planning_horizon", "cost", "component", "carrier"]
+
+    lt_costs = import_costs(longterm).fillna(0)
+    lt_costs.set_index(index_cols, inplace=True)
+    st_costs = import_costs(shortterm).fillna(0)
+    st_costs = st_costs.pivot(
+        index = index_cols,
+        columns = "name",
+        values = "value",
+    ).fillna(0)
+
+    # Calculate delta
+    st_cols = st_costs.columns
+    delta_costs = st_costs.copy()
+    delta_costs = st_costs.subtract(lt_costs["value"], axis=0).fillna(0)
+
+    # Plot
+    delta_costs_totex = delta_costs.copy().stack().groupby(
+        ["lt_run", "planning_horizon", "name"]
+    ).agg(
+        lambda x: x.sum()
+    ).div(1e9).round(1)
+
+    vmin = min(delta_costs_totex)
+    vmax = max(delta_costs_totex)
+
+    # Create heatmap with 1 row, three subfigures
+    fig, axes = plt.subplots(
+        nrows=1,
+        ncols=3,
+        figsize=figsize,
+        dpi=dpi,
     )
 
-    # Create data table summaries
-    df_runs_rows.loc[:, ["capex", "opex"]] = df_runs_rows["path"].apply(get_costs)
-    df_runs_rows["totex"] = df_runs_rows["capex"] + df_runs_rows["opex"]
+    for idx, st in enumerate(st_order):
+        data = delta_costs_totex.loc[
+            slice(None), slice(None), st
+        ].unstack().loc[plotting["run_order"]].copy()
 
-    df_runs_rows.set_index(["name", "planning_horizon"], inplace=True)
+        nice_names = plotting["nice_names"]
+        data.index = data.index.map(lambda x: nice_names[x] if x in nice_names else x)
 
-    # List of columns
-    columns = config["solve_operations"]["columns"]
-
-    # df of secondary runs (columns)
-    secondary_runs = dict()
-
-    for col in columns:
-        secondary_runs[col] = df_runs_rows.copy().reset_index()
-        secondary_runs[col]["path"] = secondary_runs[col].apply(
-            lambda x: "/".join(x["path"].split("/")[:-1]) + "/" + col + "/" + "base_s_ops" + "_"
-            + x["clusters"] + "_" + opts + "_" + sector_opts + "_" + str(x["planning_horizon"]) + ".nc",
-            axis=1
+        data_fmt = data.apply(lambda col: col.map(
+            lambda x: f"+{x:.1f}" if x > 0 else (f"{x:.1f}" if x < 0 else "0")
+        ))
+        
+        sns.heatmap(
+            data,
+            annot=data_fmt,
+            fmt="",  # disable internal formatting, we're using strings
+            cmap="RdBu_r",
+            cbar=False,
+            ax=axes[idx],
+            linewidths=0.5,
+            linecolor="black",
+            vmin=vmin,
+            vmax=vmax,
+            center=0,
         )
 
-        secondary_runs[col].loc[:, ["capex", "opex", "totex"]] = 0
-
-        secondary_runs[col].loc[:, ["capex", "opex"]] = secondary_runs[col]["path"].apply(get_costs)
-        secondary_runs[col]["totex"] = secondary_runs[col]["capex"] + secondary_runs[col]["opex"]
-
-    for col in columns:
-        secondary_runs[col].set_index(["name", "planning_horizon"], inplace=True)
-
-    # Create relative deltas
-    delta = dict()
-    for col in columns:
-        delta[col] = df_runs_rows.copy()
-
-    numeric_cols = ["capex", "opex", "totex"]
-
-    for col in columns:
-        delta[col].loc[:, numeric_cols] = (
-            secondary_runs[col].loc[:, numeric_cols]
-            .subtract(df_runs_rows.loc[:, numeric_cols])
-            # .divide(df_runs_rows.loc[:, numeric_cols])
-            # .multiply(100)
-            # .round(2)
-        ).div(1e9).round(1) # bn. EUR
-
-    # # Create long-table
-    # delta_long = pd.DataFrame()
-    # for col in columns:
-    #     delta_long = pd.concat([delta_long, delta[col].loc[:, numeric_cols].assign(name=col)], axis=0)
-
-
-    columns = [col for col in plotting["short_term_run_order"] if col in plotting["short_term_run_order"]]
-
-    # Create heatmap of delta
-    for short_term in columns:
-        vmin = min(delta[short_term][numeric_cols].min().min(), vmin)
-        vmax = max(delta[short_term][numeric_cols].max().max(), vmax)
-
-    # 3x3 grid: 3 rows (short_terms), 3 columns (capex, opex, totex)
-    fig = plt.figure(figsize=(figsize[0], figsize[1]*3), dpi=dpi)  # taller figure
-    gs = gridspec.GridSpec(3, 3, figure=fig)
-
-    for row_idx, short_term in enumerate(columns):
-        for col_idx, col in enumerate(numeric_cols):
-            ax = fig.add_subplot(gs[row_idx, col_idx])
-
-            data = delta[short_term].loc[:, col].unstack().loc[plotting["run_order"]].copy()
-            nice_names = plotting["nice_names"]
-            data.index = data.index.map(lambda x: nice_names[x] if x in nice_names else x)
-
-            sns.heatmap(
-                data,
-                annot=True,
-                fmt=".1f",
-                cmap="RdBu_r",
-                cbar=False,
-                ax=ax,
-                linewidths=0.5,
-                linecolor="black",    
-                vmin=vmin,
-                vmax=vmax,
-                center=0,
-            )
-
-            ax.set_title("")
-            ax.set_xlabel("")  # optional
-            ax.set_ylabel("")
-
-            if col_idx == 0:
-                ax.set_ylabel(f"$\Delta$ (LT $-$ {plotting["nice_names"][short_term]})", fontsize=fontsize)
-                ax.set_yticklabels(data.index, fontsize=fontsize, rotation=0)
-            else:
-                ax.set_yticklabels([])
-
-            if row_idx == 0:
-                ax.set_title(f"$\Delta$ {col.upper()} (bn. EUR)", fontsize=fontsize)
-
-            if row_idx == 2:  # last row
-                ax.set_xlabel("Planning horizon", fontsize=fontsize)
-
-    plt.tight_layout()
+        axes[idx].set_title(f"$\Delta$ {plotting["nice_names"][st]} (bn. € p.a.)", fontsize=fontsize)
+        axes[idx].set_xlabel("", fontsize=fontsize)
+        axes[idx].set_ylabel("")
+        axes[idx].set_yticklabels("", fontsize=fontsize, rotation=0)
+    
+    axes[0].set_yticklabels(data.index, fontsize=fontsize, rotation=0)
+    axes[1].set_xlabel("Planning horizon", fontsize=fontsize)
 
     fig.savefig(
         snakemake.output[0],

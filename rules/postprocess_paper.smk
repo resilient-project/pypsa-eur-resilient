@@ -453,16 +453,13 @@ rule plot_regret_matrix:
         plotting_all=config_provider("plotting", "all"),
         plotting_fig=config_provider("plotting", "figures", "plot_regret_matrix"),
     input:
-        rows=expand(
-            RESULTS 
-            + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+        longterm=expand(
+            RESULTS + "csvs/costs.csv",
             **config["scenario"],
             run=config["run"]["name"],
-            allow_missing=True
         ),
-        columns=expand(
-            RESULTS 
-            + "networks/{column}/base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+        shortterm=expand(
+            RESULTS + "csvs/{column}/costs.csv",
             **config["scenario"],
             run=config["run"]["name"],
             column=config["solve_operations"]["columns"]
