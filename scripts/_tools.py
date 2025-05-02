@@ -31,6 +31,14 @@ def update_dict(
     return original_dict
 
 
+def update_nice_names(n, dict):
+    """
+    Update the nice names of the carriers in the network.
+    """
+    print("Updating nice names of the carriers in the network.")
+    n.carriers.loc[:, "nice_name"] = n.carriers.index.to_series().map(lambda x: dict.get(x, x))
+
+
 def fill_missing_carriers(n):
     for c in n.iterate_components(n.one_port_components | n.branch_components):
         new_carriers = set(c.df.carrier.unique()) - set(n.carriers.index)
@@ -75,3 +83,14 @@ def import_network(path):
     fill_missing_carriers(n)
 
     return n
+
+
+def make_square_legend_handles(colors, labels):
+    import matplotlib.patches as mpatches
+    """
+    Create square legend handles for a given list of colors and labels.
+    """
+    return [
+        mpatches.Patch(facecolor=color, label=label)
+        for color, label in zip(colors, labels)
+    ]

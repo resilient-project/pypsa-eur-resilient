@@ -106,6 +106,7 @@ if config["foresight"] != "perfect":
     rule plot_balance_map:
         params:
             plotting=config_provider("plotting"),
+            plotting_all=config_provider("plotting", "all"),
         input:
             network=RESULTS
             + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",

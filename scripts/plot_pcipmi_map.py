@@ -40,6 +40,7 @@ if __name__ == "__main__":
 
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
+    subfontsize = fontsize-2
     titlesize = fontsize
     dpi = plotting["dpi"]
 
@@ -67,6 +68,8 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots(1, 1, figsize=figsize, subplot_kw={'projection': crs})
 
+    plt.rc("font", **plotting["font"])
+
     # Add regions
     regions_onshore.to_crs(crs.proj4_init).plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.5, alpha=alpha_regions)
     regions_offshore.to_crs(crs.proj4_init).plot(ax=ax, color="lightblue", edgecolor="black", linewidth=0.5, alpha=alpha_regions)
@@ -81,8 +84,8 @@ if __name__ == "__main__":
         linestyle='--',
     )
 
-    gl.xlabel_style = {"size": fontsize}
-    gl.ylabel_style = {"size": fontsize}
+    gl.xlabel_style = {"size": subfontsize}
+    gl.ylabel_style = {"size": subfontsize}
 
     # Add projects
     links_co2_pipeline.to_crs(crs.proj4_init).plot(ax=ax, color=color_co2, linewidth=1, alpha=alpha_links, zorder=10)
@@ -123,7 +126,7 @@ if __name__ == "__main__":
         loc='upper center',
         bbox_to_anchor=(0.5, -0.05),
         ncol=2,
-        fontsize=fontsize,
+        fontsize=subfontsize,
         frameon=False
     )
 

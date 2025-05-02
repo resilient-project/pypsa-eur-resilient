@@ -5,14 +5,20 @@
 
 rule create_paper_plots:
     input:
+        regret_matrix=EXPORT_PATH + "/regret_matrix.pdf",
         pcipmi_map=expand(
-            "results/" + PREFIX + "/plots/map_adm_pcipmi.pdf",
+            EXPORT_PATH + "/map_adm_pcipmi.pdf",
         ),
-        totex_heatmap="results/" + PREFIX + "/plots/totex_heatmap.pdf",
-        delta_system_costs=expand(
-            "results/" + PREFIX + "/plots/delta_system_costs_{planning_horizons}.pdf",
+        totex_heatmap=EXPORT_PATH + "/totex_heatmap.pdf",
+        # delta_system_costs=expand(
+        #     "results/" + PREFIX + "/plots/delta_system_costs_{planning_horizons}.pdf",
+        #     **config["scenario"],
+        # ),
+        delta_balances=expand(
+           EXPORT_PATH + "/delta_balances_{carrier}.pdf",
             **config["scenario"],
-        )
+            carrier=config_provider("plotting", "figures", "plot_delta_balances", "carriers"),
+        ),
 
 
 rule plot_pcipmi_map:
@@ -30,7 +36,7 @@ rule plot_pcipmi_map:
         stores_co2 = "data/pcipmi_projects/stores_co2.geojson",
         stores_h2 = "data/pcipmi_projects/stores_h2.geojson",
     output:
-        map="results/" + PREFIX + "/plots/map_{clusters}_{run}.pdf",
+        map=EXPORT_PATH + "/map_{clusters}_{run}.pdf",
     log:
         "results/" + PREFIX + "/logs/plot_pcipmi_map_{clusters}_{run}.log",
     benchmark:
@@ -405,15 +411,13 @@ rule plot_totex_heatmap:
         plotting_all=config_provider("plotting", "all"),
         plotting_fig=config_provider("plotting", "figures", "plot_totex_heatmap"),
     input:
-        expand(
-            RESULTS 
-            + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+        longterm=expand(
+            RESULTS + "csvs/costs.csv",
             **config["scenario"],
             run=config["run"]["name"],
-            allow_missing=True
         ),
     output:
-        plot="results/" + PREFIX + "/plots/totex_heatmap.pdf",
+        plot=EXPORT_PATH + "/totex_heatmap.pdf",
     log:
         "results/" + PREFIX + "/logs/plot_totex_heatmap.log",
     benchmark:
@@ -465,7 +469,7 @@ rule plot_regret_matrix:
             column=config["solve_operations"]["columns"]
         ),
     output:
-        plot="results/" + PREFIX + "/plots/regret_matrix.pdf",
+        plot=EXPORT_PATH + "/regret_matrix.pdf",
     log:
         "results/" + PREFIX + "/logs/plot_regret_matrix.log",
     benchmark:
@@ -473,7 +477,7 @@ rule plot_regret_matrix:
     conda:
         "../envs/environment.yaml"
     script:
-        "../scripts/plot_regret_heatmap.py"
+        "../scripts/plot_regret_matrix.py"
 
 
 rule plot_installed_capacities:
@@ -498,3 +502,32 @@ rule plot_installed_capacities:
         "../envs/environment.yaml"
     script:
         "../scripts/plot_installed_capacities.py"
+
+
+rule plot_delta_balances:
+    params:
+        plotting_all=config_provider("plotting", "all"),
+        plotting_fig=config_provider("plotting", "figures", "plot_delta_balances"),
+    input:
+        longterm=expand(
+            RESULTS + "csvs/energy_balance.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        shortterm=expand(
+            RESULTS + "csvs/{column}/energy_balance.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+    output:
+        # plot="results/" + PREFIX + "/plots/delta_balances_{carrier}.pdf",
+        plot= EXPORT_PATH + "/delta_balances_{carrier}.pdf",
+    log:
+        "results/" + PREFIX + "/logs/plot_delta_balances_{carrier}.log",
+    benchmark:
+        "results/" + PREFIX + "/benchmark/plot_delta_balances_{carrier}",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_delta_balances.py"

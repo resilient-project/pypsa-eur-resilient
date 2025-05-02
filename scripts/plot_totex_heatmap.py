@@ -20,16 +20,38 @@ from _tools import update_dict
 logger = logging.getLogger(__name__)
 
 
-def get_costs(path):
+def import_costs(
+    df: pd.DataFrame,
+) -> pd.DataFrame:
     """
-    Extracts the total system costs from the given PyPSA network.
+    Import costs from long-term and short-term runs.
     """
-    n = pypsa.Network(path)
+
+    costs_list = []
+    for i, path in enumerate(df["path"]):
+        cost = pd.read_csv(
+            path, index_col=list(range(3)), header=list(range(3))
+        )
+        # Rename three columns to
+        cost.columns = cost.columns.get_level_values('planning_horizon')
+        planning_horizons = cost.columns
+
+        cost.reset_index(inplace=True)
+        cost = cost.melt(
+            id_vars=["cost", "component", "carrier"],
+            value_vars=planning_horizons,
+            var_name="planning_horizon",
+            value_name="value",
+        )
+        cost["name"] = df["name"].iloc[i]
+        cost["lt_run"] = df["lt_run"].iloc[i]
+
+        # Append to cost
+        costs_list.append(cost)
     
-    return pd.Series({
-        "capex": n.statistics.capex().sum(),
-        "opex": n.statistics.opex().sum(),
-    })
+    costs = pd.concat(costs_list)
+
+    return costs
 
 
 if __name__ == "__main__":
@@ -38,9 +60,9 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_totex_heatmap",
-            configfiles=["config/dev.config.yaml"],
+            configfiles=["config/run5.config.yaml"],
             )
-
+        
     configure_logging(snakemake)
     set_scenario_config(snakemake)
 
@@ -51,46 +73,50 @@ if __name__ == "__main__":
     discount_rate = config["costs"]["fill_values"]["discount rate"]
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
+    subfontsize = fontsize-2
     dpi = plotting["dpi"]
 
-    # Create df of all runs
-    df_runs = pd.DataFrame()
-    df_runs["path"] = snakemake.input
-    df_runs["prefix"] = df_runs["path"].apply(lambda x: x.split("/")[-4])
-    df_runs["name"] = df_runs["path"].apply(lambda x: x.split("/")[-3])
-    df_runs["planning_horizon"] = df_runs["path"].apply(
-        lambda x: x.split("/")[-1]
-        .replace(".nc", "")
-        .split("_")[-1]
-    ).astype(int)
-    
-    df_runs["clusters"] = df_runs["path"].apply(
-        lambda x: x.split("/")[-1]
-        .replace(".nc", "")
-        .split("_")[-4]
+    opts = config["scenario"]["opts"][0]
+    sector_opts = config["scenario"]["sector_opts"][0]
+
+    lt_order = [col for col in plotting["run_order"]]
+    lt_nice_names = plotting["nice_names"]
+
+    # Create df of all runs (rows)
+    longterm = pd.DataFrame()
+    longterm["path"] = snakemake.input.longterm
+    longterm["prefix"] = longterm["path"].apply(lambda x: x.split("/")[-4])
+    longterm["name"] = longterm["path"].apply(lambda x: x.split("/")[-3])
+    longterm["lt_run"] = longterm["name"]
+
+    index_cols = ["lt_run", "planning_horizon", "cost"]
+
+    lt_costs = import_costs(longterm).fillna(0)
+    lt_costs.set_index(index_cols, inplace=True)
+
+    capex = (
+        lt_costs.xs("capital", level="cost")["value"]
+        .groupby(["lt_run", "planning_horizon"])
+        .sum()
+        .unstack("planning_horizon")
+        .div(1e9)  # bn EUR p.a.
     )
+    capex = capex.reindex(lt_order, axis=0)
+    capex.index = capex.index.map(lt_nice_names)
+    capex.columns = capex.columns.astype(int)
 
-    # Create data table summaries
-    df_runs.loc[:, ["capex", "opex"]] = df_runs["path"].apply(get_costs)
-    df_runs["totex"] = df_runs["capex"] + df_runs["opex"]
+    opex = (
+        lt_costs.xs("marginal", level="cost")["value"]
+        .groupby(["lt_run", "planning_horizon"])
+        .sum()
+        .unstack("planning_horizon")
+        .div(1e9)  # bn EUR p.a.
+    )
+    opex = opex.reindex(lt_order, axis=0)
+    opex.index = opex.index.map(lt_nice_names)
+    opex.columns = opex.columns.astype(int)
 
-    capex = df_runs.pivot(
-        index="name",
-        columns="planning_horizon",
-        values="capex"
-    ).div(1e9) # bn EUR p.a.
-
-    opex = df_runs.pivot(
-        index="name",
-        columns="planning_horizon",
-        values="opex"
-    ).div(1e9) # bn EUR p.a.
-
-    totex = df_runs.pivot(
-        index="name",
-        columns="planning_horizon",
-        values="totex"
-    ).div(1e9) # bn EUR p.a.
+    totex = capex + opex
 
     # Create Totex timeseries, discounted
     totex_pv = pd.DataFrame(index = totex.index)
@@ -106,13 +132,16 @@ if __name__ == "__main__":
         if year in range(2050, end_year):
             totex_pv[year] = totex[2050] / ((1 + discount_rate) ** (year - today))
 
-    totex_pv_sum = pd.DataFrame(totex_pv.sum(axis=1), columns=["TOTEX$_{2025}$"])
-    totex_pv_sum.sort_values(by="TOTEX$_{2025}$", ascending=False, inplace=True)
+    totex_pv_sum = pd.DataFrame(totex_pv.sum(axis=1), columns=["NPV$_{2025}$"])
+    totex_pv_sum.sort_values(by="NPV$_{2025}$", ascending=False, inplace=True)
 
     # Sort the dataframes by TOTEX
     capex = capex.loc[totex_pv_sum.index]
     opex = opex.loc[totex_pv_sum.index]
     totex = totex.loc[totex_pv_sum.index]
+
+    vmin = min(capex.min().min(), opex.min().min())
+    vmax = max(capex.max().max(), opex.max().max())
 
     # Plot 
     logger.info("Plotting heatmap of total system costs.")
@@ -120,7 +149,7 @@ if __name__ == "__main__":
     fig = plt.figure(figsize=figsize)
 
     # Define grid layout with width ratios
-    gs = gridspec.GridSpec(1, 4, width_ratios=[7, 7, 7, 2.5], figure=fig)
+    gs = gridspec.GridSpec(1, 4, width_ratios=[7, 7, 7, 3.5], figure=fig)
 
     # Create axes from the GridSpec
     ax1 = fig.add_subplot(gs[0])
@@ -132,31 +161,38 @@ if __name__ == "__main__":
         ax.tick_params(left=False, labelleft=False)
 
     # CAPEX
-    sns.heatmap(capex, annot=True, cmap="Reds", fmt=".1f", linewidths=0.5,
-                cbar_kws={"label": "bn. EUR p.a."}, ax=ax1)
-    ax1.set_title("CAPEX p.a.", fontsize=fontsize)
-    ax1.set_xlabel("Year", fontsize=fontsize)
-    ax1.set_ylabel("Scenario", fontsize=fontsize)
+    sns.heatmap(capex, annot=True, cmap="Reds", fmt=".1f", linewidths=0.5, cbar=False, vmin = vmin, vmax = vmax,
+                cbar_kws={"label": "bn. EUR p.a."}, ax=ax1, annot_kws={"fontsize": fontsize},)
+    ax1.set_title("CAPEX (bn. € p.a.)", fontsize=fontsize)
+    ax1.set_xlabel("", fontsize=fontsize)
+    ax1.set_ylabel("Long-term scenario", fontsize=fontsize)
 
     # OPEX
-    sns.heatmap(opex, annot=True, cmap="Blues", fmt=".1f", linewidths=0.5,
-                cbar_kws={"label": "bn. EUR p.a."}, ax=ax2)
-    ax2.set_title("OPEX p.a. ", fontsize=fontsize)
-    ax2.set_xlabel("Year", fontsize=fontsize)
+    sns.heatmap(opex, annot=True, cmap="Reds", fmt=".1f", linewidths=0.5, cbar=False, vmin = vmin, vmax = vmax,
+                cbar_kws={"label": "bn. EUR p.a."}, ax=ax2, annot_kws={"fontsize": fontsize},)
+    ax2.set_title("OPEX (bn. € p.a.)", fontsize=fontsize)
+    ax2.set_xlabel("Planning horizon", fontsize=fontsize)
     ax2.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis
 
-    sns.heatmap(totex, annot=True, cmap="Purples", fmt=".1f", linewidths=0.5,
-                cbar_kws={"label": "bn. EUR p.a."}, ax=ax3)
-    ax3.set_title("TOTEX p.a.", fontsize=fontsize)
-    ax3.set_xlabel("Year", fontsize=fontsize)
+    sns.heatmap(totex, annot=True, cmap="Purples", fmt=".1f", linewidths=0.5, cbar=False, vmin = totex.min().min(), vmax = totex.max().max(),
+                cbar_kws={"label": "bn. EUR p.a."}, ax=ax3, annot_kws={"fontsize": fontsize},)
+    ax3.set_title("TOTEX (bn. € p.a.)", fontsize=fontsize)
+    ax3.set_xlabel("", fontsize=fontsize)
     ax3.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis
 
-
-    sns.heatmap(totex_pv_sum, annot=True, cmap="Greys", fmt=".0f", linewidths=0.5,
-                cbar_kws={"label": "bn. EUR$_{2025}$"}, ax=ax4)
-    ax4.set_title("TOTEX", fontsize=fontsize)
-    ax4.set_xlabel("Present value", fontsize=fontsize)
+    sns.heatmap(totex_pv_sum, annot=True, cmap="Greys", fmt=".0f", linewidths=0.5, cbar=False, vmin = totex_pv_sum.min().min()*0.997, vmax=totex_pv_sum.max().max(),
+                cbar_kws={"label": "bn. EUR$_{2025}$"}, ax=ax4, annot_kws={"fontsize": fontsize},)
+    ax4.set_title("TOTEX (bn. €)", fontsize=fontsize)
+    ax4.set_xlabel("", fontsize=fontsize)
     ax4.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis
+
+    # Y ticks labels not rotate
+    ax1.set_xticklabels(ax1.get_xticklabels(), rotation=0, fontsize=subfontsize)
+    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=0, fontsize=subfontsize)
+    ax3.set_xticklabels(ax3.get_xticklabels(), rotation=0, fontsize=subfontsize)
+    ax4.set_xticklabels(ax4.get_xticklabels(), rotation=0, fontsize=subfontsize)
+    
+    ax1.set_yticklabels(ax1.get_yticklabels(), rotation=0, fontsize=subfontsize)
 
     plt.subplots_adjust(wspace=0.1) 
     plt.savefig(snakemake.output.plot, bbox_inches="tight", dpi=dpi)

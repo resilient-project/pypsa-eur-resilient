@@ -9,9 +9,7 @@ Plots regret matrix for long-term and short-term runs (columns).
 import logging
 import ast
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import pandas as pd
-import pypsa
 import seaborn as sns
 
 from _helpers import configure_logging, set_scenario_config
@@ -73,6 +71,7 @@ if __name__ == "__main__":
     discount_rate = config["costs"]["fill_values"]["discount rate"]
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
+    subfontsize = fontsize-2
     dpi = plotting["dpi"]
 
     opts = config["scenario"]["opts"][0]
@@ -98,6 +97,7 @@ if __name__ == "__main__":
     lt_costs = import_costs(longterm).fillna(0)
     lt_costs.set_index(index_cols, inplace=True)
     st_costs = import_costs(shortterm).fillna(0)
+    
     st_costs = st_costs.pivot(
         index = index_cols,
         columns = "name",
@@ -119,6 +119,7 @@ if __name__ == "__main__":
     vmin = min(delta_costs_totex)
     vmax = max(delta_costs_totex)
 
+    plt.rc("font", **plotting["font"])
     # Create heatmap with 1 row, three subfigures
     fig, axes = plt.subplots(
         nrows=1,
@@ -126,6 +127,7 @@ if __name__ == "__main__":
         figsize=figsize,
         dpi=dpi,
     )
+
 
     for idx, st in enumerate(st_order):
         data = delta_costs_totex.loc[
@@ -138,7 +140,7 @@ if __name__ == "__main__":
         data_fmt = data.apply(lambda col: col.map(
             lambda x: f"+{x:.1f}" if x > 0 else (f"{x:.1f}" if x < 0 else "0")
         ))
-        
+
         sns.heatmap(
             data,
             annot=data_fmt,
@@ -147,19 +149,25 @@ if __name__ == "__main__":
             cbar=False,
             ax=axes[idx],
             linewidths=0.5,
-            linecolor="black",
+            linecolor="white",
             vmin=vmin,
             vmax=vmax,
             center=0,
         )
 
-        axes[idx].set_title(f"$\Delta$ {plotting["nice_names"][st]} (bn. € p.a.)", fontsize=fontsize)
+        if idx !=0:
+            axes[idx].tick_params(left=False, labelleft=False)
+
+        axes[idx].set_title(f"$\Delta$ {plotting["nice_names"][st]}\n(bn. € p.a.)", fontsize=fontsize)
         axes[idx].set_xlabel("", fontsize=fontsize)
         axes[idx].set_ylabel("")
-        axes[idx].set_yticklabels("", fontsize=fontsize, rotation=0)
-    
-    axes[0].set_yticklabels(data.index, fontsize=fontsize, rotation=0)
+        axes[idx].set_yticklabels("", fontsize=subfontsize, rotation=0)
+        axes[idx].tick_params(axis="x", labelsize=subfontsize)
+ 
+    axes[0].set_yticklabels(data.index, fontsize=subfontsize, rotation=0)
+    axes[0].tick_params(axis="x", labelsize=subfontsize)
     axes[1].set_xlabel("Planning horizon", fontsize=fontsize)
+    axes[0].set_ylabel("Long-term scenario", fontsize=fontsize)
 
     fig.savefig(
         snakemake.output[0],
