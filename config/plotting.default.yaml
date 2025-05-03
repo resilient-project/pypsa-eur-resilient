@@ -77,6 +77,18 @@ plotting:
       - urban central CHP CC
       - urban central solid biomass CHP CC
       - process emissions
+    plot_balances_overview:
+      figsize: (5.5, 3.2)
+      dpi: 300
+      carriers:
+      - co2 stored
+      - H2
+      carrier_nice_names:
+        co2 stored: "CO$_2$"
+        H2: "H$_2$"
+      carrier_units:
+        co2 stored: "Mt"
+        H2: "TWh"
 
   map:
     boundaries: [-11, 30, 34, 71]
@@ -176,6 +188,7 @@ plotting:
     - AC
     - H2
     - co2_stored
+    - urban_central_heat
     AC:
       unit: TWh
       unit_conversion: 1_000_000
@@ -466,7 +479,7 @@ plotting:
     coal: "Hard coal"
     dc: "DC"
     electricity distribution grid: "Distribution grid (AC)"
-    gas for industry CC: "Industry (gas)"
+    gas for industry CC: "Industry CC (gas)"
     H2: "H$_2$"
     H2 Electrolysis: "H$_2$ electrolysis"
     H2 Fuel Cell: "H$_2$ fuel cell"
@@ -546,15 +559,15 @@ plotting:
     gas: '#e05b09'
     fossil gas: '#e05b09'
     natural gas: '#e05b09'
-    biogas to gas: '#e36311'
+    biogas to gas: '#805500' # '#e36311'
     biogas to gas CC: '#e51245'
     CCGT: '#a85522'
     CCGT marginal: '#a85522'
     allam: '#B98F76'
     gas for industry co2 to atmosphere: '#692e0a'
     gas for industry co2 to stored: '#8a3400'
-    gas for industry: '#853403'
-    gas for industry CC: '#692e0a'
+    gas for industry: '#808080' # '#853403'
+    gas for industry CC: '#808080' # '#692e0a'
     gas pipeline: '#ebbca0'
     gas pipeline new: '#a87c62'
     # oil
@@ -586,23 +599,23 @@ plotting:
     lignite: '#826837'
     Lignite marginal: '#826837'
     # biomass
-    biogas: '#e3d37d'
-    biomass: '#baa741'
+    biogas: '#0e803d' # '#e3d37d'
+    biomass: '#008020' # '#baa741'
     solid biomass: '#baa741'
     municipal solid waste: '#91ba41'
     solid biomass import: '#d5ca8d'
     solid biomass transport: '#baa741'
-    solid biomass for industry: '#7a6d26'
-    solid biomass for industry CC: '#47411c'
-    solid biomass for industry co2 from atmosphere: '#736412'
-    solid biomass for industry co2 to stored: '#47411c'
-    urban central solid biomass CHP: '#9d9042'
-    urban central solid biomass CHP CC: '#6c5d28'
-    biomass boiler: '#8A9A5B'
-    residential rural biomass boiler: '#a1a066'
-    residential urban decentral biomass boiler: '#b0b87b'
-    services rural biomass boiler: '#c6cf98'
-    services urban decentral biomass boiler: '#dde5b5'
+    solid biomass for industry: '#b7f046' # '#7a6d26'
+    solid biomass for industry CC: '#b7f046' # '#47411c'
+    solid biomass for industry co2 from atmosphere: '#008008' # '#736412'
+    solid biomass for industry co2 to stored: '#00600c' # '#47411c'
+    urban central solid biomass CHP: '#007008' # '#9d9042'
+    urban central solid biomass CHP CC: '#004008' # '#6c5d28'
+    biomass boiler: '#006030' # '#8A9A5B'
+    residential rural biomass boiler: '#006030' # '#a1a066'
+    residential urban decentral biomass boiler: '#006020' # '#b0b87b'
+    services rural biomass boiler: '#006030' # '#c6cf98'
+    services urban decentral biomass boiler: '#004020' # '#dde5b5'
     biomass to liquid: '#32CD32'
     unsustainable solid biomass: '#998622'
     unsustainable bioliquids: '#32CD32'
@@ -695,8 +708,10 @@ plotting:
     services rural ground heat pump: '#5af95d'
     Ambient: '#98eb9d'
     CHP: '#8a5751'
+    urban central CHP: '#8a5751'
     urban central gas CHP: '#8d5e56'
     CHP CC: '#634643'
+    urban central CHP CC: '#634643'
     urban central gas CHP CC: '#6e4e4c'
     CHP heat: '#8a5751'
     CHP electric: '#8a5751'
@@ -736,7 +751,7 @@ plotting:
     ammonia cracker: '#87d0e6'
     Haber-Bosch: '#076987'
     # syngas
-    Sabatier: '#9850ad'
+    Sabatier: '#c44ce6'
     methanation: '#c44ce6'
     methane: '#c44ce6'
     # synfuels
@@ -748,7 +763,7 @@ plotting:
     methanol-to-olefins/aromatics: '#FFA07A'
     Methanol steam reforming: '#FFBF00'
     Methanol steam reforming CC: '#A2EA8A'
-    methanolisation: '#00FFBF'
+    methanolisation: '#00EEDF'
     biomass-to-methanol: '#EAD28A'
     biomass-to-methanol CC: '#EADBAD'
     allam methanol: '#B98F76'

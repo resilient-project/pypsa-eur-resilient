@@ -19,6 +19,16 @@ rule create_paper_plots:
             **config["scenario"],
             carrier=config_provider("plotting", "figures", "plot_delta_balances", "carriers"),
         ),
+        balances_overview=expand(
+            EXPORT_PATH + "/balances_overview_{carrier}.pdf",
+            **config["scenario"],
+            carrier=config_provider("plotting", "figures", "plot_balances_overview", "carriers"),
+        ),
+        balances_overview_ext=expand(
+            EXPORT_PATH + "/balances_overview_extended_{carrier}.pdf",
+            **config["scenario"],
+            carrier=config_provider("plotting", "figures", "plot_balances_overview", "carriers"),
+        ),
 
 
 rule plot_pcipmi_map:
@@ -370,6 +380,7 @@ rule plot_summary_columns:
 rule plot_balance_map_column:
     params:
         plotting=config_provider("plotting"),
+        plotting_all=config_provider("plotting", "all"),
     input:
         network=RESULTS
         + "networks/{column}/base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
@@ -531,3 +542,32 @@ rule plot_delta_balances:
         "../envs/environment.yaml"
     script:
         "../scripts/plot_delta_balances.py"
+
+
+rule plot_balances_overview:
+    params:
+        plotting_all=config_provider("plotting", "all"),
+        plotting_fig=config_provider("plotting", "figures", "plot_balances_overview"),
+    input:
+        longterm=expand(
+            RESULTS + "csvs/energy_balance.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        shortterm=expand(
+            RESULTS + "csvs/{column}/energy_balance.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+    output:
+        plot= EXPORT_PATH + "/balances_overview_{carrier}.pdf",
+        plot_extended= EXPORT_PATH + "/balances_overview_extended_{carrier}.pdf",
+    log:
+        "results/" + PREFIX + "/logs/balances_overview_{carrier}.log",
+    benchmark:
+        "results/" + PREFIX + "/benchmark/balances_overview_{carrier}",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_balances_overview.py"

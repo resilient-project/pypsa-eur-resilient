@@ -20,7 +20,7 @@ from plot_power_network import load_projection
 from pypsa.plot import add_legend_lines, add_legend_patches, add_legend_semicircles, add_legend_circles
 from pypsa.statistics import get_transmission_carriers
 from shapely.geometry import LineString
-from _tools import update_nice_names, make_square_legend_handles
+from _tools import update_nice_names, update_tech_colors
 import cartopy.crs as ccrs
 
 SEMICIRCLE_CORRECTION_FACTOR = 2 if parse(pypsa.__version__) <= Version("0.33.2") else 1
@@ -52,6 +52,8 @@ if __name__ == "__main__":
     n = pypsa.Network(snakemake.input.network)
     sanitize_carriers(n, snakemake.config)
     update_nice_names(n, config["nice_names"])
+    
+    update_tech_colors(n, config["tech_colors"])
 
     n.statistics.set_parameters(round=3, drop_zero=True, nice_names=False)
 

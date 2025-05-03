@@ -74,18 +74,33 @@ if __name__ == "__main__":
     regions_onshore.to_crs(crs.proj4_init).plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.5, alpha=alpha_regions)
     regions_offshore.to_crs(crs.proj4_init).plot(ax=ax, color="lightblue", edgecolor="black", linewidth=0.5, alpha=alpha_regions)
 
-    # Add gridlines of latitude and longitude
+    # Add gridlines 
     gl = ax.gridlines(
-        crs=ccrs.PlateCarree(), 
-        draw_labels=True, 
-        linewidth=0.5, 
-        color='gray', 
-        alpha=alpha_gridlines, 
-        linestyle='--',
+        crs=ccrs.PlateCarree(),
+        draw_labels=True,
+        linewidth=0.5,
+        color='gray',
+        alpha=0.5,
+        linestyle=':',
     )
 
+    # Label style
     gl.xlabel_style = {"size": subfontsize}
     gl.ylabel_style = {"size": subfontsize}
+
+    # Show only bottom and right labels
+    gl.top_labels = False
+    gl.left_labels = False
+    gl.bottom_labels = True
+    gl.right_labels = True
+
+    # Move labels inside
+    gl.xpadding = -1
+    gl.ypadding = -1
+
+    # Set finer gridline spacing
+    gl.xlocator = plt.FixedLocator(range(-180, 181, 5))  # e.g., every 15°
+    gl.ylocator = plt.FixedLocator(range(-90, 91, 5)) 
 
     # Add projects
     links_co2_pipeline.to_crs(crs.proj4_init).plot(ax=ax, color=color_co2, linewidth=1, alpha=alpha_links, zorder=10)
@@ -124,11 +139,15 @@ if __name__ == "__main__":
             name_links_h2,    
         ], 
         loc='upper center',
-        bbox_to_anchor=(0.5, -0.05),
+        bbox_to_anchor=(0.5, -0.01),
         ncol=2,
         fontsize=subfontsize,
         frameon=False
     )
+
+    boundaries = [-11, 30, 34, 71]
+    # Set boundaries
+    ax.set_extent(boundaries, crs=ccrs.PlateCarree())
 
     # Save figure
     fig.savefig(
