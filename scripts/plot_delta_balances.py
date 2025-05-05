@@ -63,7 +63,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "plot_delta_balances",
             configfiles=["config/run5.config.yaml"],
-            carrier="process emissions CC"
+            carrier="co2 stored"
             )
 
     configure_logging(snakemake)

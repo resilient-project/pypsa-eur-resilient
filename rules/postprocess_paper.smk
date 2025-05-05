@@ -10,15 +10,13 @@ rule create_paper_plots:
             EXPORT_PATH + "/map_adm_pcipmi.pdf",
         ),
         totex_heatmap=EXPORT_PATH + "/totex_heatmap.pdf",
-        # delta_system_costs=expand(
-        #     "results/" + PREFIX + "/plots/delta_system_costs_{planning_horizons}.pdf",
-        #     **config["scenario"],
-        # ),
         delta_balances=expand(
            EXPORT_PATH + "/delta_balances_{carrier}.pdf",
             **config["scenario"],
             carrier=config_provider("plotting", "figures", "plot_delta_balances", "carriers"),
         ),
+        costs_overview=EXPORT_PATH + "/costs_overview.pdf",
+        costs_overview_extended=EXPORT_PATH + "/costs_overview_extended.pdf",
         balances_overview=expand(
             EXPORT_PATH + "/balances_overview_{carrier}.pdf",
             **config["scenario"],
@@ -571,3 +569,32 @@ rule plot_balances_overview:
         "../envs/environment.yaml"
     script:
         "../scripts/plot_balances_overview.py"
+
+
+rule plot_costs_overview:
+    params:
+        plotting_all=config_provider("plotting", "all"),
+        plotting_fig=config_provider("plotting", "figures", "plot_costs_overview"),
+    input:
+        longterm=expand(
+            RESULTS + "csvs/costs.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        shortterm=expand(
+            RESULTS + "csvs/{column}/costs.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+    output:
+        plot= EXPORT_PATH + "/costs_overview.pdf",
+        plot_extended= EXPORT_PATH + "/costs_overview_extended.pdf",
+    log:
+        "results/" + PREFIX + "/logs/costs_overview.log",
+    benchmark:
+        "results/" + PREFIX + "/benchmark/costs_overview",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_costs_overview.py"

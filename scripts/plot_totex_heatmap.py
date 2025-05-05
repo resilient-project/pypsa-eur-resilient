@@ -162,26 +162,26 @@ if __name__ == "__main__":
 
     # CAPEX
     sns.heatmap(capex, annot=True, cmap="Reds", fmt=".1f", linewidths=0.5, cbar=False, vmin = vmin, vmax = vmax,
-                cbar_kws={"label": "bn. EUR p.a."}, ax=ax1, annot_kws={"fontsize": fontsize},)
+                cbar_kws={"label": "bn. EUR p.a."}, ax=ax1, annot_kws={"fontsize": subfontsize},)
     ax1.set_title("CAPEX (bn. € p.a.)", fontsize=fontsize)
     ax1.set_xlabel("", fontsize=fontsize)
     ax1.set_ylabel("Long-term scenario", fontsize=fontsize)
 
     # OPEX
     sns.heatmap(opex, annot=True, cmap="Reds", fmt=".1f", linewidths=0.5, cbar=False, vmin = vmin, vmax = vmax,
-                cbar_kws={"label": "bn. EUR p.a."}, ax=ax2, annot_kws={"fontsize": fontsize},)
+                cbar_kws={"label": "bn. EUR p.a."}, ax=ax2, annot_kws={"fontsize": subfontsize},)
     ax2.set_title("OPEX (bn. € p.a.)", fontsize=fontsize)
     ax2.set_xlabel("Planning horizon", fontsize=fontsize)
     ax2.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis
 
     sns.heatmap(totex, annot=True, cmap="Purples", fmt=".1f", linewidths=0.5, cbar=False, vmin = totex.min().min(), vmax = totex.max().max(),
-                cbar_kws={"label": "bn. EUR p.a."}, ax=ax3, annot_kws={"fontsize": fontsize},)
+                cbar_kws={"label": "bn. EUR p.a."}, ax=ax3, annot_kws={"fontsize": subfontsize},)
     ax3.set_title("TOTEX (bn. € p.a.)", fontsize=fontsize)
     ax3.set_xlabel("", fontsize=fontsize)
     ax3.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis
 
     sns.heatmap(totex_pv_sum, annot=True, cmap="Greys", fmt=".0f", linewidths=0.5, cbar=False, vmin = totex_pv_sum.min().min()*0.997, vmax=totex_pv_sum.max().max(),
-                cbar_kws={"label": "bn. EUR$_{2025}$"}, ax=ax4, annot_kws={"fontsize": fontsize},)
+                cbar_kws={"label": "bn. EUR$_{2025}$"}, ax=ax4, annot_kws={"fontsize": subfontsize},)
     ax4.set_title("TOTEX (bn. €)", fontsize=fontsize)
     ax4.set_xlabel("", fontsize=fontsize)
     ax4.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis

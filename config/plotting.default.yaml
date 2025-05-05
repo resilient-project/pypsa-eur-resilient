@@ -89,7 +89,33 @@ plotting:
       carrier_units:
         co2 stored: "Mt"
         H2: "TWh"
-
+    plot_costs_overview:
+      figsize: (5.5, 3.2)
+      dpi: 300
+      legend_order:
+      - Other
+      - Electricity grid
+      - Hydro and RoR
+      - Biomass and biogas
+      - Nuclear
+      - Oil
+      - Coal infrastructure
+      - Power-to-Heat
+      - Gas infrastructure
+      - CHP
+      - Solar
+      - Wind
+      - Battery infrastructure
+      - Electrolysis
+      - Fischer-Tropsch
+      - Methanol
+      - Methanolisation
+      - H$_2$ infrastructure
+      - CO$_2$ infrastructure
+      - Sabatier
+      - CC at point sources
+      - DAC
+      - Load shedding
   map:
     boundaries: [-11, 30, 34, 71]
     color_geomap:
@@ -871,98 +897,98 @@ grouping:
   hydro: Hydro and RoR
   industry electricity: Electricity grid
   industry methanol: Methanol
-  kerosene for aviation: Transport
-  land transport EV: Transport
-  land transport oil: Transport
-  lignite: Lignite
-  low voltage: Electricity
-  low-temperature heat for industry: Heat
+  kerosene for aviation: Other # TODO
+  land transport EV: Other # TODO
+  land transport oil: Other # TODO
+  lignite: Coal infrastructure
+  low voltage: Electricity grid
+  low-temperature heat for industry: Other
   methanol: Methanol
   methanolisation: Methanolisation
-  naphtha for industry: Oil
+  naphtha for industry: Oil # TODO
   nuclear: Nuclear
-  offwind-ac: Offshore wind
-  offwind-dc: Offshore wind
+  offwind-ac: Wind
+  offwind-dc: Wind
   oil: Oil
   oil primary: Oil
   oil refining: Oil
-  onwind: Onshore wind
-  process emissions: CO$_2$ from process emissions
-  process emissions CC: Carbon capt. at point sources
+  onwind: Wind
+  process emissions: Other
+  process emissions CC: CC at point sources
   ror: Hydro and RoR
   rural air heat pump: Power-to-Heat
   rural biomass boiler: Biomass and biogas
-  rural gas boiler: Gas
+  rural gas boiler: Gas infrastructure
   rural ground heat pump: Power-to-Heat
-  rural heat: Heat
-  rural heat vent: Heat
+  rural heat: Other
+  rural heat vent: Other
   rural resistive heater: Power-to-Heat
   rural solar thermal: Solar
-  rural water tanks: Thermal storage
-  rural water tanks charger: Thermal storage
-  rural water tanks discharger: Thermal storage 
+  rural water tanks: Other
+  rural water tanks charger: Other
+  rural water tanks discharger: Other
   shipping methanol: Methanol
-  shipping oil: Oil
+  shipping oil: Oil # TODO
   solar: Solar
   solar rooftop: Solar
   solid biomass: Biomass and biogas
   solid biomass for industry: Biomass and biogas
-  solid biomass for industry CC: Carbon capt. at point sources
+  solid biomass for industry CC: CC at point sources
   uranium: Nuclear
   urban central CHP: CHP
-  urban central CHP CC: Carbon capt. at point sources
+  urban central CHP CC: CC at point sources
   urban central air heat pump: Power-to-Heat
-  urban central gas boiler: Gas
-  urban central heat: Heat
-  urban central heat vent: Heat
+  urban central gas boiler: Gas infrastructure
+  urban central heat: Other
+  urban central heat vent: Other
   urban central resistive heater: Power-to-Heat
   urban central solar thermal: Solar
   urban central solid biomass CHP: Biomass and biogas
-  urban central solid biomass CHP CC: Carbon capt. at point sources
-  urban central water pits: Thermal storage
-  urban central water pits charger: Thermal storage
-  urban central water pits discharger: Thermal storage
-  urban central water tanks: Thermal storage
-  urban central water tanks charger: Thermal storage
-  urban central water tanks discharger: Thermal storage
+  urban central solid biomass CHP CC: CC at point sources
+  urban central water pits: Other
+  urban central water pits charger: Other
+  urban central water pits discharger: Other
+  urban central water tanks: Other
+  urban central water tanks charger: Other
+  urban central water tanks discharger: Other
   urban decentral air heat pump: Power-to-Heat
   urban decentral biomass boiler: Biomass and biogas
-  urban decentral gas boiler: Gas
-  urban decentral heat: Heat
-  urban decentral heat vent: Heat
+  urban decentral gas boiler: Gas infrastructure
+  urban decentral heat: Other
+  urban decentral heat vent: Other
   urban decentral resistive heater: Power-to-Heat
   urban decentral solar thermal: Solar
-  urban decentral water tanks: Thermal storage
-  urban decentral water tanks charger: Thermal storage
-  urban decentral water tanks discharger: Thermal storage
+  urban decentral water tanks: Other
+  urban decentral water tanks charger: Other
+  urban decentral water tanks discharger: Other
+  load: "Load shedding"
+  rural oil boiler: Other
+  unsustainable biogas: Biomass and biogas
+  unsustainable bioliquids: Biomass and biogas
+  unsustainable solid biomass: Biomass and biogas
+  urban decentral oil boiler: Other
 
 group_colors:
   Battery infrastructure: "#ace37f"
   Biomass and biogas: "#baa741"
   CHP: "#8a5751"
   CO$_2$ infrastructure: "#cc99ff"
-  CO$_2$ from process emissions: "#222222"
   CC at point sources: "#f29dae"
-  Coal infrastructure: "#545454"
+  Coal infrastructure: "#555555"
   DAC: "#ff5270"
-  Electricity: "#97ad8c"
-  Electricity grid: ""#97ad8c"
+  Electricity grid: "#97ad8c"
   Electrolysis: "#b3e6ff"
+  Fischer-Tropsch: "#25c49a"
   Gas infrastructure: "#e05b09"
   H$_2$ infrastructure: "#7895b1"
-  Heat: "#750606"
   Hydro and RoR: "#298c81"
-  Lignite: "#826837"
   Methanol: "#57ebc4"
-  Methanolisation: "#00FFBF"
+  Methanolisation: "#57aac1"
   Nuclear: "#ff8c00"
-  Offshore wind: "#66b5ff"
-  Oil: "#001a33"
-  Onshore wind: "#235ebc"
+  Oil: "#333333"
   Power-to-Heat: "#dd2e23"
-  SMR: "#46caf0"
   Sabatier: "#c44ce6" 
   Solar: "#ffe066"
-  Thermal storage: "#b39995"
-  Transport: "#777777"
-  Other: "#aaaaaa"
+  Wind: "#66b5ff"
+  Other: "#bbbbbb"
+  Load shedding: "#00ff00" # only for debugging

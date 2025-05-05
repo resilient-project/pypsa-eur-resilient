@@ -153,6 +153,7 @@ if __name__ == "__main__":
             vmin=vmin,
             vmax=vmax,
             center=0,
+            annot_kws={"fontsize": subfontsize},
         )
 
         if idx !=0:
