@@ -308,15 +308,15 @@ if __name__ == "__main__":
             )
 
             # Reindex
-            data_st = data_st.reindex(data.index)
-            # Column order
-            data_st = data_st.reindex(columns=data.columns)
+            data = data.reindex(lt_order_nice_names)
+            data_st = data_st.reindex(lt_order_nice_names)
 
             delta_data = data_st - data
             delta_data.fillna(0, inplace=True)
 
             data_order = [col for col in legend_order if col in data.columns]
             delta_data = delta_data[data_order]
+            delta_data = delta_data.reindex(lt_order_nice_names)
 
             abs_max = max(
                 max(ymax, delta_data[delta_data>0].sum(axis=1).max()), 
