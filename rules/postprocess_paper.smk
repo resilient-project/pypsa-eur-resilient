@@ -16,7 +16,7 @@ rule create_paper_plots:
             carrier=config_provider("plotting", "figures", "plot_delta_balances", "carriers"),
         ),
         costs_overview=EXPORT_PATH + "/costs_overview.pdf",
-        costs_overview_extended=EXPORT_PATH + "/costs_overview_extended.pdf",
+        costs_overview_extend=EXPORT_PATH + "/costs_overview_extended.pdf",
         balances_overview=expand(
             EXPORT_PATH + "/balances_overview_{carrier}.pdf",
             **config["scenario"],
@@ -27,6 +27,9 @@ rule create_paper_plots:
             **config["scenario"],
             carrier=config_provider("plotting", "figures", "plot_balances_overview", "carriers"),
         ),
+        capacities_overview=EXPORT_PATH + "/capacities_overview.pdf",
+        capacities_overview_ext= EXPORT_PATH + "/capacities_overview_extended.pdf",
+        exogenous_demand= EXPORT_PATH + "/exogenous_demand.pdf",
 
 
 rule plot_pcipmi_map:
@@ -562,9 +565,9 @@ rule plot_balances_overview:
         plot= EXPORT_PATH + "/balances_overview_{carrier}.pdf",
         plot_extended= EXPORT_PATH + "/balances_overview_extended_{carrier}.pdf",
     log:
-        "results/" + PREFIX + "/logs/balances_overview_{carrier}.log",
+        "results/" + PREFIX + "/logs/plot_balances_overview_{carrier}.log",
     benchmark:
-        "results/" + PREFIX + "/benchmark/balances_overview_{carrier}",
+        "results/" + PREFIX + "/benchmark/plot_balances_overview_{carrier}",
     conda:
         "../envs/environment.yaml"
     script:
@@ -591,10 +594,61 @@ rule plot_costs_overview:
         plot= EXPORT_PATH + "/costs_overview.pdf",
         plot_extended= EXPORT_PATH + "/costs_overview_extended.pdf",
     log:
-        "results/" + PREFIX + "/logs/costs_overview.log",
+        "results/" + PREFIX + "/logs/plot_costs_overview.log",
     benchmark:
-        "results/" + PREFIX + "/benchmark/costs_overview",
+        "results/" + PREFIX + "/benchmark/plot_costs_overview",
     conda:
         "../envs/environment.yaml"
     script:
         "../scripts/plot_costs_overview.py"
+
+
+rule plot_capacities_overview:
+    params:
+        plotting_all=config_provider("plotting", "all"),
+        plotting_fig=config_provider("plotting", "figures", "plot_capacities_overview"),
+    input:
+        longterm=expand(
+            RESULTS + "csvs/capacities.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        shortterm=expand(
+            RESULTS + "csvs/{column}/capacities.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+            column=config["solve_operations"]["columns"]
+        ),
+    output:
+        plot= EXPORT_PATH + "/capacities_overview.pdf",
+        plot_extended= EXPORT_PATH + "/capacities_overview_extended.pdf",
+    log:
+        "results/" + PREFIX + "/logs/plot_capacities_overview.log",
+    benchmark:
+        "results/" + PREFIX + "/benchmark/plot_capacities_overview",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_capacities_overview.py"
+
+
+rule plot_exogenous_demand:
+    params:
+        plotting_all=config_provider("plotting", "all"),
+        plotting_fig=config_provider("plotting", "figures", "plot_exogenous_demand"),
+    input:
+        longterm=expand(
+            RESULTS + "csvs/energy_balance.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+    output:
+        plot= EXPORT_PATH + "/exogenous_demand.pdf",
+    log:
+        "results/" + PREFIX + "/logs/plot_exogenous_demand.log",
+    benchmark:
+        "results/" + PREFIX + "/benchmark/plot_exogenous_demand",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_exogenous_demand.py"

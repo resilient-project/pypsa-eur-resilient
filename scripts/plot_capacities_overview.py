@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Plot costs for all scenarios side-by-side for certain carrier.
+Plot capacities for all scenarios side-by-side for certain carrier.
 """
 
 import logging
@@ -24,12 +24,10 @@ def import_csvs(
     Import costs from long-term and short-term runs.
     """
 
-    data_col = "cost"
-
     data_list = []
     for i, path in enumerate(df["path"]):
         data = pd.read_csv(
-            path, index_col=list(range(3)), header=list(range(3))
+            path, index_col=list(range(2)), header=list(range(3))
         )
         # Rename three columns to
         data.columns = data.columns.get_level_values('planning_horizon')
@@ -37,7 +35,7 @@ def import_csvs(
 
         data.reset_index(inplace=True)
         data = data.melt(
-            id_vars=[data_col, "component", "carrier"],
+            id_vars=["component", "carrier"],
             value_vars=planning_horizons,
             var_name="planning_horizon",
             value_name="value",
@@ -60,7 +58,7 @@ if __name__ == "__main__":
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "plot_costs_overview",
+            "plot_capacities_overview",
             configfiles=["config/run5.config.yaml"],
             )
 
@@ -126,7 +124,7 @@ if __name__ == "__main__":
     # Group by group
     costs = costs.groupby(["planning_horizon", "lt_run", "group", "name", "run_type", "group_color"], observed=True).agg(
         value=("value", "sum"),
-    ).div(1e9) # EUR to bn. EUR p.a.
+    ).div(1e3) # MW to GW
     costs.reset_index(inplace=True)
 
     # Nice names for lt_run
@@ -141,9 +139,13 @@ if __name__ == "__main__":
         values="value",
     ).reset_index()
 
-    # Drop load shedding after debugging
-    if "Load shedding" in costs.group.values:
-        costs = costs[costs["group"] != "Load shedding"]
+    # Filter costs to keep subset
+    negative_group_sel = ["Other", "Battery infrastructure", "CO$_2$ infrastructure", "Methanol", "H$_2$ infrastructure", "Gas infrastructure", "Oil","Biomass and biogas", "Coal infrastructure", "Electricity grid"]
+    costs = costs[~costs["group"].isin(negative_group_sel)]
+
+    # # Drop load shedding after debugging
+    # if "Load shedding" in costs.group.values:
+    #     costs = costs[costs["group"] != "Load shedding"]
 
     # First plot
     n_lt_runs = costs["lt_run"].nunique()
@@ -197,7 +199,7 @@ if __name__ == "__main__":
 
         # Set title and labels
         ax.set_xlabel(f"{planning_horizon}", fontsize=fontsize)
-        ax.set_ylabel(f"Total system costs (bn. € p.a.)", fontsize=fontsize)
+        ax.set_ylabel(f"Capacities (GW)", fontsize=fontsize)
 
         # Ylim
         ax.set_ylim(ymin, ymax*1.1)
@@ -237,7 +239,7 @@ if __name__ == "__main__":
 
     handles = [
         plt.Rectangle((0, 0), 1, 1, color=group_colors[c], label=c) 
-        for c in legend_order[::-1]
+        for c in legend_order[::-1] if c not in negative_group_sel
     ]
 
     # Add the production legend (left side, 2 columns)
@@ -292,7 +294,6 @@ if __name__ == "__main__":
         ymin = 0
 
         for i, planning_horizon in enumerate(planning_horizons):
-            ax = axes[s, i]
             ax = axes[s, i]
             planning_horizon = str(planning_horizon)
             data = costs.query("planning_horizon == @planning_horizon").copy()
@@ -353,7 +354,7 @@ if __name__ == "__main__":
                 ax.xaxis.set_visible(False)
 
             if s == 1:
-                ax.set_ylabel(f"$\Delta$ Total system costs (bn. € p.a.)", fontsize=fontsize)
+                ax.set_ylabel(f"$\Delta$Capacities (GW)", fontsize=fontsize)
 
             # Add totals of positive values on top
             totals = delta_data[delta_data>0].sum(axis=1)
@@ -362,7 +363,7 @@ if __name__ == "__main__":
                 ax.text(
                     x=j,
                     y=totals.iloc[j],
-                    s=f"{nt:+.1f}" if abs(nt) > 0.1 else "",
+                    s=f"{nt:+.0f}" if abs(nt) > 0.1 else "",
                     ha="center",
                     va="bottom",
                     fontsize=subfontsize,
@@ -388,7 +389,7 @@ if __name__ == "__main__":
 
     handles = [
         plt.Rectangle((0, 0), 1, 1, color=group_colors[c], label=c)
-        for c in legend_order[::-1]
+        for c in legend_order[::-1] if c not in negative_group_sel
     ]
 
     # Add the production legend (left side, 2 columns)

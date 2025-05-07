@@ -215,7 +215,7 @@ if __name__ == "__main__":
         ax.set_ylabel(f"{carrier_nice_name} balance ({carrier_unit} p.a.)", fontsize=fontsize)
 
         # Ylim
-        ax.set_ylim(ymin*1.3, ymax*1.3)
+        ax.set_ylim(ymin*1.2, ymax*1.2)
 
         ax.set_xticklabels(
             data.index,
@@ -332,39 +332,30 @@ if __name__ == "__main__":
 
         for i, lt_run in enumerate(lt_order):
             ax = axes[s, i]
-            data = balances.query("lt_run == @lt_run").copy().pivot(
+            data = balances.query("lt_run == @lt_run").copy()
+
+            data["delta"] = data[st_run] - data["Long-term"]
+            data["delta"] = data["delta"].fillna(0)
+
+            delta_data = data.pivot(
                 index="planning_horizon",
                 columns="carrier",
-                values="Long-term",
+                values="delta",
             )
 
-            data_st = balances.query("lt_run == @lt_run").copy().pivot(
-                index="planning_horizon",
-                columns="carrier",
-                values=st_run,
+            abs_max = max(
+                max(ymax, delta_data[delta_data>0].sum(axis=1).max()), 
+                abs(min(ymin, delta_data[delta_data<0].sum(axis=1).min())),
             )
-
-            # Reindex
-            data_st = data_st.reindex(data.index)
-            # Column order
-            data_st = data_st.reindex(columns=data.columns)
-
-            delta_data = data_st - data
-            delta_data.fillna(0, inplace=True)
-
-            data_order = data.columns.tolist()
-            data_order = [col for col in carrier_order if col in data_order]
-            delta_data = delta_data[data_order]
-
-            ymax = max(ymax, delta_data[delta_data>0].sum(axis=1).max())
-            ymin = -ymax
+            ymax = plotting.get("delta_ymax").get(carrier, abs_max*1.1)
+            ymin = plotting.get("delta_ymin").get(carrier, -abs_max*1.1)
 
             delta_data.plot(
                 kind="bar",
                 stacked=True,
                 ax=ax,
                 width=0.8,
-                color=[tech_colors.get(col, "yellow") for col in data.columns],
+                color=[tech_colors.get(col, "yellow") for col in delta_data.columns],
             )
 
             # Turn off legend
@@ -375,10 +366,10 @@ if __name__ == "__main__":
             ax.set_ylabel("")
 
             # # Ylim
-            ax.set_ylim(ymin*1.3, ymax*1.3)
+            ax.set_ylim(ymin, ymax)
 
             ax.set_xticklabels(
-                data.index,
+                delta_data.index,
                 rotation=90,
                 fontsize=subfontsize,
             )
@@ -414,10 +405,10 @@ if __name__ == "__main__":
 
         # Add label of st_run in each row
         axes[s, 0].text(
-            x=1,
-            y=ymin*1.15,
+            x=-0.5,
+            y=ymax*0.88,
             s=plotting["nice_names"][st_run],
-            ha="center",
+            ha="left",
             va="center",
             fontsize=subfontsize-2,
             rotation=0,

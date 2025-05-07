@@ -89,9 +89,17 @@ plotting:
       carrier_units:
         co2 stored: "Mt"
         H2: "TWh"
+      delta_ymin:
+        co2 stored: -370
+        H2: -390
+      delta_ymax: 
+        co2 stored: 370
+        H2: 390
     plot_costs_overview:
       figsize: (5.5, 3.2)
       dpi: 300
+      delta_ymin: -30
+      delta_ymax: 80
       legend_order:
       - Other
       - Electricity grid
@@ -116,6 +124,38 @@ plotting:
       - CC at point sources
       - DAC
       - Load shedding
+    plot_capacities_overview:
+      figsize: (5.5, 3.2)
+      dpi: 300
+      delta_ymin: 0
+      delta_ymax: 370
+      legend_order:
+      - Other
+      - Electricity grid
+      - Hydro and RoR
+      - Biomass and biogas
+      - Nuclear
+      - Oil
+      - Coal infrastructure
+      - Power-to-Heat
+      - Gas infrastructure
+      - CHP
+      - Solar
+      - Wind
+      - Battery infrastructure
+      - Electrolysis
+      - Fischer-Tropsch
+      - Methanol
+      - Methanolisation
+      - H$_2$ infrastructure
+      - CO$_2$ infrastructure
+      - Sabatier
+      - CC at point sources
+      - DAC
+      - Load shedding
+    plot_exogenous_demand:
+      figsize: (5.5, 5)
+      dpi: 300
   map:
     boundaries: [-11, 30, 34, 71]
     color_geomap:
@@ -619,7 +659,7 @@ plotting:
     Coal: '#545454'
     coal: '#545454'
     Coal marginal: '#545454'
-    coal for industry: '#343434'
+    coal for industry: '#545454' #'#343434'
     solid: '#545454'
     Lignite: '#826837'
     lignite: '#826837'
@@ -671,7 +711,7 @@ plotting:
     home battery discharger: '#3c5221'
     BEV charger: '#baf238'
     V2G: '#e5ffa8'
-    land transport EV: '#baf238'
+    land transport EV: '#38baf2' # '#baf238'
     land transport demand: '#38baf2'
     EV battery: '#baf238'
     # hot water storage
@@ -713,6 +753,7 @@ plotting:
     urban central heat vent: '#a74747'
     decentral heat: '#750606'
     residential urban decentral heat: '#a33c3c'
+    urban decentral heat: '#a33c3c'
     services urban decentral heat: '#cc1f1f'
     low-temperature heat for industry: '#8f2727'
     process heat: '#ff0000'
@@ -992,3 +1033,49 @@ group_colors:
   Wind: "#66b5ff"
   Other: "#bbbbbb"
   Load shedding: "#00ff00" # only for debugging
+
+load_grouping:
+  agriculture electricity: Electricity
+  agriculture heat: Low-temp. heat
+  agriculture machinery oil: Liquid hydrocarbons
+  coal for industry: Coal
+  gas for industry: Gas
+  electricity: Electricity
+  H2 for industry: H2
+  industry electricity: Electricity
+  industry methanol: Methanol
+  kerosene for aviation: Liquid hydrocarbons
+  land transport EV: Electricity
+  land transport oil: Liquid hydrocarbons
+  low-temperature heat for industry: Low-temp. heat
+  naphtha for industry: Liquid hydrocarbons
+  process emissions: Process emissions
+  rural heat: Low-temp. heat
+  shipping methanol: Methanol
+  shipping oil: Liquid hydrocarbons
+  solid biomass for industry: Biomass
+  urban central heat: Low-temp. heat
+  urban decentral heat: Low-temp. heat
+
+load_nice_names:
+  agriculture electricity: Agriculture electricity
+  agriculture heat: Agriculture heat
+  agriculture machinery oil: Agriculture machinery oil
+  coal for industry: Coal-based industry
+  gas for industry: Gas-based industry
+  electricity: Electricity
+  H2 for industry: H2
+  industry electricity: Industry electricity
+  industry methanol: Methanol-based industry
+  kerosene for aviation: Kerosene for aviation
+  land transport EV: Electric vehicles
+  land transport oil: ICE vehicles
+  low-temperature heat for industry: Industry low-temp. heat 
+  naphtha for industry: Naphta-based industry
+  process emissions: Process emissions
+  rural heat: Rural heat
+  shipping methanol: Shipping methanol
+  shipping oil: Shipping oil
+  solid biomass for industry: Biomass-based industry
+  urban central heat: Urban central heat
+  urban decentral heat: Urban decentral heat
