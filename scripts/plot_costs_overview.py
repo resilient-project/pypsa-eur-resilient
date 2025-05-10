@@ -353,7 +353,7 @@ if __name__ == "__main__":
                 ax.xaxis.set_visible(False)
 
             if s == 1:
-                ax.set_ylabel(f"$\Delta$ Total system costs (bn. € p.a.)", fontsize=fontsize)
+                ax.set_ylabel(f"$\Delta$Total system costs (bn. € p.a.)", fontsize=fontsize)
 
             # Add totals of positive values on top
             totals = delta_data[delta_data>0].sum(axis=1)
