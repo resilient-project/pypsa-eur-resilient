@@ -199,7 +199,7 @@ if __name__ == "__main__":
         axes[0], 
         exogenous_load_twh, 
         order_twh, 
-        "Demand (TWh)", 
+        "Demand (TWh p.a.)", 
         unit_gap=100,
         hatch_color="black",
     )
@@ -210,7 +210,7 @@ if __name__ == "__main__":
         axes[1], 
         exogenous_load_mt, 
         order_mt, 
-        "Demand (Mt p.a.)", 
+        "CO$_2$ (Mt p.a.)", 
         unit_gap=3,
         hatch_color="white",
     )
