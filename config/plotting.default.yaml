@@ -1041,7 +1041,7 @@ load_grouping:
   coal for industry: Coal
   gas for industry: Gas
   electricity: Electricity
-  H2 for industry: H2
+  H2 for industry: H$_2$
   industry electricity: Electricity
   industry methanol: Methanol
   kerosene for aviation: Liquid hydrocarbons
@@ -1064,7 +1064,7 @@ load_nice_names:
   coal for industry: Coal-based industry
   gas for industry: Gas-based industry
   electricity: Electricity
-  H2 for industry: H2
+  H2 for industry: H$_2$
   industry electricity: Industry electricity
   industry methanol: Methanol-based industry
   kerosene for aviation: Kerosene for aviation

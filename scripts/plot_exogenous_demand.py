@@ -9,6 +9,7 @@ Plot exogenous demand for all planning_horizons.
 import logging
 import ast
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 import pandas as pd
 import numpy as np
 
@@ -129,120 +130,135 @@ if __name__ == "__main__":
     plt.rc("font", **plotting["font"])
 
     # Set up figure and axis
-    fig, axe = plt.subplots(
-        nrows=1,
-        ncols=1,
-        figsize=(5.5, 5),
-        dpi=dpi
-    )
+    not_twh = ["process emissions"]
+    exogenous_load_mt = exogenous_load.query("carrier in @not_twh").copy()
+    exogenous_load_twh = exogenous_load.drop(
+        exogenous_load.query("carrier in @not_twh").index
+    ).copy()
 
-    # Reverse dictionary of nice_names
     nice_name_reverse = {v: k for k, v in nice_names.items()}
     nice_name_colors = {
         k: tech_colors[nice_name_reverse[k]] for k in nice_names.values()
     }
 
-    n_df = len(planning_horizons)
-    H = "/"
-    labels = planning_horizons
-    title = ""
+        
+    # === Parameters ===
+    fig, axes = plt.subplots(
+        1, 2,
+        figsize=figsize,
+        gridspec_kw={'width_ratios': [8, 1]},  # Left wider, right narrower
+        sharey=False
+    )
+    H = "//"  # Hatch pattern
+    n_df = len(planning_horizons)  # Number of planning horizon groups
 
-    for i, ph in enumerate(planning_horizons):
-        ph = str(ph)
-        df = exogenous_load.query("planning_horizon==@ph").pivot(index="group", columns="nice_name", values="value")
-        df = df.reindex(order)
-        df_colors = [nice_name_colors.get(col, '#cccccc') for col in df.columns]
+    # === Helper function ===
+    def plot_grouped_stacked_bar(ax, df_all, order, ylabel, unit_gap, hatch_color):
+        bar_tops = {}
+        for i, ph in enumerate(planning_horizons):
+            ph_str = str(ph)
+            df = df_all.query("planning_horizon == @ph_str").pivot(index="group", columns="nice_name", values="value")
+            df = df.reindex(order)
+            colors = [nice_name_colors.get(col, '#cccccc') for col in df.columns]
 
-        df.plot(
-            kind="bar",
-            linewidth=0,
-            stacked=True,
-            ax=axe,
-            legend=False,
-            grid=False,
-            color=df_colors,
-        )
+            df.plot(kind="bar", stacked=True, linewidth=0, ax=ax, color=colors, legend=False)
 
-        n_col = len(df.columns)
-        n_ind = len(df.index)
+            n_col, n_ind = len(df.columns), len(df.index)
 
-    # Adjust hatch patterns and bar spacing
-    h, l = axe.get_legend_handles_labels()
-    for i in range(0, n_df * n_col, n_col):
-        for j, pa in enumerate(h[i:i+n_col]):
-            for rect in pa.patches:
-                rect.set_x(rect.get_x() + 1 / float(n_df + 1) * i / float(n_col))
-                rect.set_hatch(H * int(i / n_col))
-                rect.set_width(1 / float(n_df + 1))
+            # Hatch and shift bars
+            handles, _ = ax.get_legend_handles_labels()
+            for j, pa in enumerate(handles[i * n_col:(i + 1) * n_col]):
+                for rect in pa.patches:
+                    rect.set_x(rect.get_x() + i / (n_df + 1))
+                    rect.set_width(1 / (n_df + 1))
+                    rect.set_hatch(H * i)
+                    rect.set_edgecolor(hatch_color)
 
-    axe.set_xticks((np.arange(0, 2 * n_ind, 2) + 1 / float(n_df + 1)) / 2.)
-    axe.set_xticklabels(df.index, rotation=90)
-    axe.set_xlabel("")
-    axe.set_title(title)
+                    # Accumulate bar tops for value labels
+                    x = rect.get_x() + rect.get_width() / 2.
+                    bar_tops[x] = bar_tops.get(x, 0) + rect.get_height()
 
-    # Add invisible bars for second legend (hatch)
-    n = [axe.bar(0, 0, color=nice_name_colors["Biomass-based industry"], hatch=H * i * 2)[0] for i in range(n_df)]
+        # X ticks and labels
+        ax.set_xticks(np.arange(len(order))+0.125)
+        ax.set_xticklabels(order, rotation=90, fontsize=subfontsize)
+        ax.set_ylabel(ylabel, fontsize=fontsize)
+        ax.tick_params(axis="y", labelsize=subfontsize)
+        ax.set_xlabel("")
 
-    # First legend (colors)
-    l1 = fig.legend(
-        handles=h[:n_col],
-        labels=l[:n_col],
+        # Value labels
+        for x, total in bar_tops.items():
+            ax.text(x+0.025, total + unit_gap, f"{int(round(total))}", ha='center', va='bottom', fontsize=subfontsize, rotation=90)
+
+        # Y axis limits 
+        y_min, y_max = ax.get_ylim()
+        ax.set_ylim(y_min, y_max*1.1)
+
+    # === Plot TWh (left) ===
+    order_twh = order[~np.isin(order, exogenous_load_mt["group"])]
+    plot_grouped_stacked_bar(
+        axes[0], 
+        exogenous_load_twh, 
+        order_twh, 
+        "Demand (TWh)", 
+        unit_gap=100,
+        hatch_color="black",
+    )
+
+    # === Plot Mt p.a. (right) ===
+    order_mt = order[order.isin(exogenous_load_mt["group"])]
+    plot_grouped_stacked_bar(
+        axes[1], 
+        exogenous_load_mt, 
+        order_mt, 
+        "Demand (Mt p.a.)", 
+        unit_gap=3,
+        hatch_color="white",
+    )
+
+    handleheight = 1.1
+    handlelength = 1
+
+    # Legend for colors (technologies)
+    color_handles = [
+        Patch(
+            facecolor=color, 
+            edgecolor=None, 
+            label=name,
+            ) for name, color in nice_name_colors.items()
+    ]
+
+    # Legend for hatch patterns (planning horizons)
+    hatch_handles = [
+        Patch(
+            facecolor=nice_name_colors["Biomass-based industry"],
+            edgecolor=None,
+            hatch=H * i,
+            label=str(ph),
+        ) for i, ph in enumerate(planning_horizons)
+    ]
+
+    fig.legend(
+        handles=color_handles,
         loc='lower left',
-        bbox_to_anchor=(0, -0.085),
+        bbox_to_anchor=(0, -0.1),
         ncol=3,
         fontsize=subfontsize,
         frameon=False,
-        handleheight=1.1,
-        handlelength=1,
+        handleheight=handleheight,
+        handlelength=handlelength,
     )
 
-    # Second legend (hatches)
-    l2 = fig.legend(
-        handles=n,
-        labels=labels,
+    # Add hatch legend (planning horizons) above the plot
+    fig.legend(
+        handles=hatch_handles,
         loc='upper left',
-        bbox_to_anchor=(0.12, 0.98),
+        bbox_to_anchor=(0.12, 0.973),
         ncol=1,
         fontsize=subfontsize,
         frameon=False,
-        handleheight=1.1,
-        handlelength=1,
+        handleheight=handleheight,
+        handlelength=handlelength,
     )
-
-    # Add total value labels above bars
-    bar_tops = {}
-    for i in range(0, n_df * n_col, n_col):
-        for j, pa in enumerate(h[i:i+n_col]):
-            for rect in pa.patches:
-                x_center = rect.get_x() + rect.get_width() / 2. +0.03
-                height = rect.get_height()
-                if height == 0:
-                    continue
-                if x_center in bar_tops:
-                    bar_tops[x_center] += height
-                else:
-                    bar_tops[x_center] = height
-
-    for x, total in bar_tops.items():
-        axe.text(
-            x,
-            total + 150,  # adjust offset if needed
-            f"{int(round(total, 0))}",
-            ha='center',
-            va='bottom',
-            rotation=90,
-            fontsize=subfontsize,
-        )
-
-    # ylim increase by factor 1.2
-    axe.set_ylim(0, axe.get_ylim()[1] * 1.15)
-
-    # xticks and yticks fontsize
-    axe.tick_params(axis="x", labelsize=subfontsize)
-    axe.tick_params(axis="y", labelsize=subfontsize)
-
-    # Add y label
-    axe.set_ylabel("Demand (TWh p.a.)", fontsize=fontsize)
 
     fig.tight_layout()
     fig.subplots_adjust(bottom=0.4)
