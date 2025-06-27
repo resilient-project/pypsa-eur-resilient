@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: CC0-1.0
 
-name: pypsa-eur
+name: pypsa-eur-new-opt
 channels:
 - conda-forge
 - bioconda
@@ -11,7 +11,7 @@ dependencies:
 - pip
 
 # Inhouse packages
-- pypsa>=0.32.1
+# - pypsa>=0.32.1
 - atlite>=0.3
 - linopy>=0.4.4
 - powerplantmatching>=0.5.15
@@ -70,3 +70,4 @@ dependencies:
   - highspy
   - tsam>=2.3.1
   - entsoe-py
+  - git+https://github.com/PyPSA/PyPSA.git@new-opt
