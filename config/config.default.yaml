@@ -11,8 +11,8 @@ logging:
   format: '%(levelname)s:%(name)s:%(message)s'
 
 remote:
-  ssh: z1
-  path: scratch/projects/pcipmi-policy-targets/workflow/pypsa-eur-resilient
+  ssh: 
+  path:
 
 # PCI-PMI policy paper settings
 pcipmi_policy_paper:

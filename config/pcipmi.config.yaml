@@ -11,8 +11,8 @@ logging:
   format: '%(levelname)s:%(name)s:%(message)s'
 
 remote:
-  ssh: z1
-  path: scratch/projects/pcipmi-policy-targets/workflow/pypsa-eur-resilient
+  ssh: 
+  path: 
 
 # PCI-PMI policy paper settings
 pcipmi_policy_paper:
@@ -37,16 +37,16 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "third-run-dev"
+  prefix: "pcipmi"
   name:
-  - no-pipelines-no-pcipmi
+  - decentral-islands
   - pcipmi
-  - pcipmi-national-expansion
-  - pcipmi-national-international-expansion
-  - greenfield-pipelines
+  - pcipmi-nat
+  - pcipmi-internat
+  - central-planning
   scenarios:
     enable: true
-    file: config/third-run.scenarios.yaml
+    file: config/pcipmi.scenarios.yaml
   disable_progressbar: false
   shared_resources:
     policy: false
@@ -61,17 +61,15 @@ foresight: myopic
 solve_operations:
   resample_temporal_resolution: false
   columns:
-    - ops__free_inv__ghg_target
-    - ops__free_inv__no_pipes
-    - ops__free_inv__no_pipes_emission_price
-    - ops__free_inv__delay_pipes
-    # - ops__no_h2_pipes
-    # - ops__no_onshore_co2_pipes
+    - ops__ghg_target
+    - ops__no_pipes
+    - ops__delay_pipes
+    # - ops__no_pipes_emission_price
   definitions:
-    ops__free_inv__ghg_target:
+    ops__ghg_target:
       options:
         allow_load_shedding: false
-        fix_minimum_investments: false # all assets except for pipelines 
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -89,10 +87,10 @@ solve_operations:
             enable: false
           electrolyser_capacity_min_gw:
             enable: false
-    ops__free_inv__no_pipes:
+    ops__no_pipes:
       options:
         allow_load_shedding: 10000 # EUR/MWh
-        fix_minimum_investments: false # all assets except for pipelines
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -109,11 +107,11 @@ solve_operations:
           h2_production_min_mt:
             enable: true
           electrolyser_capacity_min_gw:
-            enable: true
-    ops__free_inv__delay_pipes:
+            enable: false
+    ops__delay_pipes:
       options:
         allow_load_shedding: 10000 # EUR/MWh
-        fix_minimum_investments: false # all assets except for pipelines
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -126,15 +124,15 @@ solve_operations:
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
-            enable: true # changed
-          h2_production_min_mt:
-            enable: true # changed
-          electrolyser_capacity_min_gw:
             enable: true
-    ops__free_inv__no_pipes_emission_price:
+          h2_production_min_mt:
+            enable: true
+          electrolyser_capacity_min_gw:
+            enable: false
+    ops__no_pipes_emission_price:
       options:
         allow_load_shedding: 10000 # EUR/MWh
-        fix_minimum_investments: false # all assets except for pipelines
+        fix_minimum_investments: true # all assets except for pipelines
         fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
         fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
         remove_co2_pipelines: false
@@ -147,47 +145,7 @@ solve_operations:
       overwrite_config:
         pcipmi_policy_paper:
           co2_sequestration_min_mt:
-            enable: false
-          h2_production_min_mt:
-            enable: false
-          electrolyser_capacity_min_gw:
-            enable: false
-    ops__no_h2_pipes:
-      options:
-        allow_load_shedding: 10000 # EUR/MWh
-        allow_investments: true # all assets except for pipelines
-        fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
-        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
-        remove_co2_pipelines: false
-        remove_onshore_co2_pipelines: false
-        remove_h2_pipelines: true
-        remove_co2_sequestration: false
-        use_emission_price: false
-      overwrite_config:
-        pcipmi_policy_paper:
-          co2_sequestration_min_mt:
-            enable: false
-          h2_production_min_mt:
             enable: true
-          electrolyser_capacity_min_gw:
-            enable: false
-    ops__no_onshore_co2_pipes:
-      options:
-        allow_load_shedding: 10000 # EUR/MWh
-        allow_investments: true # all assets except for pipelines
-        fix_all_capacities: false # ["Generator", "Line", "Link", "Store"]
-        fix_optimal_pipeline_capacities: true # CO2 and H2 pipelines
-        remove_co2_pipelines: false
-        remove_onshore_co2_pipelines: true
-        remove_h2_pipelines: false
-        remove_co2_sequestration: false
-        use_emission_price: false
-        delay_onshore_co2_pipelines: false
-        delay_h2_pipelines: false
-      overwrite_config:
-        pcipmi_policy_paper:
-          co2_sequestration_min_mt:
-            enable: false
           h2_production_min_mt:
             enable: true
           electrolyser_capacity_min_gw:
@@ -346,101 +304,13 @@ clustering:
     SE: 0.05
   temporal:
     resolution_elec: false
-    resolution_sector: 169h
+    resolution_sector: 2190seg
 
 solving:
-  mem_mb: 7000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
+  mem_mb: 220000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
   memory_logging_frequency: 30 # in seconds
-  runtime: 3h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
+  runtime: 40h #runtime in humanfriendly style https://humanfriendly.readthedocs.io/en/latest/
   options:
     assign_all_duals: true
     custom_extra_functionality: false # Has to be set to false, otherwise the imported solve_network function will not work correctly
     noisy_costs: true
-
-plotting:
-  balance_map:
-    bus_carriers:
-    - AC
-    - H2
-    - co2_stored
-    AC:
-      unit: TWh
-      unit_conversion: 1_000_000
-      cmap: Greens
-      vmin:
-      vmax:
-      region_unit: €/MWh
-      bus_factor: 0.002
-      branch_factor: 0.15
-      flow_factor: 100
-      bus_sizes:
-      - 200
-      - 100
-      branch_sizes:
-      - 200
-      - 100
-    H2:
-      unit: TWh
-      unit_conversion: 1_000_000
-      cmap: Blues
-      vmin: 50
-      vmax: 100
-      region_unit: €/MWh
-      bus_factor: 0.002
-      branch_factor: 0.06
-      flow_factor: 25
-      bus_sizes:
-      - 50
-      - 25
-      branch_sizes:
-      - 40
-      - 20
-    co2_stored:
-      unit: Mt
-      unit_conversion: 1_000_000
-      cmap: Purples
-      vmin:
-      vmax:
-      region_unit: €/t_${CO_2}$
-      bus_factor: 0.03
-      branch_factor: 0.1
-      flow_factor: 45
-      bus_sizes:
-      - 50
-      - 10
-      branch_sizes:
-      - 5
-      - 2
-  capacity_map:
-    H2:
-      unit: TW
-      unit_conversion: 1_000_000
-      cmap: Blues
-      vmin: 50
-      vmax: 100
-      region_unit: €/MWh
-      bus_factor: 0.002
-      branch_factor: 0.0003
-      flow_factor: 45
-      bus_sizes:
-      - 50
-      - 25
-      branch_sizes:
-      - 40
-      - 20
-    co2 stored:
-      unit: Mt
-      unit_conversion: 1_000_000
-      cmap: Purples
-      vmin:
-      vmax:
-      region_unit: €/t_${CO_2}$
-      bus_factor: 200
-      branch_factor: 0.001
-      flow_factor: 150
-      bus_sizes:
-      - 0.005
-      - 0.001
-      branch_sizes:
-      - 5
-      - 2
