@@ -74,7 +74,7 @@ if __name__ == "__main__":
     discount_rate = config["costs"]["fill_values"]["discount rate"]
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
-    subfontsize = fontsize-2
+    subfontsize = fontsize
     dpi = plotting["dpi"]
 
     opts = config["scenario"]["opts"][0]
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     ).reset_index()
 
     # Filter costs to keep subset
-    negative_group_sel = ["Other", "Battery infrastructure", "CO$_2$ infrastructure", "Methanol", "H$_2$ infrastructure", "Gas infrastructure", "Oil","Biomass and biogas", "Coal infrastructure", "Electricity grid"]
+    negative_group_sel = ["Other", "Battery", "CO$_2$ infra", "Methanol", "H$_2$ infra", "Gas", "Oil", "Biomass & -gas", "Coal", "Electricity grid"]
     costs = costs[~costs["group"].isin(negative_group_sel)]
 
     # # Drop load shedding after debugging
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     legend = fig.legend(
         handles=handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor+xpad, 0.06),  # fixed at 0 (left-aligned)
+        bbox_to_anchor=(x_anchor+xpad, 0.055),  # fixed at 0 (left-aligned)
         ncol=ncol,
         fontsize=subfontsize,
         title="",
@@ -396,7 +396,7 @@ if __name__ == "__main__":
     legend = fig.legend(
         handles=handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor+xpad, 0.04),  # fixed at 0 (left-aligned)
+        bbox_to_anchor=(x_anchor+xpad, 0.035),  # fixed at 0 (left-aligned)
         ncol=ncol,
         fontsize=subfontsize,
         title="",

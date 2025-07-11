@@ -63,7 +63,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "plot_balances_overview",
             configfiles=["config/run5.config.yaml"],
-            carrier="co2 stored",
+            carrier="H2",
             )
 
     configure_logging(snakemake)
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     discount_rate = config["costs"]["fill_values"]["discount rate"]
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
-    subfontsize = fontsize-2
+    subfontsize = fontsize
     dpi = plotting["dpi"]
 
     opts = config["scenario"]["opts"][0]
@@ -86,8 +86,8 @@ if __name__ == "__main__":
     carrier = snakemake.wildcards.carrier
     font = plotting["font"]
 
-    carrier_nice_name = plotting["carrier_nice_names"][carrier]
-    carrier_unit = plotting["carrier_units"][carrier]
+    carrier_nice_name = plotting["carrier_nice_names"].get(carrier, carrier)
+    carrier_unit = plotting["carrier_units"].get(carrier, "TWh")
 
     planning_horizons = snakemake.config["scenario"]["planning_horizons"]
     st_order = [col for col in plotting["short_term_run_order"]]
@@ -117,6 +117,12 @@ if __name__ == "__main__":
     to_drop = balances.index[(balances.value.abs()<10)] # Drop small values
     balances = balances.drop(to_drop, axis=0)
     balances.reset_index(drop=True, inplace=True)
+
+    # If carrier is gas, aggregate gas boilers
+    if carrier == "gas":
+        idx_gas_boiler = balances.loc[balances["carrier"].str.contains("gas boiler")].index
+        balances.loc[idx_gas_boiler, "carrier"] = "gas boiler"
+
 
     # Drop st
     # balances.drop(
@@ -171,8 +177,14 @@ if __name__ == "__main__":
     handleheight = 1.1
 
     if carrier == "H2":
-        x_anchor_cons = 0.5
-        ncol_cons = 2
+        x_anchor_cons = 0.25
+        ncol_prod = 1
+        ncol_cons = 3
+
+    if carrier == "gas":
+        x_anchor_cons = 0.25
+        ncol_prod = 1
+        ncol_cons = 3 
 
     xpad = 0.03
     
@@ -259,7 +271,7 @@ if __name__ == "__main__":
     ]
 
     cons_handles = [
-        plt.Rectangle((0, 0), 1, 1, color=tech_colors[c], label=nice_names.get(c, c))
+        plt.Rectangle((0, 0), 1, 1, color=tech_colors.get(c, "#ff0000"), label=nice_names.get(c, c))
         for c in cons_carriers
     ]
 
@@ -267,7 +279,7 @@ if __name__ == "__main__":
     legend_prod = fig.legend(
         handles=prod_handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor_prod+xpad, 0.07),  # fixed at 0 (left-aligned)
+        bbox_to_anchor=(x_anchor_prod+xpad, 0.055),  # fixed at 0 (left-aligned)
         ncol=ncol_prod,
         fontsize=subfontsize,
         title="Production",
@@ -283,7 +295,7 @@ if __name__ == "__main__":
     legend_cons = fig.legend(
         handles=cons_handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor_cons+xpad, 0.07),  # fixed at 0.5 (centered)
+        bbox_to_anchor=(x_anchor_cons+xpad, 0.055),  # fixed at 0.5 (centered)
         ncol=ncol_cons,
         fontsize=subfontsize,
         title="Consumption",
@@ -434,7 +446,7 @@ if __name__ == "__main__":
     legend_prod = fig.legend(
         handles=prod_handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor_prod+xpad, 0.045),  # fixed at 0 (left-aligned)
+        bbox_to_anchor=(x_anchor_prod+xpad, 0.035),  # fixed at 0 (left-aligned)
         ncol=ncol_prod,
         fontsize=subfontsize,
         title="Production",
@@ -450,7 +462,7 @@ if __name__ == "__main__":
     legend_cons = fig.legend(
         handles=cons_handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor_cons+xpad, 0.045),  # fixed at 0.5 (centered)
+        bbox_to_anchor=(x_anchor_cons+xpad, 0.035),  # fixed at 0.5 (centered)
         ncol=ncol_cons,
         fontsize=subfontsize,
         title="Consumption",

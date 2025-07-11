@@ -73,7 +73,7 @@ if __name__ == "__main__":
     discount_rate = config["costs"]["fill_values"]["discount rate"]
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
-    subfontsize = fontsize-2
+    subfontsize = fontsize
     dpi = plotting["dpi"]
 
     opts = config["scenario"]["opts"][0]

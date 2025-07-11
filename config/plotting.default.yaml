@@ -9,7 +9,7 @@ plotting:
     font:
       family: sans-serif
       sans-serif: Roboto
-      size: 10
+      size: 6
     nice_names:
       no-pipelines-no-pcipmi: "DI"
       pcipmi: "PCI"
@@ -31,7 +31,7 @@ plotting:
       - ops__no_pipes
   figures:
     plot_pcipmi_map:
-      figsize: (5.5, 7)
+      figsize: (4.2, 4.5)
       dpi: 300
     plot_delta_system_costs:
       figsize: (10, 5)
@@ -44,16 +44,16 @@ plotting:
       - pcipmi-national-international-expansion
       - greenfield-pipelines
     plot_totex_heatmap:
-      figsize: (5.5, 3)
+      figsize: (3.6, 2)
       dpi: 300
     plot_regret_matrix:
-      figsize: (5.5, 3)
+      figsize: (3.6, 1.7)
       dpi: 300
     plot_installed_capacities:
-      figsize: (10, 5)
+      figsize: (3.6, 2)
       dpi: 300
     plot_delta_balances:
-      figsize: (5.5, 2.5)
+      figsize: (3.5, 1.6)
       dpi: 300
       custom_markers:
         Long-term: "o" # Circle
@@ -78,83 +78,89 @@ plotting:
       - urban central solid biomass CHP CC
       - process emissions
     plot_balances_overview:
-      figsize: (5.5, 3.2)
+      figsize: (3.5, 2.3)
       dpi: 300
       carriers:
       - co2 stored
       - H2
+      - gas
       carrier_nice_names:
         co2 stored: "CO$_2$"
         H2: "H$_2$"
+        gas: "CH$_4$"
+        oil: "Oil"
       carrier_units:
         co2 stored: "Mt"
         H2: "TWh"
+        gas: "TWh"
       delta_ymin:
         co2 stored: -370
         H2: -390
+        gas: -700
       delta_ymax: 
         co2 stored: 370
         H2: 390
+        gas: 700
     plot_costs_overview:
-      figsize: (5.5, 3.2)
+      figsize: (3.5, 2.8)
       dpi: 300
       delta_ymin: -30
       delta_ymax: 80
       legend_order:
       - Other
       - Electricity grid
-      - Hydro and RoR
-      - Biomass and biogas
+      - Hydro & RoR
+      - Biomass & -gas
       - Nuclear
       - Oil
-      - Coal infrastructure
-      - Power-to-Heat
-      - Gas infrastructure
+      - Coal
+      - PtH
+      - Gas
       - CHP
       - Solar
       - Wind
-      - Battery infrastructure
+      - Battery
       - Electrolysis
       - Fischer-Tropsch
       - Methanol
       - Methanolisation
-      - H$_2$ infrastructure
-      - CO$_2$ infrastructure
+      - H$_2$ infra
+      - CO$_2$ infra
       - Sabatier
-      - CC at point sources
+      - Point source CC
       - DAC
       - Load shedding
     plot_capacities_overview:
-      figsize: (5.5, 3.2)
+      figsize: (3.5, 2.2)
       dpi: 300
       delta_ymin: 0
       delta_ymax: 370
       legend_order:
       - Other
       - Electricity grid
-      - Hydro and RoR
-      - Biomass and biogas
+      - Hydro & RoR
+      - Biomass & -gas
       - Nuclear
       - Oil
-      - Coal infrastructure
-      - Power-to-Heat
-      - Gas infrastructure
+      - Coal
+      - PtH
+      - Gas
       - CHP
       - Solar
       - Wind
-      - Battery infrastructure
+      - Battery
       - Electrolysis
       - Fischer-Tropsch
       - Methanol
       - Methanolisation
-      - H$_2$ infrastructure
-      - CO$_2$ infrastructure
+      - H$_2$ infra
+      - CO$_2$ infra
       - Sabatier
-      - CC at point sources
+      - Point source CC
       - DAC
       - Load shedding
     plot_exogenous_demand:
-      figsize: (5.5, 5)
+      figsize: (3.6, 3.5)
       dpi: 300
   map:
     boundaries: [-11, 30, 34, 71]
@@ -251,10 +257,10 @@ plotting:
     - urban central water tanks
   balance_map:
     bus_carriers:
-    - AC
+    # - AC
     - H2
     - co2_stored
-    - urban_central_heat
+    # - urban_central_heat
     AC:
       unit: TWh
       unit_conversion: 1_000_000
@@ -292,8 +298,8 @@ plotting:
       unit: TWh
       unit_conversion: 1_000_000
       cmap: Blues
-      vmin:
-      vmax:
+      vmin: 30
+      vmax: 130
       region_unit: €/MWh
       bus_factor: 0.002
       branch_factor: 0.06
@@ -309,8 +315,8 @@ plotting:
       unit: Mt
       unit_conversion: 1_000_000
       cmap: Purples
-      vmin:
-      vmax:
+      vmin: 0
+      vmax: 150
       region_unit: €/t$_{CO_2}$
       bus_factor: 0.015
       branch_factor: 0.08
@@ -541,11 +547,15 @@ plotting:
     battery: "Battery"
     battery charger: "Battery charger"
     battery discharger: "Battery discharger"
+    biogas to gas: "Biogas to gas"
     co2 sequestered: "CO$_2$ sequestration"
     coal: "Hard coal"
     dc: "DC"
     electricity distribution grid: "Distribution grid (AC)"
+    gas: "Gas (methane)"
+    gas for industry: "Industry (gas)"
     gas for industry CC: "Industry CC (gas)"
+    gas boiler: "Gas boiler"
     H2: "H$_2$"
     H2 Electrolysis: "H$_2$ electrolysis"
     H2 Fuel Cell: "H$_2$ fuel cell"
@@ -560,21 +570,23 @@ plotting:
     oil: "Oil"
     onwind: "Onshore wind"
     process emissions CC: "Process emissions CC"
-    solid biomass for industry CC: "Industry CC (biomass)"
+    rural gas boiler: "Gas boiler (rural)"
+    solid biomass for industry CC: "Industry CC (bio)"
     urban central air heat pump: "Air heat pump"
     urban central CHP: "CHP (gas)"
     urban central CHP CC: "CHP CC (gas)"
-    urban central gas boiler: "Gas boiler)" 
+    urban central gas boiler: "Gas boiler (urban)" 
     urban central heat: "Heat"
     urban central heat vent: "Heat vent"
     urban central resistive heater: "Resistive heater"
     urban central solar thermal: "Solar thermal"
-    urban central solid biomass CHP: "CHP (biomass)"
-    urban central solid biomass CHP CC: "CHP CC (biomass)"
+    urban central solid biomass CHP: "CHP (bio)"
+    urban central solid biomass CHP CC: "CHP CC (bio)"
     urban central water pits charger: "Water pits charger"
     urban central water pits discharger: "Water pits discharger"
     urban central water tanks charger: "Water tanks charger"
     urban central water tanks discharger: "Water tanks discharger"
+    urban decentral gas boiler: "Gas boiler (decentral)"
 
   tech_colors:
     # wind
@@ -614,26 +626,27 @@ plotting:
     OCGT: '#e0986c'
     OCGT marginal: '#e0986c'
     OCGT-heat: '#e0986c'
-    gas boiler: '#db6a25'
-    gas boilers: '#db6a25'
     gas boiler marginal: '#db6a25'
     residential rural gas boiler: '#d4722e'
+    rural gas boiler: '#d4722e'
     residential urban decentral gas boiler: '#cb7a36'
     services rural gas boiler: '#c4813f'
     services urban decentral gas boiler: '#ba8947'
     urban central gas boiler: '#b0904f'
+    urban decentral gas boiler: '#b0904f'
+    gas boiler: '#cc1f1f'
     gas: '#e05b09'
     fossil gas: '#e05b09'
-    natural gas: '#e05b09'
-    biogas to gas: '#805500' # '#e36311'
+    natural gas: '#e05b09' 
+    biogas to gas: '#b7f046' # '#e36311'
     biogas to gas CC: '#e51245'
-    CCGT: '#a85522'
-    CCGT marginal: '#a85522'
+    CCGT: '#baa741'
+    CCGT marginal: '#cb7a36'
     allam: '#B98F76'
     gas for industry co2 to atmosphere: '#692e0a'
     gas for industry co2 to stored: '#8a3400'
     gas for industry: '#808080' # '#853403'
-    gas for industry CC: '#808080' # '#692e0a'
+    gas for industry CC: '#303030' # '#692e0a'
     gas pipeline: '#ebbca0'
     gas pipeline new: '#a87c62'
     # oil
@@ -644,9 +657,11 @@ plotting:
     oil boiler: '#adadad'
     residential rural oil boiler: '#a9a9a9'
     services rural oil boiler: '#a5a5a5'
+    rural oil boiler: '#a5a5a5'
     residential urban decentral oil boiler: '#a1a1a1'
     urban central oil boiler: '#9d9d9d'
     services urban decentral oil boiler: '#999999'
+    urban decentral oil boiler: '#999999'
     agriculture machinery oil: '#949494'
     shipping oil: "#808080"
     land transport oil: '#afafaf'
@@ -864,6 +879,7 @@ plotting:
     # other
     shipping: '#03a2ff'
     power-to-heat: '#2fb537'
+    PtH: '#2fb537'
     power-to-gas: '#c44ce6'
     power-to-H2: '#ff29d9'
     power-to-liquid: '#25c49a'
@@ -894,54 +910,54 @@ plotting:
 
 grouping:
   AC: Electricity grid
-  BEV charger: Battery infrastructure
-  CCGT: Gas infrastructure
-  CO2: CO$_2$ infrastructure
-  CO2 pipeline: CO$_2$ infrastructure
+  BEV charger: Battery
+  CCGT: Gas
+  CO2: CO$_2$ infra
+  CO2 pipeline: CO$_2$ infra
   DAC: DAC
   DC: Electricity grid
-  EV battery: Battery infrastructure
+  EV battery: Battery
   Fischer-Tropsch: Fischer-Tropsch
-  H2: H$_2$ infrastructure
+  H2: H$_2$ infra
   H2 Electrolysis: Electrolysis
-  H2 Fuel Cell: H$_2$ infrastructure
-  H2 Store: H$_2$ infrastructure
-  H2 for industry: H$_2$ infrastructure
-  H2 pipeline: H$_2$ infrastructure
-  OCGT: Gas infrastructure
-  PHS: Hydro and RoR
+  H2 Fuel Cell: H$_2$ infra
+  H2 Store: H$_2$ infra
+  H2 for industry: H$_2$ infra
+  H2 pipeline: H$_2$ infra
+  OCGT: Gas
+  PHS: Hydro & RoR
   SMR: Other
-  SMR CC: CC at point sources
+  SMR CC: Point source CC
   Sabatier: Sabatier
-  V2G: Battery infrastructure
+  V2G: Battery
   agriculture electricity: Other
   agriculture heat: Other
   agriculture machinery oil: Other
-  battery: Battery infrastructure
-  battery charger: Battery infrastructure
-  battery discharger: Battery infrastructure
-  biogas: Biomass and biogas
-  biogas to gas: Biomass and biogas
-  co2: CO$_2$ infrastructure
-  co2 sequestered: CO$_2$ infrastructure
-  co2 stored: CO$_2$ infrastructure
-  coal: Coal infrastructure
-  coal for industry: Coal infrastructure
+  battery: Battery
+  battery charger: Battery
+  battery discharger: Battery
+  biogas: Biomass & -gas
+  biogas to gas: Biomass & -gas
+  co2: CO$_2$ infra
+  co2 sequestered: CO$_2$ infra
+  co2 stored: CO$_2$ infra
+  coal: Coal
+  coal for industry: Coal
   electricity: Electricity grid
   electricity distribution grid: Electricity grid
-  gas: Gas infrastructure
-  gas for industry: Gas infrastructure
-  gas for industry CC: CC at point sources
-  home battery: Battery infrastructure
-  home battery charger: Battery infrastructure
-  home battery discharger: Battery infrastructure
-  hydro: Hydro and RoR
+  gas: Gas
+  gas for industry: Gas
+  gas for industry CC: Point source CC
+  home battery: Battery
+  home battery charger: Battery
+  home battery discharger: Battery
+  hydro: Hydro & RoR
   industry electricity: Electricity grid
   industry methanol: Methanol
   kerosene for aviation: Other # TODO
   land transport EV: Other # TODO
   land transport oil: Other # TODO
-  lignite: Coal infrastructure
+  lignite: Coal
   low voltage: Electricity grid
   low-temperature heat for industry: Other
   methanol: Methanol
@@ -955,15 +971,15 @@ grouping:
   oil refining: Oil
   onwind: Wind
   process emissions: Other
-  process emissions CC: CC at point sources
-  ror: Hydro and RoR
-  rural air heat pump: Power-to-Heat
-  rural biomass boiler: Biomass and biogas
-  rural gas boiler: Gas infrastructure
-  rural ground heat pump: Power-to-Heat
+  process emissions CC: Point source CC
+  ror: Hydro & RoR
+  rural air heat pump: PtH
+  rural biomass boiler: Biomass & -gas
+  rural gas boiler: Gas
+  rural ground heat pump: PtH
   rural heat: Other
   rural heat vent: Other
-  rural resistive heater: Power-to-Heat
+  rural resistive heater: PtH
   rural solar thermal: Solar
   rural water tanks: Other
   rural water tanks charger: Other
@@ -972,62 +988,62 @@ grouping:
   shipping oil: Oil # TODO
   solar: Solar
   solar rooftop: Solar
-  solid biomass: Biomass and biogas
-  solid biomass for industry: Biomass and biogas
-  solid biomass for industry CC: CC at point sources
+  solid biomass: Biomass & -gas
+  solid biomass for industry: Biomass & -gas
+  solid biomass for industry CC: Point source CC
   uranium: Nuclear
   urban central CHP: CHP
-  urban central CHP CC: CC at point sources
-  urban central air heat pump: Power-to-Heat
-  urban central gas boiler: Gas infrastructure
+  urban central CHP CC: Point source CC
+  urban central air heat pump: PtH
+  urban central gas boiler: Gas
   urban central heat: Other
   urban central heat vent: Other
-  urban central resistive heater: Power-to-Heat
+  urban central resistive heater: PtH
   urban central solar thermal: Solar
-  urban central solid biomass CHP: Biomass and biogas
-  urban central solid biomass CHP CC: CC at point sources
+  urban central solid biomass CHP: Biomass & -gas
+  urban central solid biomass CHP CC: Point source CC
   urban central water pits: Other
   urban central water pits charger: Other
   urban central water pits discharger: Other
   urban central water tanks: Other
   urban central water tanks charger: Other
   urban central water tanks discharger: Other
-  urban decentral air heat pump: Power-to-Heat
-  urban decentral biomass boiler: Biomass and biogas
-  urban decentral gas boiler: Gas infrastructure
+  urban decentral air heat pump: PtH
+  urban decentral biomass boiler: Biomass & -gas
+  urban decentral gas boiler: Gas
   urban decentral heat: Other
   urban decentral heat vent: Other
-  urban decentral resistive heater: Power-to-Heat
+  urban decentral resistive heater: PtH
   urban decentral solar thermal: Solar
   urban decentral water tanks: Other
   urban decentral water tanks charger: Other
   urban decentral water tanks discharger: Other
   load: "Load shedding"
   rural oil boiler: Other
-  unsustainable biogas: Biomass and biogas
-  unsustainable bioliquids: Biomass and biogas
-  unsustainable solid biomass: Biomass and biogas
+  unsustainable biogas: Biomass & -gas
+  unsustainable bioliquids: Biomass & -gas
+  unsustainable solid biomass: Biomass & -gas
   urban decentral oil boiler: Other
 
 group_colors:
-  Battery infrastructure: "#ace37f"
-  Biomass and biogas: "#baa741"
+  Battery: "#ace37f"
+  Biomass & -gas: "#baa741"
   CHP: "#8a5751"
-  CO$_2$ infrastructure: "#cc99ff"
-  CC at point sources: "#f29dae"
-  Coal infrastructure: "#555555"
+  CO$_2$ infra: "#cc99ff"
+  Point source CC: "#f29dae"
+  Coal: "#555555"
   DAC: "#ff5270"
   Electricity grid: "#97ad8c"
   Electrolysis: "#b3e6ff"
   Fischer-Tropsch: "#25c49a"
-  Gas infrastructure: "#e05b09"
-  H$_2$ infrastructure: "#7895b1"
-  Hydro and RoR: "#298c81"
+  Gas: "#e05b09"
+  H$_2$ infra: "#7895b1"
+  Hydro & RoR: "#298c81"
   Methanol: "#57ebc4"
   Methanolisation: "#57aac1"
   Nuclear: "#ff8c00"
   Oil: "#333333"
-  Power-to-Heat: "#dd2e23"
+  PtH: "#dd2e23"
   Sabatier: "#c44ce6" 
   Solar: "#ffe066"
   Wind: "#66b5ff"

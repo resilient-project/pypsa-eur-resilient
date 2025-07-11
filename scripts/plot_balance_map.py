@@ -163,7 +163,7 @@ if __name__ == "__main__":
     plt.rc("font", **font)
 
     fig, ax = plt.subplots(
-        figsize=(5, 6.5),
+        figsize=(2.5, 3.2),
         subplot_kw={"projection": crs},
         layout="constrained",
     )
@@ -239,8 +239,8 @@ if __name__ == "__main__":
     )
 
     # Label style
-    gl.xlabel_style = {"size": font["size"] - 2}
-    gl.ylabel_style = {"size": font["size"] - 2}
+    gl.xlabel_style = {"size": font["size"] - 1}
+    gl.ylabel_style = {"size": font["size"] - 1}
 
     # Show only bottom and right labels
     gl.top_labels = False
@@ -265,12 +265,12 @@ if __name__ == "__main__":
         ax=ax,
         label=f"Demand-weighted price ({price_unit})",
         shrink=0.95,
-        pad=0.015,
+        pad=0.01,
         aspect=50,
         orientation="horizontal",
     )
     cbr.outline.set_edgecolor("None")
-    cbr.ax.tick_params(labelsize=font["size"] - 2)
+    cbr.ax.tick_params(labelsize=font["size"] - 1)
     cbr.ax.xaxis.label.set_size(font["size"])
 
     # add legend
@@ -279,10 +279,10 @@ if __name__ == "__main__":
         "frameon": False,
         "alignment": "left",
         "title_fontproperties": {"weight": "bold"},
-        "fontsize": font["size"] - 2,
+        "fontsize": font["size"]-1,
     }
 
-    pad = 0.12
+    pad = 0.14
     n.carriers.loc["", "color"] = "None"
     supp_carriers = bus_sizes[bus_sizes > 0].index.unique("carrier").sort_values()
     cons_carriers = (
@@ -319,8 +319,14 @@ if __name__ == "__main__":
     handleheight = 1.1
 
     if carrier == "H2":
-        x_anchor_cons = 0.5
+        x_anchor_cons = 0.33
+        ncol_supp = 1
         ncol_cons = 2
+
+    if carrier == "co2 stored":
+        x_anchor_cons = 0.67
+        ncol_supp = 2
+        ncol_cons = 1
 
     # Add supply carriers
     add_legend_patches(
@@ -365,7 +371,7 @@ if __name__ == "__main__":
             [f"{s} {carrier_unit}" for s in legend_bus_sizes],
             patch_kw={"color": link_color},
             legend_kw={
-                "bbox_to_anchor": (0.03, 0.97),
+                "bbox_to_anchor": (0.01, 0.98),
                 **legend_kwargs,
             },
         )
@@ -382,8 +388,8 @@ if __name__ == "__main__":
                 "solid_capstyle": "round",
             },
             legend_kw={
-                "bbox_to_anchor": (0.21, 0.97), 
-                "handlelength": 1.4,
+                "bbox_to_anchor": (0.24, 0.98), 
+                "handlelength": 1.1,
                 **legend_kwargs
             },
         )

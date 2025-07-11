@@ -63,7 +63,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "plot_delta_balances",
             configfiles=["config/run5.config.yaml"],
-            carrier="co2 stored"
+            carrier="solid biomass for industry CC",
             )
 
     configure_logging(snakemake)
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     discount_rate = config["costs"]["fill_values"]["discount rate"]
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
-    subfontsize = fontsize-2
+    subfontsize = fontsize
     dpi = plotting["dpi"]
 
     opts = config["scenario"]["opts"][0]
@@ -170,6 +170,7 @@ if __name__ == "__main__":
         nrows=1,
         ncols=3,
         figsize=figsize,
+        tight_layout=True,
     )
 
     for i, year in enumerate(planning_horizons):
@@ -190,7 +191,15 @@ if __name__ == "__main__":
             palette=custom_hues,
             markers=custom_markers,
             ax=ax,
+            s=60,                      # Make markers larger
+            edgecolor="black",          # Marker border color
+            linewidth=1.0,              # Thickness of border
+            facecolors="#ffffff"           # Make markers hollow
         )
+
+        for path_collection in ax.collections:
+            path_collection.set_facecolor((1, 1, 1, 0))  # Transparent (R, G, B, alpha)
+            path_collection.set_edgecolor("black")      # Set edge color to black
 
         sns.scatterplot(
             data=subset.query("run_type != 'LT'"),
@@ -264,8 +273,8 @@ if __name__ == "__main__":
         by_label.values(),
         by_label.keys(),
         loc="lower center",
-        bbox_to_anchor=(0.5, -0.07),
-        ncol=4,
+        bbox_to_anchor=(0.5, -0.11),
+        ncol=2,
         fontsize=subfontsize,
         frameon=False,
     )

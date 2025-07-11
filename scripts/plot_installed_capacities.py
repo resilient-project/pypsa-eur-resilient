@@ -38,7 +38,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "plot_installed_capacities",
             run="pcipmi-national-international-expansion",
-            configfiles=["config/dev.config.yaml"],
+            configfiles=["config/run5.config.yaml"],
             )
 
     configure_logging(snakemake)

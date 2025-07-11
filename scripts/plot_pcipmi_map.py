@@ -40,7 +40,6 @@ if __name__ == "__main__":
 
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
-    subfontsize = fontsize-2
     titlesize = fontsize
     dpi = plotting["dpi"]
 
@@ -85,8 +84,8 @@ if __name__ == "__main__":
     )
 
     # Label style
-    gl.xlabel_style = {"size": subfontsize}
-    gl.ylabel_style = {"size": subfontsize}
+    gl.xlabel_style = {"size": fontsize}
+    gl.ylabel_style = {"size": fontsize}
 
     # Show only bottom and right labels
     gl.top_labels = False
@@ -119,7 +118,7 @@ if __name__ == "__main__":
     name_links_co2 = "PCI-PMI CO$_2$ pipelines"
     name_links_h2 = "PCI-PMI H$_2$ pipelines"
     name_stores_co2 = "PCI-PMI CO$_2$ sequestration"
-    name_stores_h2 = "PCI-PMI H$_2$ storages"
+    name_stores_h2 = "PCI-PMI H$_2$ storage"
     name_seq = "Depleted oil & gas fields"
    
     # Add legend with border set to none
@@ -141,7 +140,7 @@ if __name__ == "__main__":
         loc='upper center',
         bbox_to_anchor=(0.5, -0.01),
         ncol=2,
-        fontsize=subfontsize,
+        fontsize=fontsize,
         frameon=False
     )
 

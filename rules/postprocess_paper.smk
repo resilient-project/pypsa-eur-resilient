@@ -3,6 +3,15 @@
 # SPDX-License-Identifier: MIT
 
 
+rule create_some_paper_plots:
+    input:
+        delta_balances=expand(
+           EXPORT_PATH + "/delta_balances_{carrier}.pdf",
+            **config["scenario"],
+            carrier=config_provider("plotting", "figures", "plot_delta_balances", "carriers"),
+        ),
+
+
 rule create_paper_plots:
     input:
         regret_matrix=EXPORT_PATH + "/regret_matrix.pdf",

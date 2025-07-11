@@ -76,7 +76,7 @@ if __name__ == "__main__":
     discount_rate = config["costs"]["fill_values"]["discount rate"]
     figsize = ast.literal_eval(plotting["figsize"])
     fontsize = plotting["font"]["size"]
-    subfontsize = fontsize-2
+    subfontsize = fontsize
     dpi = plotting["dpi"]
 
     opts = config["scenario"]["opts"][0]
@@ -244,7 +244,7 @@ if __name__ == "__main__":
     legend = fig.legend(
         handles=handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor+xpad, 0.06),  # fixed at 0 (left-aligned)
+        bbox_to_anchor=(x_anchor+xpad, 0.03),  # fixed at 0 (left-aligned)
         ncol=ncol,
         fontsize=subfontsize,
         title="",
@@ -395,7 +395,7 @@ if __name__ == "__main__":
     legend = fig.legend(
         handles=handles,
         loc="upper left",
-        bbox_to_anchor=(x_anchor+xpad, 0.04),  # fixed at 0 (left-aligned)
+        bbox_to_anchor=(x_anchor+xpad, 0.02),  # fixed at 0 (left-aligned)
         ncol=ncol,
         fontsize=subfontsize,
         title="",
