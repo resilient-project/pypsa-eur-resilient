@@ -20,15 +20,15 @@ plotting:
       ops__delay_pipes: "Delayed pipelines"
       ops__no_pipes: "No pipelines"
     run_order: 
-      - no-pipelines-no-pcipmi
-      - pcipmi
-      - pcipmi-national-expansion
-      - pcipmi-national-international-expansion
-      - greenfield-pipelines
+    - decentral-islands
+    - pcipmi
+    - pcipmi-nat
+    - pcipmi-internat
+    - central-planning
     short_term_run_order: 
-      - ops__ghg_target
-      - ops__delay_pipes
-      - ops__no_pipes
+    - ops__ghg_target
+    - ops__delay_pipes
+    - ops__no_pipes
   figures:
     plot_pcipmi_map:
       figsize: (4.2, 4.5)
@@ -38,11 +38,11 @@ plotting:
       dpi: 300
       run_to_subtract: "no-pipelines-no-pcipmi"
       run_order: 
-      - no-pipelines-no-pcipmi
+      - decentral-islands
       - pcipmi
-      - pcipmi-national-expansion
-      - pcipmi-national-international-expansion
-      - greenfield-pipelines
+      - pcipmi-nat
+      - pcipmi-internat
+      - central-planning
     plot_totex_heatmap:
       figsize: (3.6, 2)
       dpi: 300

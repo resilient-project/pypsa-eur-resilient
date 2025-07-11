@@ -34,7 +34,7 @@ pcipmi:
     options:
       delay: 0
 
-pcipmi-national-expansion:
+pcipmi-nat:
   carrier_networks:
     CO2:
       enable: true
@@ -70,7 +70,7 @@ pcipmi-national-expansion:
     options:
       delay: 0
 
-pcipmi-national-international-expansion:
+pcipmi-internat:
   carrier_networks:
     CO2:
       enable: true
@@ -106,7 +106,7 @@ pcipmi-national-international-expansion:
     options:
       delay: 0
 
-no-pipelines-no-pcipmi:
+decentral-islands:
   carrier_networks:
     CO2:
       enable: false
@@ -120,7 +120,7 @@ no-pipelines-no-pcipmi:
     options:
       delay: 0
 
-greenfield-pipelines:
+central-planning:
   carrier_networks:
     CO2:
       enable: true
