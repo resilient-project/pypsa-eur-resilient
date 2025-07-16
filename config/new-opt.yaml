@@ -39,9 +39,9 @@ pcipmi_policy_paper:
 run:
   prefix: "new-opt"
   name: 
-  - no-01
-  - no-02
-  - no-03
+  - no1
+  - no2
+  - no3
   scenarios:
     enable: true
     file: "new-opt.scenarios.yaml"
