@@ -11,8 +11,8 @@ logging:
   format: '%(levelname)s:%(name)s:%(message)s'
 
 remote:
-  ssh: 
-  path: 
+  ssh: z1
+  path: scratch/projects/new-opt-profiling/
 
 # PCI-PMI policy paper settings
 pcipmi_policy_paper:
@@ -37,16 +37,14 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "pcipmi"
-  name:
-  - decentral-islands
-  - pcipmi
-  - pcipmi-nat
-  - pcipmi-internat
-  - central-planning
+  prefix: "new-opt"
+  name: 
+  - no-01
+  - no-02
+  - no-03
   scenarios:
     enable: true
-    file: config/pcipmi.scenarios.yaml
+    file: "new-opt.scenarios.yaml"
   disable_progressbar: false
   shared_resources:
     policy: false
@@ -162,8 +160,8 @@ scenario:
   - ''
   planning_horizons:
   - 2030
-  - 2040
-  - 2050
+  # - 2040
+  # - 2050
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#countries
 countries: ['AL', 'AT', 'BA', 'BE', 'BG', 'CH', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'ME', 'MK', 'NL', 'NO', 'PL', 'PT', 'RO', 'RS', 'SE', 'SI', 'SK', 'XK']
@@ -203,7 +201,7 @@ carrier_networks:
       pcipmi: true
     extendable:
       greenfield: ['national', 'international']
-      pcipmi: []
+      pcipmi: ["national", "international"]
     p_nom_max: .inf
     options:
       cost_factor: 1.0
@@ -216,7 +214,7 @@ carrier_networks:
       pcipmi: true
     extendable:
       greenfield: ['national', 'international']
-      pcipmi: []
+      pcipmi: ["national", "international"]
     p_nom_max: .inf
     options:
       delay: 0
