@@ -1215,7 +1215,6 @@ def add_empty_co2_atmosphere_store_constraint(n):
 
     n.model.add_constraints(lhs == 0, name=cname)
 
-
 def extra_functionality(
     n: pypsa.Network, snapshots: pd.DatetimeIndex, planning_horizons: str | None = None, additional_settings: dict = {}
 ) -> None:
@@ -1357,6 +1356,7 @@ def solve_network(
     params: dict,
     solving: dict,
     rule_name: str | None = None,
+    run: str = "",
     planning_horizons: str | None = None,
     additional_settings: dict = {},
     **kwargs,
@@ -1376,6 +1376,8 @@ def solve_network(
         Dictionary of solving options and configuration
     rule_name : str, optional
         Name of the snakemake rule being executed
+    run: str, optional
+        The run identifier, e.g., "no3", "no4", etc. (only for profiling purposes)
     planning_horizons : str, optional
             The current planning horizon year or None in perfect foresight
     **kwargs
@@ -1405,9 +1407,10 @@ def solve_network(
         solving["solver_options"][set_of_options] if set_of_options else {}
     )
     kwargs["solver_name"] = solving["solver"]["name"]
-    kwargs["extra_functionality"] = partial(
-        extra_functionality, planning_horizons=planning_horizons, additional_settings=additional_settings
-    )
+    # Disabled because currently incompatible
+    # kwargs["extra_functionality"] = partial(
+    #     extra_functionality, planning_horizons=planning_horizons, additional_settings=additional_settings
+    # )
     kwargs["transmission_losses"] = cf_solving.get("transmission_losses", False)
     kwargs["linearized_unit_commitment"] = cf_solving.get(
         "linearized_unit_commitment", False
@@ -1431,6 +1434,15 @@ def solve_network(
         n.params = params
 
     # For profiling scenarios
+    logger.info(f"Solving network for run: {run}.")
+    # Setup scenarios
+    if run == "no2":
+        logger.info(f"Setting up 1 scenario for run '{run}'")
+        n.set_scenarios({"scenario": 1})
+    if run == "no3":
+        logger.info(f"Setting up 2 scenarios for run '{run}'")
+        n.set_scenarios({"scenario-1": 0.3, "scenario-2": 0.7})
+
     if hasattr(n, "scenarios"):
         logger.info(f"Network has scnarios:")
         logger.info(n.scenario_weightings)
@@ -1482,11 +1494,13 @@ if __name__ == "__main__":
             sector_opts="",
             planning_horizons="2030",
             configfiles=["config/new-opt.yaml"],
-            run="no2",
+            run="no3",
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)
     update_config_from_wildcards(snakemake.config, snakemake.wildcards)
+
+    run = snakemake.wildcards.get("run", "")
 
     pcipmi_policy_paper = snakemake.params["pcipmi_policy_paper"]
 
@@ -1495,6 +1509,8 @@ if __name__ == "__main__":
     np.random.seed(solve_opts.get("seed", 123))
 
     n = pypsa.Network(snakemake.input.network)
+
+    n.snapshots = n.snapshots[:8]
 
     planning_horizons = snakemake.wildcards.get("planning_horizons", None)
 
@@ -1521,6 +1537,7 @@ if __name__ == "__main__":
             solving=snakemake.params.solving,
             planning_horizons=planning_horizons,
             rule_name=snakemake.rule,
+            run=run,
         )
 
     logger.info(f"Maximum memory usage: {mem.mem_usage}")
