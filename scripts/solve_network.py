@@ -1510,16 +1510,16 @@ if __name__ == "__main__":
 
     n = pypsa.Network(snakemake.input.network)
 
-    planning_horizons = snakemake.wildcards.get("planning_horizons", None)
+    # planning_horizons = snakemake.wildcards.get("planning_horizons", None)
 
-    prepare_network(
-        n,
-        solve_opts=snakemake.params.solving["options"],
-        foresight=snakemake.params.foresight,
-        planning_horizons=planning_horizons,
-        co2_sequestration_potential=snakemake.params["co2_sequestration_potential"],
-        limit_max_growth=snakemake.params.get("sector", {}).get("limit_max_growth"),
-    )
+    # prepare_network(
+    #     n,
+    #     solve_opts=snakemake.params.solving["options"],
+    #     foresight=snakemake.params.foresight,
+    #     planning_horizons=planning_horizons,
+    #     co2_sequestration_potential=snakemake.params["co2_sequestration_potential"],
+    #     limit_max_growth=snakemake.params.get("sector", {}).get("limit_max_growth"),
+    # )
 
     logging_frequency = snakemake.config.get("solving", {}).get(
         "mem_logging_frequency", 30
@@ -1528,15 +1528,17 @@ if __name__ == "__main__":
     with memory_logger(
         filename=getattr(snakemake.log, "memory", None), interval=logging_frequency
     ) as mem:
-        solve_network(
-            n,
-            config=snakemake.config,
-            params=snakemake.params,
-            solving=snakemake.params.solving,
-            planning_horizons=planning_horizons,
-            rule_name=snakemake.rule,
-            run=run,
-        )
+        # solve_network(
+        #     n,
+        #     config=snakemake.config,
+        #     params=snakemake.params,
+        #     solving=snakemake.params.solving,
+        #     planning_horizons=planning_horizons,
+        #     rule_name=snakemake.rule,
+        #     run=run,
+        # )
+        logging.getLogger("gurobipy").setLevel(logging.CRITICAL)
+        n.optimize(solver_name="gurobi")
 
     logger.info(f"Maximum memory usage: {mem.mem_usage}")
 
