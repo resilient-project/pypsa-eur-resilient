@@ -174,7 +174,7 @@ enable:
 electricity:
   conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
   renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
-  transmission_limit: v1.0
+  transmission_limit: ""
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#transmission_projects
 transmission_projects:
