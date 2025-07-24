@@ -1430,6 +1430,11 @@ def solve_network(
     if not hasattr(n, "params"):
         n.params = params
 
+    # For profiling scenarios
+    if hasattr(n, "scenarios"):
+        logger.info(f"Network has scnarios:")
+        logger.info(n.scenario_weightings)
+
     if rolling_horizon and rule_name == "solve_operations_network":
         kwargs["horizon"] = cf_solving.get("horizon", 365)
         kwargs["overlap"] = cf_solving.get("overlap", 0)
