@@ -1510,8 +1510,6 @@ if __name__ == "__main__":
 
     n = pypsa.Network(snakemake.input.network)
 
-    n.snapshots = n.snapshots[:8]
-
     planning_horizons = snakemake.wildcards.get("planning_horizons", None)
 
     prepare_network(
