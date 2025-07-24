@@ -11,20 +11,11 @@ plotting:
       sans-serif: Roboto
       size: 6
     nice_names:
-      no-pipelines-no-pcipmi: "DI"
-      pcipmi: "PCI"
-      pcipmi-national-expansion: "PCI-n"
-      pcipmi-national-international-expansion: "PCI-in"
-      greenfield-pipelines: "CP"
-      ops__ghg_target: "Reduced targets"
-      ops__delay_pipes: "Delayed pipelines"
-      ops__no_pipes: "No pipelines"
+      no0: "No0 (ref)"
+      no1: "No1"
     run_order: 
-    - decentral-islands
-    - pcipmi
-    - pcipmi-nat
-    - pcipmi-internat
-    - central-planning
+    - no0
+    - no1
     short_term_run_order: 
     - ops__ghg_target
     - ops__delay_pipes
@@ -36,13 +27,10 @@ plotting:
     plot_delta_system_costs:
       figsize: (10, 5)
       dpi: 300
-      run_to_subtract: "no-pipelines-no-pcipmi"
+      run_to_subtract: "no0"
       run_order: 
-      - decentral-islands
-      - pcipmi
-      - pcipmi-nat
-      - pcipmi-internat
-      - central-planning
+      - no0
+      - no1
     plot_totex_heatmap:
       figsize: (3.6, 2)
       dpi: 300

@@ -1,17 +1,29 @@
+no0:
+  electricity:
+    conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
+    renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
+    transmission_limit: v1.0
+
 no1:
   electricity:
-  conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
-  renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
-  transmission_limit: v1.0
+    conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
+    renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
+    transmission_limit: v1.0
 
 no2:
   electricity:
-  conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
-  renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
-  transmission_limit: v1.0
+    conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
+    renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
+    transmission_limit: v1.0
 
 no3:
   electricity:
-  conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
-  renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
-  transmission_limit: v1.0
+    conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
+    renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
+    transmission_limit: v1.0
+
+pcipmi:
+  electricity:
+    conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
+    renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
+    transmission_limit: v1.0

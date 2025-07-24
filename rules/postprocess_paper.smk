@@ -14,31 +14,31 @@ rule create_some_paper_plots:
 
 rule create_paper_plots:
     input:
-        regret_matrix=EXPORT_PATH + "/regret_matrix.pdf",
+        # regret_matrix=EXPORT_PATH + "/regret_matrix.pdf",
         pcipmi_map=expand(
             EXPORT_PATH + "/map_adm_pcipmi.pdf",
         ),
-        totex_heatmap=EXPORT_PATH + "/totex_heatmap.pdf",
+        # totex_heatmap=EXPORT_PATH + "/totex_heatmap.pdf",
         delta_balances=expand(
            EXPORT_PATH + "/delta_balances_{carrier}.pdf",
             **config["scenario"],
             carrier=config_provider("plotting", "figures", "plot_delta_balances", "carriers"),
         ),
         costs_overview=EXPORT_PATH + "/costs_overview.pdf",
-        costs_overview_extend=EXPORT_PATH + "/costs_overview_extended.pdf",
+        # costs_overview_extend=EXPORT_PATH + "/costs_overview_extended.pdf",
         balances_overview=expand(
             EXPORT_PATH + "/balances_overview_{carrier}.pdf",
             **config["scenario"],
             carrier=config_provider("plotting", "figures", "plot_balances_overview", "carriers"),
         ),
-        balances_overview_ext=expand(
-            EXPORT_PATH + "/balances_overview_extended_{carrier}.pdf",
-            **config["scenario"],
-            carrier=config_provider("plotting", "figures", "plot_balances_overview", "carriers"),
-        ),
+        # balances_overview_ext=expand(
+        #     EXPORT_PATH + "/balances_overview_extended_{carrier}.pdf",
+        #     **config["scenario"],
+        #     carrier=config_provider("plotting", "figures", "plot_balances_overview", "carriers"),
+        # ),
         capacities_overview=EXPORT_PATH + "/capacities_overview.pdf",
-        capacities_overview_ext= EXPORT_PATH + "/capacities_overview_extended.pdf",
-        exogenous_demand= EXPORT_PATH + "/exogenous_demand.pdf",
+        # capacities_overview_ext= EXPORT_PATH + "/capacities_overview_extended.pdf",
+        # exogenous_demand= EXPORT_PATH + "/exogenous_demand.pdf",
 
 
 rule plot_pcipmi_map:

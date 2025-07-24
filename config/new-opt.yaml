@@ -44,7 +44,7 @@ run:
   - no3
   scenarios:
     enable: true
-    file: "new-opt.scenarios.yaml"
+    file: config/new-opt.scenarios.yaml
   disable_progressbar: false
   shared_resources:
     policy: false
@@ -168,7 +168,7 @@ countries: ['AL', 'AT', 'BA', 'BE', 'BG', 'CH', 'CZ', 'DE', 'DK', 'EE', 'ES', 'F
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#enable
 enable:
-  retrieve: enable
+  retrieve: true
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#electricity
 electricity:

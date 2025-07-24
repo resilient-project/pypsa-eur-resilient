@@ -1473,10 +1473,11 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "solve_sector_network_myopic",
             opts="",
-            clusters="70",
+            clusters="adm",
             sector_opts="",
             planning_horizons="2030",
-            configfiles=["config/dev.config.yaml"]
+            configfiles=["config/new-opt.yaml"],
+            run="no2",
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)
@@ -1489,6 +1490,13 @@ if __name__ == "__main__":
     np.random.seed(solve_opts.get("seed", 123))
 
     n = pypsa.Network(snakemake.input.network)
+
+    # Temporary hot fix for line_types
+    # https://github.com/PyPSA/PyPSA/pull/1154#issuecomment-3077749897
+    if len(n.scenarios)>0:
+        # Remove first index level
+        n.line_types.index = n.line_types.index.droplevel(0)
+
     planning_horizons = snakemake.wildcards.get("planning_horizons", None)
 
     prepare_network(
@@ -1503,6 +1511,7 @@ if __name__ == "__main__":
     logging_frequency = snakemake.config.get("solving", {}).get(
         "mem_logging_frequency", 30
     )
+
     with memory_logger(
         filename=getattr(snakemake.log, "memory", None), interval=logging_frequency
     ) as mem:
