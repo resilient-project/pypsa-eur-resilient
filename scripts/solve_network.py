@@ -1496,12 +1496,6 @@ if __name__ == "__main__":
 
     n = pypsa.Network(snakemake.input.network)
 
-    # Temporary hot fix for line_types
-    # https://github.com/PyPSA/PyPSA/pull/1154#issuecomment-3077749897
-    if len(n.scenarios)>0:
-        # Remove first index level
-        n.line_types.index = n.line_types.index.droplevel(0)
-
     planning_horizons = snakemake.wildcards.get("planning_horizons", None)
 
     prepare_network(
