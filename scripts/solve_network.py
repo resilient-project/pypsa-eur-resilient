@@ -1538,7 +1538,19 @@ if __name__ == "__main__":
         #     run=run,
         # )
         logging.getLogger("gurobipy").setLevel(logging.CRITICAL)
-        n.optimize(solver_name="gurobi")
+        n.optimize(
+            solver_name="gurobi",
+            solver_optoins={
+            "Threads": 8,
+            "Method": 2,
+            "Crossover": 0,
+            "BarConvTol": 1e-6,
+            "Seed": 123,
+            "AggFill": 0,
+            "PreDual": 0,
+            "GURO_PAR_BARDENSETHRESH": 200,
+            }
+        )
 
     logger.info(f"Maximum memory usage: {mem.mem_usage}")
 
