@@ -1518,12 +1518,6 @@ if __name__ == "__main__":
     # For profiling scenarios
     logger.info(f"Solving network for run: {run}.")
     # Setup scenarios
-    if run == "no2":
-        logger.info(f"Setting up 1 scenario for run '{run}'")
-        n.set_scenarios({"scenario": 1})
-    if run == "no3":
-        logger.info(f"Setting up 2 scenarios for run '{run}'")
-        n.set_scenarios({"scenario-1": 0.3, "scenario-2": 0.7})
 
     if hasattr(n, "scenarios"):
         logger.info(f"Network has scenarios:")
