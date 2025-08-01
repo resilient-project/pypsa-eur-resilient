@@ -29,14 +29,21 @@ import logging
 import numpy as np
 import pandas as pd
 import pypsa
+
 from _helpers import (
+    PYPSA_V1,
     configure_logging,
     get,
     set_scenario_config,
     update_config_from_wildcards,
 )
 from add_electricity import load_costs, set_transmission_costs
-from pypsa.common import expand_series
+
+# Allow for PyPSA versions <0.35
+if PYPSA_V1:
+    pypsa.network.power_flow.logger.setLevel(logging.WARNING)
+else:
+    pypsa.pf.logger.setLevel(logging.WARNING)
 
 idx = pd.IndexSlice
 

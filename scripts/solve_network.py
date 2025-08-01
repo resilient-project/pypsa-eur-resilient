@@ -42,6 +42,7 @@ import xarray as xr
 import yaml
 from _benchmark import memory_logger
 from _helpers import (
+    PYPSA_V1,
     configure_logging,
     set_scenario_config,
     update_config_from_wildcards,
@@ -51,7 +52,10 @@ from pypsa.descriptors import get_activity_mask
 from pypsa.descriptors import get_switchable_as_dense as get_as_dense
 
 logger = logging.getLogger(__name__)
-pypsa.pf.logger.setLevel(logging.WARNING)
+if PYPSA_V1:
+    pypsa.network.power_flow.logger.setLevel(logging.WARNING)
+else:
+    pypsa.pf.logger.setLevel(logging.WARNING)
 
 
 class ObjectiveValueError(Exception):

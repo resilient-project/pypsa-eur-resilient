@@ -26,6 +26,9 @@ from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
+PYPSA_V1 = bool(re.match(r"^0\.35\.\d\.post1\.dev\d{3}", pypsa.__version__))
+
+
 REGION_COLS = ["geometry", "name", "x", "y", "country"]
 
 
