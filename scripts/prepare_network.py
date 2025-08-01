@@ -36,7 +36,7 @@ from _helpers import (
     update_config_from_wildcards,
 )
 from add_electricity import load_costs, set_transmission_costs
-from pypsa.descriptors import expand_series
+from pypsa.common import expand_series
 
 idx = pd.IndexSlice
 
