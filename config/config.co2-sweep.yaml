@@ -1,0 +1,225 @@
+logging:
+  level: INFO
+  format: '%(levelname)s:%(name)s:%(message)s'
+
+run:
+  prefix: "co2-sweep"
+  name: 
+  - co2-10__seq250mt__c2030
+  - co2-05__seq250mt__c2030
+  # - co2-00__seq250mt__c2030
+  # - co2+05__seq250mt__c2030
+  # - co2+10__seq250mt__c2030
+  # - co2+15__seq250mt__c2030
+  # - co2+20__seq250mt__c2030
+  # - co2+25__seq250mt__c2030
+  # - co2+30__seq250mt__c2030
+  # - co2+35__seq250mt__c2030
+  # - co2+40__seq250mt__c2030
+  # - co2+45__seq250mt__c2030
+  # - co2+50__seq250mt__c2030
+  # - co2+55__seq250mt__c2030
+  # - co2+60__seq250mt__c2030
+  # - co2+65__seq250mt__c2030
+  # - co2-10__seq250mt__c2050
+  # - co2-05__seq250mt__c2050
+  # - co2-00__seq250mt__c2050
+  # - co2+05__seq250mt__c2050
+  # - co2+10__seq250mt__c2050
+  # - co2+15__seq250mt__c2050
+  # - co2+20__seq250mt__c2050
+  # - co2+25__seq250mt__c2050
+  # - co2+30__seq250mt__c2050
+  # - co2+35__seq250mt__c2050
+  # - co2+40__seq250mt__c2050
+  # - co2+45__seq250mt__c2050
+  # - co2+50__seq250mt__c2050
+  # - co2+55__seq250mt__c2050
+  - co2+60__seq250mt__c2050
+  # - co2+65__seq250mt__c2050
+  # - co2-10__seq5000mt__c2030
+  # - co2-05__seq5000mt__c2030
+  # - co2-00__seq5000mt__c2030
+  # - co2+05__seq5000mt__c2030
+  # - co2+10__seq5000mt__c2030
+  # - co2+15__seq5000mt__c2030
+  # - co2+20__seq5000mt__c2030
+  # - co2+25__seq5000mt__c2030
+  # - co2+30__seq5000mt__c2030
+  # - co2+35__seq5000mt__c2030
+  # - co2+40__seq5000mt__c2030
+  # - co2+45__seq5000mt__c2030
+  # - co2+50__seq5000mt__c2030
+  - co2+55__seq5000mt__c2030
+  # - co2+60__seq5000mt__c2030
+  # - co2+65__seq5000mt__c2030  
+  # - co2-10__seq5000mt__c2050
+  # - co2-05__seq5000mt__c2050
+  # - co2-00__seq5000mt__c2050
+  # - co2+05__seq5000mt__c2050
+  # - co2+10__seq5000mt__c2050
+  # - co2+15__seq5000mt__c2050
+  # - co2+20__seq5000mt__c2050
+  # - co2+25__seq5000mt__c2050
+  # - co2+30__seq5000mt__c2050
+  # - co2+35__seq5000mt__c2050
+  # - co2+40__seq5000mt__c2050
+  # - co2+45__seq5000mt__c2050
+  # - co2+50__seq5000mt__c2050
+  # - co2+55__seq5000mt__c2050
+  # - co2+60__seq5000mt__c2050
+  # - co2+65__seq5000mt__c2050 
+  scenarios:
+    enable: true
+    file: config/scenarios.co2-sweep.yaml
+  disable_progressbar: false
+  shared_resources:
+    policy: "base"
+    exclude: []
+  shared_cutouts: true
+  use_shadow_directory: false
+
+foresight: overnight
+
+scenario:
+  clusters:
+  - 50
+  planning_horizons:
+  - 2050
+
+countries:
+- AL
+- AT
+- BA
+- BE
+- BG
+- CH
+- CZ
+- DE
+- DK
+- EE
+- ES
+- FI
+- FR
+- GB
+- GR
+- HR
+- HU
+- IE
+- IT
+- LT
+- LU
+- LV
+- ME
+- MK
+- NL
+- 'NO'
+- PL
+- PT
+- RO
+- RS
+- SE
+- SI
+- SK
+- XK
+
+electricity:
+  voltages: [220., 300., 330., 380., 400., 500., 750.]
+  base_network: osm-prebuilt
+  osm-prebuilt-version: 0.6
+  conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
+  renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
+
+transmission_projects:
+  enable: true
+  include:
+    tyndp2020: true
+    nep: true
+    manual: true
+  skip:
+  - upgraded_lines
+  - upgraded_links
+  status:
+  - under_construction
+  - in_permitting
+  - confirmed
+
+sector:
+  transport: true
+  heating: true
+  biomass: true
+  industry: true
+  shipping: true
+  aviation: true
+  agriculture: true
+  fossil_fuels: true
+  hydrogen_fuel_cell: true
+  hydrogen_turbine: true
+  SMR: true
+  SMR_cc: true
+  regional_oil_demand: true
+  regional_co2_sequestration_potential:
+    enable: true
+    attribute:
+    - conservative estimate Mt
+    - conservative estimate GAS Mt
+    - conservative estimate OIL Mt
+    - conservative estimate aquifer Mt
+    include_onshore: false
+    min_size: 3
+    max_size: 25
+    years_of_storage: 25
+  co2_sequestration_potential:
+    2020: 0
+    2025: 0
+    2030: 40
+    2035: 100
+    2040: 180
+    2045: 250
+    2050: 250
+  co2_sequestration_cost: 30
+  co2_sequestration_lifetime: 50
+  co2_spatial: true
+  co2_network: true
+  co2_network_cost_factor: 1
+  cc_fraction: 0.9
+  hydrogen_underground_storage: true
+  hydrogen_underground_storage_locations:
+  - onshore    # more than 50 km from sea
+  - nearshore      # within 50 km of sea
+    # - offshore
+  H2_network: true
+  gas_network: true
+  imports:
+    enable: false
+
+costs:
+  version: v0.13.2
+  social_discountrate: 0.02
+  fill_values:
+    FOM: 0
+    VOM: 0
+    efficiency: 1
+    fuel: 0
+    investment: 0
+    lifetime: 25
+    "CO2 intensity": 0
+    "discount rate": 0.07
+  emission_prices:
+    enable: false
+    co2: 0.
+    co2_monthly_prices: false
+
+clustering:
+  temporal:
+    resolution_elec: false
+    resolution_sector: 2190seg
+
+solving:
+  solver:
+    name: gurobi
+    options: gurobi-default
+
+  mem_mb: 128000
+  memory_logging_frequency: 5 # in seconds
+  runtime: 48h 
