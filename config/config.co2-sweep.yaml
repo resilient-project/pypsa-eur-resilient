@@ -5,70 +5,66 @@ logging:
 run:
   prefix: "co2-sweep"
   name: 
-  - co2-10__seq250mt__c2030
-  - co2-05__seq250mt__c2030
-  # - co2-00__seq250mt__c2030
-  # - co2+05__seq250mt__c2030
-  # - co2+10__seq250mt__c2030
-  # - co2+15__seq250mt__c2030
-  # - co2+20__seq250mt__c2030
-  # - co2+25__seq250mt__c2030
-  # - co2+30__seq250mt__c2030
-  # - co2+35__seq250mt__c2030
-  # - co2+40__seq250mt__c2030
-  # - co2+45__seq250mt__c2030
-  # - co2+50__seq250mt__c2030
-  # - co2+55__seq250mt__c2030
-  # - co2+60__seq250mt__c2030
-  # - co2+65__seq250mt__c2030
-  # - co2-10__seq250mt__c2050
-  # - co2-05__seq250mt__c2050
-  # - co2-00__seq250mt__c2050
-  # - co2+05__seq250mt__c2050
-  # - co2+10__seq250mt__c2050
-  # - co2+15__seq250mt__c2050
-  # - co2+20__seq250mt__c2050
-  # - co2+25__seq250mt__c2050
-  # - co2+30__seq250mt__c2050
-  # - co2+35__seq250mt__c2050
-  # - co2+40__seq250mt__c2050
-  # - co2+45__seq250mt__c2050
-  # - co2+50__seq250mt__c2050
-  # - co2+55__seq250mt__c2050
+  - co2-02__seq250mt__c2030
+  - co2+00__seq250mt__c2030
+  - co2+05__seq250mt__c2030
+  - co2+10__seq250mt__c2030
+  - co2+15__seq250mt__c2030
+  - co2+20__seq250mt__c2030
+  - co2+25__seq250mt__c2030
+  - co2+30__seq250mt__c2030
+  - co2+35__seq250mt__c2030
+  - co2+40__seq250mt__c2030
+  - co2+45__seq250mt__c2030
+  - co2+50__seq250mt__c2030
+  - co2+55__seq250mt__c2030
+  - co2+60__seq250mt__c2030
+  - co2+65__seq250mt__c2030
+  - co2-02__seq250mt__c2050
+  - co2+00__seq250mt__c2050
+  - co2+05__seq250mt__c2050
+  - co2+10__seq250mt__c2050
+  - co2+15__seq250mt__c2050
+  - co2+20__seq250mt__c2050
+  - co2+25__seq250mt__c2050
+  - co2+30__seq250mt__c2050
+  - co2+35__seq250mt__c2050
+  - co2+40__seq250mt__c2050
+  - co2+45__seq250mt__c2050
+  - co2+50__seq250mt__c2050
+  - co2+55__seq250mt__c2050
   - co2+60__seq250mt__c2050
-  # - co2+65__seq250mt__c2050
-  # - co2-10__seq5000mt__c2030
-  # - co2-05__seq5000mt__c2030
-  # - co2-00__seq5000mt__c2030
-  # - co2+05__seq5000mt__c2030
-  # - co2+10__seq5000mt__c2030
-  # - co2+15__seq5000mt__c2030
-  # - co2+20__seq5000mt__c2030
-  # - co2+25__seq5000mt__c2030
-  # - co2+30__seq5000mt__c2030
-  # - co2+35__seq5000mt__c2030
-  # - co2+40__seq5000mt__c2030
-  # - co2+45__seq5000mt__c2030
-  # - co2+50__seq5000mt__c2030
+  - co2+65__seq250mt__c2050
+  - co2-02__seq5000mt__c2030
+  - co2+00__seq5000mt__c2030
+  - co2+05__seq5000mt__c2030
+  - co2+10__seq5000mt__c2030
+  - co2+15__seq5000mt__c2030
+  - co2+20__seq5000mt__c2030
+  - co2+25__seq5000mt__c2030
+  - co2+30__seq5000mt__c2030
+  - co2+35__seq5000mt__c2030
+  - co2+40__seq5000mt__c2030
+  - co2+45__seq5000mt__c2030
+  - co2+50__seq5000mt__c2030
   - co2+55__seq5000mt__c2030
-  # - co2+60__seq5000mt__c2030
-  # - co2+65__seq5000mt__c2030  
-  # - co2-10__seq5000mt__c2050
-  # - co2-05__seq5000mt__c2050
-  # - co2-00__seq5000mt__c2050
-  # - co2+05__seq5000mt__c2050
-  # - co2+10__seq5000mt__c2050
-  # - co2+15__seq5000mt__c2050
-  # - co2+20__seq5000mt__c2050
-  # - co2+25__seq5000mt__c2050
-  # - co2+30__seq5000mt__c2050
-  # - co2+35__seq5000mt__c2050
-  # - co2+40__seq5000mt__c2050
-  # - co2+45__seq5000mt__c2050
-  # - co2+50__seq5000mt__c2050
-  # - co2+55__seq5000mt__c2050
-  # - co2+60__seq5000mt__c2050
-  # - co2+65__seq5000mt__c2050 
+  - co2+60__seq5000mt__c2030
+  - co2+65__seq5000mt__c2030  
+  - co2-02__seq5000mt__c2050
+  - co2+00__seq5000mt__c2050
+  - co2+05__seq5000mt__c2050
+  - co2+10__seq5000mt__c2050
+  - co2+15__seq5000mt__c2050
+  - co2+20__seq5000mt__c2050
+  - co2+25__seq5000mt__c2050
+  - co2+30__seq5000mt__c2050
+  - co2+35__seq5000mt__c2050
+  - co2+40__seq5000mt__c2050
+  - co2+45__seq5000mt__c2050
+  - co2+50__seq5000mt__c2050
+  - co2+55__seq5000mt__c2050
+  - co2+60__seq5000mt__c2050
+  - co2+65__seq5000mt__c2050 
   scenarios:
     enable: true
     file: config/scenarios.co2-sweep.yaml
@@ -122,6 +118,9 @@ countries:
 - SI
 - SK
 - XK
+
+co2_budget:
+  2050: 0.000
 
 electricity:
   voltages: [220., 300., 330., 380., 400., 500., 750.]
@@ -194,6 +193,7 @@ sector:
     enable: false
 
 costs:
+  year: 2050
   version: v0.13.2
   social_discountrate: 0.02
   fill_values:
@@ -220,6 +220,6 @@ solving:
     name: gurobi
     options: gurobi-default
 
-  mem_mb: 128000
+  mem_mb: 90000
   memory_logging_frequency: 5 # in seconds
   runtime: 48h 

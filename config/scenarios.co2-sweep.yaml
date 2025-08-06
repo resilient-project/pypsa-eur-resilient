@@ -1,22 +1,13 @@
-co2-10__seq250mt__c2030:
+co2-02__seq250mt__c2030:
   co2_budget:
-    2050: -0.10
+    2050: -0.02
   sector:
     co2_sequestration_potential:
       2050: 250
   costs:
     year: 2030
 
-co2-05__seq250mt__c2030:
-  co2_budget:
-    2050: -0.05
-  sector:
-    co2_sequestration_potential:
-      2050: 250
-  costs:
-    year: 2030
-
-co2-00__seq250mt__c2030:
+co2+00__seq250mt__c2030:
   co2_budget:
     2050: 0.00
   sector:
@@ -142,25 +133,16 @@ co2+65__seq250mt__c2030:
   costs:
     year: 2030
 
-co2-10__seq250mt__c2050:
+co2-02__seq250mt__c2050:
   co2_budget:
-    2050: -0.10
+    2050: -0.02
   sector:
     co2_sequestration_potential:
       2050: 250
   costs:
     year: 2050
 
-co2-05__seq250mt__c2050:
-  co2_budget:
-    2050: -0.05
-  sector:
-    co2_sequestration_potential:
-      2050: 250
-  costs:
-    year: 2050
-
-co2-00__seq250mt__c2050:
+co2+00__seq250mt__c2050:
   co2_budget:
     2050: 0.00
   sector:
@@ -286,25 +268,16 @@ co2+65__seq250mt__c2050:
   costs:
     year: 2050
 
-co2-10__seq5000mt__c2030:
+co2-02__seq5000mt__c2030:
   co2_budget:
-    2050: -0.10
+    2050: -0.02
   sector:
     co2_sequestration_potential:
       2050: 5000
   costs:
     year: 2030
 
-co2-05__seq5000mt__c2030:
-  co2_budget:
-    2050: -0.05
-  sector:
-    co2_sequestration_potential:
-      2050: 5000
-  costs:
-    year: 2030
-
-co2-00__seq5000mt__c2030:
+co2+00__seq5000mt__c2030:
   co2_budget:
     2050: 0.00
   sector:
@@ -430,25 +403,16 @@ co2+65__seq5000mt__c2030:
   costs:
     year: 2030
 
-co2-10__seq5000mt__c2050:
+co2-02__seq5000mt__c2050:
   co2_budget:
-    2050: -0.10
+    2050: -0.02
   sector:
     co2_sequestration_potential:
       2050: 5000
   costs:
     year: 2050
 
-co2-05__seq5000mt__c2050:
-  co2_budget:
-    2050: -0.05
-  sector:
-    co2_sequestration_potential:
-      2050: 5000
-  costs:
-    year: 2050
-
-co2-00__seq5000mt__c2050:
+co2+00__seq5000mt__c2050:
   co2_budget:
     2050: 0.00
   sector:
