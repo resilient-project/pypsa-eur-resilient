@@ -220,6 +220,6 @@ solving:
     name: gurobi
     options: gurobi-default
 
-  mem_mb: 90000
+  mem_mb: 120000
   memory_logging_frequency: 5 # in seconds
   runtime: 48h 
