@@ -481,3 +481,42 @@ rule plot_base_statistics:
         + "figures/.statistics_plots_base_s_{clusters}_elec_{opts}",
     script:
         "../scripts/plot_statistics.py"
+
+
+rule plot_co2_metrics:
+    params:
+        clusters=config_provider("scenario", "clusters"),
+        opts=config_provider("scenario", "opts"),
+        sector_opts=config_provider("scenario", "sector_opts"),
+        planning_horizons=config_provider("scenario", "planning_horizons"),
+    input:
+        configs=expand(
+            RESULTS + "configs/config.base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.yaml",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        costs=expand(
+            RESULTS + "csvs/costs.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        metrics=expand(
+            RESULTS + "csvs/metrics.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        energy_balance=expand(
+            RESULTS + "csvs/energy_balance.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+    output:
+        plot="results/co2_metrics/plots/costs.pdf",
+    log:
+        "results/co2_metrics/logs/plot_co2_metrics.log",
+    benchmark:
+        "results/co2_metrics/benchmarks/plot_co2_metrics.log",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_co2_metrics.py"
