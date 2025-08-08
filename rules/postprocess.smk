@@ -510,6 +510,11 @@ rule plot_co2_metrics:
             **config["scenario"],
             run=config["run"]["name"],
         ),
+        weighted_prices=expand(
+            RESULTS + "csvs/weighted_prices.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
     output:
         plot="results/co2_metrics/plots/costs.pdf",
     log:
