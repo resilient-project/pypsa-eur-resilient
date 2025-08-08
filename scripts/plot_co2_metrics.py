@@ -131,7 +131,7 @@ if __name__ == "__main__":
     # Plot
     sns.set_theme(style="whitegrid")
 
-    fig, axes = plt.subplots(len(seq_potentials), len(cost_years), figsize=(12, 10), sharex=True, sharey=True)
+    fig, axes = plt.subplots(len(seq_potentials), len(cost_years), figsize=(12, 12), sharex=True, sharey=True)
     plt.rcParams.update({'font.size': 11})
 
     ymax = scenario_data["co2_price"].max()
@@ -260,7 +260,7 @@ if __name__ == "__main__":
     # Price plots
     sns.set_theme(style="whitegrid")
 
-    fig, axes = plt.subplots(len(seq_potentials), len(cost_years), figsize=(12, 10), sharex=True, sharey=True)
+    fig, axes = plt.subplots(len(seq_potentials), len(cost_years), figsize=(12, 12), sharex=True, sharey=True)
     plt.rcParams.update({'font.size': 11})
 
     ymax = 600
