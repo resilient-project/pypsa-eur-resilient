@@ -35,6 +35,36 @@ run:
   - co2+55__seq250mt__c2050
   - co2+60__seq250mt__c2050
   - co2+65__seq250mt__c2050
+  - co2-02__seq500mt__c2030
+  - co2+00__seq500mt__c2030
+  - co2+05__seq500mt__c2030
+  - co2+10__seq500mt__c2030
+  - co2+15__seq500mt__c2030
+  - co2+20__seq500mt__c2030
+  - co2+25__seq500mt__c2030
+  - co2+30__seq500mt__c2030
+  - co2+35__seq500mt__c2030
+  - co2+40__seq500mt__c2030
+  - co2+45__seq500mt__c2030
+  - co2+50__seq500mt__c2030
+  - co2+55__seq500mt__c2030
+  - co2+60__seq500mt__c2030
+  - co2+65__seq500mt__c2030
+  - co2-02__seq500mt__c2050
+  - co2+00__seq500mt__c2050
+  - co2+05__seq500mt__c2050
+  - co2+10__seq500mt__c2050
+  - co2+15__seq500mt__c2050
+  - co2+20__seq500mt__c2050
+  - co2+25__seq500mt__c2050
+  - co2+30__seq500mt__c2050
+  - co2+35__seq500mt__c2050
+  - co2+40__seq500mt__c2050
+  - co2+45__seq500mt__c2050
+  - co2+50__seq500mt__c2050
+  - co2+55__seq500mt__c2050
+  - co2+60__seq500mt__c2050
+  - co2+65__seq500mt__c2050
   - co2-02__seq5000mt__c2030
   - co2+00__seq5000mt__c2030
   - co2+05__seq5000mt__c2030
