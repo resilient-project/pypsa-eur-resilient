@@ -525,3 +525,47 @@ rule plot_co2_metrics:
         "../envs/environment.yaml"
     script:
         "../scripts/plot_co2_metrics.py"
+
+
+rule plot_co2_mac:
+    params:
+        clusters=config_provider("scenario", "clusters"),
+        opts=config_provider("scenario", "opts"),
+        sector_opts=config_provider("scenario", "sector_opts"),
+        planning_horizons=config_provider("scenario", "planning_horizons"),
+    input:
+        configs=expand(
+            RESULTS + "configs/config.base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.yaml",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        costs=expand(
+            RESULTS + "csvs/costs.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        metrics=expand(
+            RESULTS + "csvs/metrics.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        energy_balance=expand(
+            RESULTS + "csvs/energy_balance.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        weighted_prices=expand(
+            RESULTS + "csvs/weighted_prices.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+    output:
+        plot="results/co2_metrics/plots/co2_mac.pdf",
+    log:
+        "results/co2_metrics/logs/plot_co2_mac.log",
+    benchmark:
+        "results/co2_metrics/benchmarks/plot_co2_mac.log",
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/plot_co2_mac.py"

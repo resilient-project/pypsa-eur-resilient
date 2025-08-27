@@ -253,3 +253,182 @@ solving:
   mem_mb: 120000
   memory_logging_frequency: 5 # in seconds
   runtime: 48h 
+
+grouping:
+  AC: Electricity grid
+  BEV charger: Battery
+  CCGT: Gas
+  CO2: CO$_2$ infra
+  CO2 pipeline: CO$_2$ infra
+  DAC: DAC
+  DC: Electricity grid
+  EV battery: Battery
+  Fischer-Tropsch: FT & Methanol
+  H2: Other
+  H2 Electrolysis: Electrolysis
+  H2 Fuel Cell: Other
+  H2 Store: Other
+  H2 for industry: Other
+  H2 pipeline: Other
+  H2 turbine: Other
+  Haber-Bosch: Other
+  HVC to air: Other
+  OCGT: Gas
+  OCGT methanol: Gas
+  PHS: Hydro & RoR
+  SMR: Other
+  SMR CC: Point source CC
+  Sabatier: Other
+  V2G: Battery
+  agriculture electricity: Other
+  agriculture heat: Other
+  agriculture machinery oil: Other
+  ammonia cracker: Other
+  ammonia store: Other
+  battery: Battery
+  battery charger: Battery
+  battery discharger: Battery
+  biogas: Biomass & -gas
+  biogas to gas: Biomass & -gas
+  biomass to liquid: Biomass & -gas
+  biomass-to-methanol: Biomass & -gas
+  co2: CO$_2$ infra
+  co2 sequestered: CO$_2$ sequestration
+  co2 stored: CO$_2$ infra
+  coal: Coal
+  coal for industry: Coal
+  electricity: Electricity grid
+  electricity distribution grid: Electricity grid
+  electrobiofuels: Biomass & -gas
+  gas: Gas
+  gas for industry: Gas
+  gas for industry CC: Point source CC
+  gas pipeline: Other
+  gas pipeline new: Other
+  home battery: Battery
+  home battery charger: Battery
+  home battery discharger: Battery
+  hydro: Hydro & RoR
+  industry electricity: Electricity grid
+  industry methanol: Other
+  kerosene for aviation: Other # TODO
+  land transport EV: Other # TODO
+  land transport oil: Other # TODO
+  lignite: Coal
+  low voltage: Electricity grid
+  low-temperature heat for industry: Other
+  methanol: FT & Methanol
+  methanolisation: FT & Methanol
+  naphtha for industry: Oil # TODO
+  non-sequestered HVC: Other
+  nuclear: Nuclear
+  offwind-ac: Offshore wind
+  offwind-dc: Offshore wind
+  oil: Oil
+  oil primary: Oil
+  oil refining: Oil
+  onwind: Onshore wind
+  process emissions: Other
+  process emissions CC: Point source CC
+  ror: Hydro & RoR
+  rural air heat pump: PtH
+  rural biomass boiler: Biomass & -gas
+  rural gas boiler: Gas
+  rural ground heat pump: PtH
+  rural heat: Other
+  rural heat vent: Other
+  rural resistive heater: PtH
+  rural solar thermal: Solar
+  rural water tanks: Other
+  rural water tanks charger: Other
+  rural water tanks discharger: Other
+  shipping methanol: Other
+  shipping oil: Oil # TODO
+  solar: Solar
+  solar rooftop: Solar
+  solid biomass: Biomass & -gas
+  solid biomass for industry: Biomass & -gas
+  solid biomass for industry CC: Point source CC
+  urban central gas CHP: Gas
+  urban central gas CHP CC: Point source CC
+  uranium: Nuclear
+  urban central CHP: CHP
+  urban central CHP CC: Point source CC
+  urban central air heat pump: PtH
+  urban central gas boiler: Gas
+  urban central heat: Other
+  urban central heat vent: Other
+  urban central resistive heater: PtH
+  urban central solar thermal: Solar
+  urban central solid biomass CHP: Biomass & -gas
+  urban central solid biomass CHP CC: Point source CC
+  urban central water pits: Other
+  urban central water pits charger: Other
+  urban central water pits discharger: Other
+  urban central water tanks: Other
+  urban central water tanks charger: Other
+  urban central water tanks discharger: Other
+  urban decentral air heat pump: PtH
+  urban decentral biomass boiler: Biomass & -gas
+  urban decentral gas boiler: Gas
+  urban decentral heat vent: Other
+  urban decentral resistive heater: PtH
+  urban decentral solar thermal: Solar
+  urban decentral water tanks: Other
+  urban decentral water tanks charger: Other
+  urban decentral water tanks discharger: Other
+  load: "Load shedding"
+  rural oil boiler: Other
+  unsustainable biogas: Biomass & -gas
+  unsustainable bioliquids: Biomass & -gas
+  unsustainable solid biomass: Biomass & -gas
+  urban decentral oil boiler: Other
+
+group_colors:
+  Battery: "#ace37f"
+  Biomass & -gas: "#baa741"
+  CHP: "#8a5751"
+  CO$_2$ infra: "#cc99ff"
+  CO$_2$ sequestration: "#c44ce6"
+  Point source CC: "#f29dae"
+  Coal: "#555555"
+  DAC: "#ff5270"
+  Electricity grid: "#97ad8c"
+  Electrolysis: "#b3e6ff"
+  Fischer-Tropsch: "#25c49a"
+  FT & Methanol: "#57ebc4"
+  Gas: "#e05b09"
+  H$_2$ infra: "#7895b1"
+  Hydro & RoR: "#298c81"
+  Methanol: "#57ebc4"
+  Methanolisation: "#57aac1"
+  Nuclear: "#ff8c00"
+  Oil: "#333333"
+  PtH: "#dd2e23"
+  Solar: "#ffe066"
+  Offshore wind: "#0040ff"
+  Onshore wind: "#66b5ff"
+  Other: "#bbbbbb"
+  Load shedding: "#00ff00" # only for debugging
+  Haber-Bosch: "#5ab3b3"
+  Gas pipelines: "#ffcc99"
+
+group_order:
+- Other
+- Nuclear
+- Gas
+- Oil
+- Hydro & RoR
+- Electricity grid
+- Solar
+- Onshore wind
+- Offshore wind
+- FT & Methanol
+- Biomass & -gas
+- Battery
+- Point source CC
+- PtH
+- Electrolysis
+- CO$_2$ infra
+- CO$_2$ sequestration
+- DAC
