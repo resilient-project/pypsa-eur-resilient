@@ -97,6 +97,8 @@ if __name__ == "__main__":
     # Import results
     costs = import_csvs(costs, skiprows=3, header=0)
     costs.columns = ["cost", "component", "carrier", "value", "run"]
+    costs["value"] = costs["value"].div(1e9) # Convert to bn. euros
+
 
     # Update relative CO2 budget with absolute vaue
     metrics = import_csvs(metrics).fillna(0)
@@ -143,10 +145,6 @@ if __name__ == "__main__":
 
             subset = scenario_data.query(f"(co2_seq_potential_mt == {seq}) & (cost_year == {cy})")
             subset = subset.sort_values(by="co2_budget_mt", ascending=False)
-
-            subset["co2_abated"] = subset["co2_budget_mt"].diff(+1).fillna(0) * (-1)
-            subset["co2_reduction_rel"] = (subset["co2_budget_mt"] / total_co2_emissions * 1e6).round(2)
-            subset["co2_abated_cum"] = (1 - subset["co2_reduction_rel"]) * total_co2_emissions / 1e6
 
             # Right y-axis: CO2 sequestered
             ax2 = ax.twinx()
@@ -272,10 +270,6 @@ if __name__ == "__main__":
 
             subset = scenario_data.query(f"(co2_seq_potential_mt == {seq}) & (cost_year == {cy})")
             subset = subset.sort_values(by="co2_budget_mt", ascending=False)
-
-            subset["co2_abated"] = subset["co2_budget_mt"].diff(+1).fillna(0) * (-1)
-            subset["co2_reduction_rel"] = (subset["co2_budget_mt"] / total_co2_emissions * 1e6).round(2)
-            subset["co2_abated_cum"] = (1 - subset["co2_reduction_rel"]) * total_co2_emissions / 1e6
 
             subset_xaxis = subset["co2_price"] if b_co2_xaxis else subset["co2_budget_mt"]
 
