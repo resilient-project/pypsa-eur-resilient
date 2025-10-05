@@ -63,8 +63,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_exogenous_demand",
-            configfiles=["config/run5.config.yaml"],
-            carrier="co2 stored",
+            configfiles=["config/pcipmi.config.yaml"],
             )
 
     configure_logging(snakemake)
@@ -85,7 +84,6 @@ if __name__ == "__main__":
 
     opts = config["scenario"]["opts"][0]
     sector_opts = config["scenario"]["sector_opts"][0]
-    carrier = snakemake.wildcards.carrier
     font = plotting["font"]
 
     planning_horizons = snakemake.config["scenario"]["planning_horizons"]
