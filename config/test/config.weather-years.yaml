@@ -11,8 +11,8 @@ logging:
   format: '%(levelname)s:%(name)s:%(message)s'
 
 remote:
-  ssh: 
-  path: 
+  ssh: z1
+  path: scratch/projects/pcipmi-policy-targets/workflow/pypsa-eur-resilient/
 
 # PCI-PMI policy paper settings
 pcipmi_policy_paper:
@@ -300,7 +300,7 @@ clustering:
     SE: 0.05
   temporal:
     resolution_elec: false
-    resolution_sector: 337 #2190seg
+    resolution_sector: 337h #2190seg
 
 solving:
   mem_mb: 80000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
