@@ -53,7 +53,7 @@ run:
   use_shadow_directory: true # Set to false if problems regarding missing directories occur
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#foresight
-foresight: myopic
+foresight: overnight
 
 # Solve two-step operations
 solve_operations:
