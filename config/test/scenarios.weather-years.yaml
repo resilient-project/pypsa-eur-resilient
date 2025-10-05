@@ -1,7 +1,7 @@
 wy2010:
   snapshots:
-    start: "2010-01-01"
-    end: "2011-01-01"
+    start: "2013-01-01"
+    end: "2014-01-01"
     inclusive: 'left'
   atlite:
     cutout_directory: cutouts
@@ -210,8 +210,8 @@ wy2013:
 
 wy2020:
   snapshots:
-    start: "2020-01-01"
-    end: "2021-01-01"
+    start: "2013-01-01"
+    end: "2014-01-01"
     inclusive: 'left'
   atlite:
     cutout_directory: cutouts
