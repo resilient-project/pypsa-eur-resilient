@@ -11,11 +11,11 @@ plotting:
       sans-serif: Roboto
       size: 6
     nice_names:
-      no-pipelines-no-pcipmi: "DI"
+      decentral-islands: "DI"
       pcipmi: "PCI"
-      pcipmi-national-expansion: "PCI-n"
-      pcipmi-national-international-expansion: "PCI-in"
-      greenfield-pipelines: "CP"
+      pcipmi-nat: "PCI-n"
+      pcipmi-internat: "PCI-in"
+      central-planning: "CP"
       ops__ghg_target: "Reduced targets"
       ops__delay_pipes: "Delayed pipelines"
       ops__no_pipes: "No pipelines"
