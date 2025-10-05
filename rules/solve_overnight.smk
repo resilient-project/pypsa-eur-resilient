@@ -5,6 +5,7 @@
 
 rule solve_sector_network:
     params:
+        pcipmi_policy_paper=config_provider("pcipmi_policy_paper"),
         solving=config_provider("solving"),
         foresight=config_provider("foresight"),
         co2_sequestration_potential=config_provider(
