@@ -53,7 +53,7 @@ run:
   - pipelines1.1___pcipmi
   - pipelines1.1___pcipmi-nat
   - pipelines1.1___pcipmi-internat
-  - pipelines1.1___central-plannin
+  - pipelines1.1___central-planning
   - pipelines0.9___decentral-islands
   - pipelines0.9___pcipmi
   - pipelines0.9___pcipmi-nat
