@@ -1,3 +1,16 @@
+decentral-islands:
+  carrier_networks:
+    CO2:
+      enable: false
+    H2:
+      enable: false   
+  pcipmi_projects:
+    enable: false
+    include: 
+      - storage_units_electricity
+    options:
+      delay: 0
+
 pcipmi:
   carrier_networks:
     CO2:
@@ -24,7 +37,6 @@ pcipmi:
       p_nom_max: .inf
       options:
         delay: 0
-      
   pcipmi_projects:
     enable: true
     include: 
@@ -59,8 +71,7 @@ pcipmi-nat:
         pcipmi: []
       p_nom_max: .inf
       options:
-        delay: 0
-      
+        delay: 0   
   pcipmi_projects:
     enable: true
     include: 
@@ -96,27 +107,12 @@ pcipmi-internat:
       p_nom_max: .inf
       options:
         delay: 0
-      
   pcipmi_projects:
     enable: true
     include: 
       - storage_units_electricity
       - stores_co2
       - stores_h2
-    options:
-      delay: 0
-
-decentral-islands:
-  carrier_networks:
-    CO2:
-      enable: false
-    H2:
-      enable: false
-      
-  pcipmi_projects:
-    enable: false
-    include: 
-      - storage_units_electricity
     options:
       delay: 0
 
@@ -145,8 +141,7 @@ central-planning:
         pcipmi: ["national", "international"]
       p_nom_max: .inf
       options:
-        delay: 0
-      
+        delay: 0 
   pcipmi_projects:
     enable: true
     include: 
