@@ -128,7 +128,7 @@ rule all:
         lambda w: expand(
             (
                 RESULTS
-                + "maps/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}-balance_map_{carrier}.jpg"
+                + "maps/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}-balance_map_{carrier}.pdf"
             ),
             **config["scenario"],
             run=config["run"]["name"],
