@@ -1165,7 +1165,13 @@ if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("add_electricity", clusters=100)
+        snakemake = mock_snakemake(
+            "add_electricity", 
+            clusters="adm",
+            configfiles=["config/test/config.weather-years.yaml"],
+            run="wy2020",
+        )
+
     configure_logging(snakemake)  # pylint: disable=E0606
     set_scenario_config(snakemake)
 
