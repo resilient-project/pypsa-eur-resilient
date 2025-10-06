@@ -400,6 +400,7 @@ load:
   distribution_key:
     gdp: 0.6
     population: 0.4
+  patch_xk_load_to_2013: false
 
 # docs
 # TODO: PyPSA-Eur merge issue in prepare_sector_network.py

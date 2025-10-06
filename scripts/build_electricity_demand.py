@@ -231,7 +231,10 @@ if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("build_electricity_demand")
+        snakemake = mock_snakemake("build_electricity_demand",
+            configfiles=["config/test/config.weather-years.yaml"],
+            run="wy2020",
+        )
 
     configure_logging(snakemake)
     set_scenario_config(snakemake)
@@ -286,6 +289,12 @@ if __name__ == "__main__":
         countries = list(set(countries) - set(["UA", "MD", "XK"]))
         synthetic_load = synthetic_load.loc[snapshots, countries]
         load = load.combine_first(synthetic_load)
+    
+    if snakemake.params.load["patch_xk_load_to_2013"] and "XK" in load.columns:
+        logger.info("Patching XK load to 2013 values.")
+        load_xk_2013 = pd.read_csv(snakemake.input.electricity_demand_xk_2013, index_col=0, parse_dates=True)
+        load_xk_2013.index = load_xk_2013.index.map(lambda t: t.replace(year=2020))
+        load["XK"] = load_xk_2013.reindex(load.index)
 
     assert not load.isna().any().any(), (
         "Load data contains nans. Adjust the parameters "
