@@ -6419,8 +6419,8 @@ if __name__ == "__main__":
             clusters="adm",
             sector_opts="",
             planning_horizons="2050",
-            configfiles=["config/dev.config.yaml"],
-            run="pcipmi-national-international-expansion",
+            configfiles=["config/test/config.varying-costs.yaml"],
+            run="low-cost",
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
