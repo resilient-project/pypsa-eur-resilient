@@ -273,7 +273,7 @@ if __name__ == "__main__":
             load["MD"] = 6.2e6 * (load_ua / load_ua.sum())
 
     if snakemake.params.load["manual_adjustments"]:
-        load = manual_adjustment(load, snakemake.input[0], countries)
+        load = manual_adjustment(load, snakemake.input.reported, countries)
 
     logger.info(f"Linearly interpolate gaps of size {interpolate_limit} and less.")
     load = load.interpolate(method="linear", limit=interpolate_limit)
@@ -290,7 +290,7 @@ if __name__ == "__main__":
         synthetic_load = synthetic_load.loc[snapshots, countries]
         load = load.combine_first(synthetic_load)
     
-    if snakemake.params.load["patch_xk_load_to_2013"] and "XK" in load.columns:
+    if snakemake.params.load["patch_xk_load_to_2013"] and "XK" in load.columns and load["XK"].isna().any():
         logger.info("Patching XK load to 2013 values.")
         load_xk_2013 = pd.read_csv(snakemake.input.electricity_demand_xk_2013, index_col=0, parse_dates=True)
         load_xk_2013.index = load_xk_2013.index.map(lambda t: t.replace(year=2020))

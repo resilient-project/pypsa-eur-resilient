@@ -10,13 +10,13 @@ rule build_electricity_demand:
         countries=config_provider("countries"),
         load=config_provider("load"),
     input:
-        electricity_demand_xk_2013=ancient("data/electricity_demand_xk_2013.csv"),
         reported=ancient("data/electricity_demand_raw.csv"),
         synthetic=lambda w: (
             ancient("data/load_synthetic_raw.csv")
             if config_provider("load", "supplement_synthetic")(w)
             else []
         ),
+        electricity_demand_xk_2013=ancient("data/electricity_demand_xk_2013.csv"),
     output:
         resources("electricity_demand.csv"),
     log:
