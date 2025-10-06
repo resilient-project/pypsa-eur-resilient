@@ -103,7 +103,9 @@ if __name__ == "__main__":
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "build_renewable_profiles", clusters=38, technology="offwind-ac"
+            "build_renewable_profiles", clusters="adm", technology="offwind-ac",
+            configfiles=["config/test/config.weather-years.yaml"],
+            run="wy2020",
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)

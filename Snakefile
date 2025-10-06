@@ -267,3 +267,12 @@ rule pull:
         rsync -uvarh --no-g {params.cluster}/results . || echo "No results directory, skipping rsync"
         rsync -uvarh --no-g {params.cluster}/logs . || echo "No logs directory, skipping rsync"
         """
+
+
+rule pull_some:
+    params:
+        cluster = f"{config['remote']['ssh']}:{config['remote']['path']}",
+    shell:
+        """
+        rsync -uvarh --no-g --ignore-missing-args --files-from=.sync-receive {params.cluster}/ . 
+        """
