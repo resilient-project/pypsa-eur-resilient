@@ -1,13 +1,13 @@
-### 1.5 factor CO2 and H2 pipeline costs
-pipelines1.5___decentral-islands:
+### 1.3 factor CO2 and H2 pipeline costs
+pipelines1.3___decentral-islands:
   adjustments:
     sector:
       factor:
         links:
           H2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
           CO2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
       absolute: false
   carrier_networks:
     CO2:
@@ -21,15 +21,15 @@ pipelines1.5___decentral-islands:
     options:
       delay: 0
 
-pipelines1.5___pcipmi:
+pipelines1.3___pcipmi:
   adjustments:
     sector:
       factor:
         links:
           H2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
           CO2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
       absolute: false
   carrier_networks:
     CO2:
@@ -65,15 +65,15 @@ pipelines1.5___pcipmi:
     options:
       delay: 0
 
-pipelines1.5___pcipmi-nat:
+pipelines1.3___pcipmi-nat:
   adjustments:
     sector:
       factor:
         links:
           H2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
           CO2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
       absolute: false
   carrier_networks:
     CO2:
@@ -109,15 +109,15 @@ pipelines1.5___pcipmi-nat:
     options:
       delay: 0
 
-pipelines1.5___pcipmi-internat:
+pipelines1.3___pcipmi-internat:
   adjustments:
     sector:
       factor:
         links:
           H2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
           CO2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
       absolute: false
   carrier_networks:
     CO2:
@@ -153,15 +153,15 @@ pipelines1.5___pcipmi-internat:
     options:
       delay: 0
 
-pipelines1.5___central-planning:
+pipelines1.3___central-planning:
   adjustments:
     sector:
       factor:
         links:
           H2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
           CO2 pipeline:
-            capital_cost: 1.5
+            capital_cost: 1.3
       absolute: false
   carrier_networks:
     CO2:

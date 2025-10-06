@@ -39,11 +39,11 @@ pcipmi_policy_paper:
 run:
   prefix: "sensitivities"
   name:
-  - pipelines1.5___decentral-islands
-  - pipelines1.5___pcipmi
-  - pipelines1.5___pcipmi-nat
-  - pipelines1.5___pcipmi-internat
-  - pipelines1.5___central-planning
+  - pipelines1.3___decentral-islands
+  - pipelines1.3___pcipmi
+  - pipelines1.3___pcipmi-nat
+  - pipelines1.3___pcipmi-internat
+  - pipelines1.3___central-planning
   - pipelines1.2___decentral-islands
   - pipelines1.2___pcipmi
   - pipelines1.2___pcipmi-nat
@@ -71,7 +71,7 @@ run:
   - wy2020___central-planning
   scenarios:
     enable: true
-    file: config/pcipmi.scenarios.yaml
+    file: config/sensitivities.scenarios.yaml
   disable_progressbar: false
   shared_resources:
     policy: false
