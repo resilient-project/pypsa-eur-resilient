@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_totex_heatmap",
-            configfiles=["config/run5.config.yaml"],
+            configfiles=["config/postprocess_sensitivities.yaml"],
             )
         
     configure_logging(snakemake)
@@ -88,6 +88,17 @@ if __name__ == "__main__":
     longterm["prefix"] = longterm["path"].apply(lambda x: x.split("/")[-4])
     longterm["name"] = longterm["path"].apply(lambda x: x.split("/")[-3])
     longterm["lt_run"] = longterm["name"]
+
+    # Filter # TODO: HERE
+    longterm["name"] = longterm["lt_run"].apply(lambda x: x.split("___")[0])
+    longterm["lt_run"] = longterm["lt_run"].apply(lambda x: x.split("___")[-1])
+    # Rename main runs
+    longterm.loc[longterm.prefix=="pcipmi", "name"] = "main"
+    
+
+    # Filter by name == "main"
+    longterm = longterm[longterm["name"] == "wy2020"].reset_index(drop=True)
+
 
     index_cols = ["lt_run", "planning_horizon", "cost"]
 
@@ -146,7 +157,8 @@ if __name__ == "__main__":
     # Plot 
     logger.info("Plotting heatmap of total system costs.")
     plt.rc("font", **plotting["font"])
-    fig = plt.figure(figsize=figsize)
+    # fig = plt.figure(figsize=figsize)
+    fig = plt.figure(figsize=(6,3))
 
     # Define grid layout with width ratios
     gs = gridspec.GridSpec(1, 4, width_ratios=[7, 7, 7, 3.5], figure=fig)
@@ -195,4 +207,4 @@ if __name__ == "__main__":
     ax1.set_yticklabels(ax1.get_yticklabels(), rotation=0, fontsize=subfontsize)
 
     plt.subplots_adjust(wspace=0.1) 
-    plt.savefig(snakemake.output.plot, bbox_inches="tight", dpi=dpi)
+    # plt.savefig(snakemake.output.plot, bbox_inches="tight", dpi=dpi)

@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_capacities_overview",
-            configfiles=["config/run5.config.yaml"],
+            configfiles=["config/pcipmi.config.yaml"],
             )
 
     configure_logging(snakemake)
@@ -116,6 +116,33 @@ if __name__ == "__main__":
     costs = pd.concat([lt_costs, st_costs], axis=0).reset_index(drop=True)
     costs["group"] = costs["carrier"].map(carrier_groups)
     costs["group_color"] = costs["group"].map(group_colors)
+
+    # Drop stores and storage units and lines
+    costs = costs[~costs["component"].isin(["Store", "Line"])]
+
+    # For all generators, remove due to double counting in links
+    negative_generators = [
+        "biogas", # double-check
+        "coal", 
+        "gas", 
+        "lignite", 
+        "nuclear", 
+        "oil-primary", 
+        "rural heat vent", 
+        "solid biomass", 
+        "unsustainable biogas", 
+        "unsustainable bioliquids", 
+        "unsustainable solid biomass",
+        "urban central heat vent",
+        "urban decentral heat vent",
+        "load", # double-check
+    ]
+    costs = costs[~(costs["carrier"].isin(negative_generators) & (costs["component"]=="Generator"))]
+
+    negative_links 
+
+    # TODO: create PR on this so it's in the responsibility of the technology developer
+
     
     # to_drop = costs.index[(costs.value.abs()<10)] # Drop small values
     # costs = costs.drop(to_drop, axis=0)
@@ -140,7 +167,7 @@ if __name__ == "__main__":
     ).reset_index()
 
     # Filter costs to keep subset
-    negative_group_sel = ["Other", "Battery", "CO$_2$ infra", "Methanol", "H$_2$ infra", "Gas", "Oil", "Biomass & -gas", "Coal", "Electricity grid"]
+    negative_group_sel = ["Other", "CO$_2$ infra", "Methanol", "H$_2$ infra", "Biomass & -gas", "Gas", "Electricity grid"]
     costs = costs[~costs["group"].isin(negative_group_sel)]
 
     # # Drop load shedding after debugging
