@@ -30,6 +30,7 @@ OUTPUTS = [
     "nodal_capacities",
     "nodal_energy_balance",
     "nodal_capacity_factors",
+    "branch_volumes",
 ]
 
 
@@ -294,17 +295,35 @@ def calculate_market_values(n: pypsa.Network) -> pd.Series:
     )
 
 
+def calculate_branch_volumes(n: pypsa.Network) -> pd.Series:
+    """
+    Calculate the optimized total branch volumes for each technology carrier.
+
+    """
+    link_volume = n.links.query("length>0").copy()
+    link_volume["volume"] = link_volume.eval("length * p_nom_opt")
+    link_volume = link_volume.groupby("carrier")["volume"].sum()
+
+    line_volume = n.lines.query("length>0").copy()
+    line_volume["volume"] = line_volume.eval("length * s_nom_opt")
+    line_volume = line_volume.groupby("carrier")["volume"].sum()
+
+    branch_volume = pd.concat([line_volume, link_volume])
+
+    return branch_volume.sort_index()
+
+
 if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "make_summary_column",
-            clusters="70",
+            "make_summary",
+            clusters="adm",
             opts="",
             sector_opts="",
-            planning_horizons="2030",
-            configfiles="config/second-run.config.yaml",
+            planning_horizons="2050",
+            configfiles="config/pcipmi.config.yaml",
             run="pcipmi",
             column = "ops___ghg_h2_target___no_pipes_short_term_invest",
         )

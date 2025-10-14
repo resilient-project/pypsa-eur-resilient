@@ -219,6 +219,8 @@ rule make_summary:
         + "csvs/individual/market_values_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
         metrics=RESULTS
         + "csvs/individual/metrics_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+        branch_volumes=RESULTS
+        + "csvs/individual/branch_volumes_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
     threads: 1
     resources:
         mem_mb=8000,
@@ -325,6 +327,12 @@ rule make_global_summary:
             **config["scenario"],
             allow_missing=True,
         ),
+        branch_volumes=expand(
+            RESULTS
+            + "csvs/individual/branch_volumes_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+            **config["scenario"],
+            allow_missing=True,
+        ),
     output:
         costs=RESULTS + "csvs/costs.csv",
         capacities=RESULTS + "csvs/capacities.csv",
@@ -340,6 +348,7 @@ rule make_global_summary:
         nodal_capacities=RESULTS + "csvs/nodal_capacities.csv",
         nodal_energy_balance=RESULTS + "csvs/nodal_energy_balance.csv",
         nodal_capacity_factors=RESULTS + "csvs/nodal_capacity_factors.csv",
+        branch_volumes=RESULTS + "csvs/branch_volumes.csv",
     threads: 1
     resources:
         mem_mb=8000,

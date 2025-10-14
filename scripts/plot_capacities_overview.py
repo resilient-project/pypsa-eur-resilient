@@ -139,7 +139,37 @@ if __name__ == "__main__":
     ]
     costs = costs[~(costs["carrier"].isin(negative_generators) & (costs["component"]=="Generator"))]
 
-    negative_links 
+    negative_links = [
+        "BEV charger",
+        "CO2 pipeline",
+        "DC",
+        "H2 pipeline",
+        "V2G", # optional
+        "agriculture machinery oil",
+        "battery charger",
+        "co2 sequestered",
+        "coal for industry",
+        "electricity distribution grid",
+        "gas for industry",
+        "home battery charger",
+        "industry methanol",
+        "kerosene for aviation",
+        "land transport oil",
+        "naphtha for industry",
+        "oil refining",
+        "process emissions",
+        "rural water tanks charger",
+        "shipping methanol",
+        "shipping oil",
+        "solid biomass for industry",
+        "unsustainable bioliquids",
+        "urban central water pits charger",
+        "urban central water tanks charger",
+        "urban decentral water tanks charger",
+        'urban central water pits discharger',
+        'urban central water tanks discharger',
+    ]
+    costs = costs[~(costs["carrier"].isin(negative_links) & (costs["component"]=="Link"))]
 
     # TODO: create PR on this so it's in the responsibility of the technology developer
 
@@ -167,8 +197,8 @@ if __name__ == "__main__":
     ).reset_index()
 
     # Filter costs to keep subset
-    negative_group_sel = ["Other", "CO$_2$ infra", "Methanol", "H$_2$ infra", "Biomass & -gas", "Gas", "Electricity grid"]
-    costs = costs[~costs["group"].isin(negative_group_sel)]
+    # negative_group_sel = ["Other", "CO$_2$ infra", "Methanol", "H$_2$ infra", "Biomass & -gas", "Gas", "Electricity grid"]
+    # costs = costs[~costs["group"].isin(negative_group_sel)]
 
     # # Drop load shedding after debugging
     # if "Load shedding" in costs.group.values:
@@ -266,8 +296,10 @@ if __name__ == "__main__":
 
     handles = [
         plt.Rectangle((0, 0), 1, 1, color=group_colors[c], label=c) 
-        for c in legend_order[::-1] if c not in negative_group_sel
+        for c in legend_order if c in list(data.columns)
     ]
+    # Reverse order
+    handles = handles[::-1]
 
     # Add the production legend (left side, 2 columns)
     legend = fig.legend(
@@ -362,7 +394,7 @@ if __name__ == "__main__":
             ax.set_ylabel("")
 
             # # Ylim
-            ax.set_ylim(ymin, ymax)
+            ax.set_ylim(ymin, ymax*1.1)
 
             ax.set_xticklabels(
                 delta_data.index,
@@ -402,7 +434,7 @@ if __name__ == "__main__":
         # Add label of st_run in each row
         axes[s, 0].text(
             x=-0.5,
-            y=ymax*0.92,
+            y=ymax*1.1*0.92,
             s=plotting["nice_names"][st_run],
             ha="left",
             va="center",
@@ -414,10 +446,10 @@ if __name__ == "__main__":
     for ax in axes.flatten():
         ax.tick_params(axis="y", labelsize=subfontsize)
 
-    handles = [
-        plt.Rectangle((0, 0), 1, 1, color=group_colors[c], label=c)
-        for c in legend_order[::-1] if c not in negative_group_sel
-    ]
+    # handles = [
+    #     plt.Rectangle((0, 0), 1, 1, color=group_colors[c], label=c)
+    #     for c in legend_order if c in list(data.columns)
+    # ]
 
     # Add the production legend (left side, 2 columns)
     legend = fig.legend(

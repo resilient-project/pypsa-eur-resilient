@@ -667,28 +667,38 @@ rule plot_exogenous_demand:
 rule create_sensitivity_plots:
     input:
         expand(
-            EXPORT_PATH + "/costs_overview_sensitivity_{sensitivity}.pdf",
+            EXPORT_PATH + "/capacities_costs_overview_sensitivity_{sensitivity}.pdf",
             **config["scenario"],
-            sensitivity=config_provider("plotting", "figures", "plot_costs_overview_sensitivity", "sensitivities"),
+            sensitivity=config_provider("plotting", "figures", "plot_capacities_costs_overview_sensitivity", "sensitivities"),
         ),
 
-rule plot_costs_overview_sensitivity:
+rule plot_capacities_costs_overview_sensitivity:
     params:
         plotting_all=config_provider("plotting", "all"),
-        plotting_fig=config_provider("plotting", "figures", "plot_costs_overview_sensitivity"),
+        plotting_fig=config_provider("plotting", "figures", "plot_capacities_costs_overview_sensitivity"),
     input:
-        runs=expand(
+        capacities=expand(
+            RESULTS + "csvs/capacities.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
+        costs=expand(
             RESULTS + "csvs/costs.csv",
             **config["scenario"],
             run=config["run"]["name"],
         ),
+        branch_volumes=expand(
+            RESULTS + "csvs/branch_volumes.csv",
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),
     output:
-        plot= EXPORT_PATH + "/costs_overview_sensitivity_{sensitivity}.pdf",
+        plot= EXPORT_PATH + "/capacities_costs_overview_sensitivity_{sensitivity}.pdf",
     log:
-        "results/" + PREFIX + "/logs/plot_costs_overview_sensitivity_{sensitivity}.log",
+        "results/" + PREFIX + "/logs/plot_capacities_costs_overview_sensitivity_{sensitivity}.log",
     benchmark:
-        "results/" + PREFIX + "/benchmark/plot_costs_overview_sensitivity_{sensitivity}",
+        "results/" + PREFIX + "/benchmark/plot_capacities_costs_overview_sensitivity_{sensitivity}",
     conda:
         "../envs/environment.yaml"
     script:
-        "../scripts/plot_costs_overview_sensitivity.py"
+        "../scripts/plot_capacities_costs_overview_sensitivity.py"

@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_costs_overview",
-            configfiles=["config/run5.config.yaml"],
+            configfiles=["config/pcipmi.config.yaml"],
             )
 
     configure_logging(snakemake)

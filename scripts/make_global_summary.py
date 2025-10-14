@@ -28,6 +28,7 @@ INDEX_COLS = {
     "weighted_prices": 1,
     "market_values": 1,
     "metrics": 1,
+    "branch_volumes": 1,
 }
 
 if __name__ == "__main__":
@@ -35,13 +36,13 @@ if __name__ == "__main__":
         from _helpers import mock_snakemake
 
         snakemake = mock_snakemake(
-            "make_global_summary_column",
+            "make_global_summary",
             clusters="adm",
             opts="",
             sector_opts="",
-            planning_horizons="2040",
-            configfiles="config/run5.config.yaml",
-            run="pcipmi-national-international-expansion",
+            # planning_horizons="2030",
+            configfiles="config/pcipmi.config.yaml",
+            run="pcipmi",
             column = "ops__no_pipes",
             )
 

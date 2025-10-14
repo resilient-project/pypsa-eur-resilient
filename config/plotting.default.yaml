@@ -126,6 +126,7 @@ plotting:
       - Methanolisation
       - H$_2$ infra
       - CO$_2$ infra
+      - SMR
       - Sabatier
       - Point source CC
       - DAC
@@ -155,6 +156,7 @@ plotting:
       - Methanolisation
       - H$_2$ infra
       - CO$_2$ infra
+      - SMR
       - Sabatier
       - Point source CC
       - DAC
@@ -163,7 +165,7 @@ plotting:
       figsize: (3.6, 3.5)
       dpi: 300
     # Sensitivities
-    plot_costs_overview_sensitivity:
+    plot_capacities_costs_overview_sensitivity:
       sensitivities:
       - pipelines0.9
       - pipelines1.1
@@ -171,7 +173,7 @@ plotting:
       - pipelines1.3
       - wy2010
       - wy2020
-      figsize: (3.5, 2.8)
+      figsize: (3.5, 5)
       dpi: 300
       delta_ymin: -30
       delta_ymax: 80
@@ -195,6 +197,7 @@ plotting:
       - Methanolisation
       - H$_2$ infra
       - CO$_2$ infra
+      - SMR
       - Sabatier
       - Point source CC
       - DAC
@@ -963,7 +966,7 @@ grouping:
   H2 pipeline: H$_2$ infra
   OCGT: Gas
   PHS: Hydro & RoR
-  SMR: Other
+  SMR: SMR
   SMR CC: Point source CC
   Sabatier: Sabatier
   V2G: Battery
@@ -1082,6 +1085,7 @@ group_colors:
   Oil: "#333333"
   PtH: "#dd2e23"
   Sabatier: "#c44ce6" 
+  SMR: "#870c71"
   Solar: "#ffe066"
   Wind: "#66b5ff"
   Other: "#bbbbbb"
