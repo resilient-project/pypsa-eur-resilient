@@ -10,6 +10,7 @@ import logging
 import ast
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+import numpy as np
 import pandas as pd
 
 from _helpers import configure_logging, set_scenario_config
@@ -281,7 +282,13 @@ if __name__ == "__main__":
     handleheight = 1.1
 
     xpad = 0.03
-    
+
+    toggle_labels = True
+    row0_axes2 = []
+    row1_axes2 = []
+    row2_axes2 = []
+
+
     fig, axes = plt.subplots(
         nrows=3,
         ncols=len(planning_horizons),
@@ -313,6 +320,8 @@ if __name__ == "__main__":
         if "Load shedding" in delta_to_main.group.values:
             delta_to_main = delta_to_main[delta_to_main["group"] != "Load shedding"]
 
+
+        row2_axes2 = []
         for i, planning_horizon in enumerate(planning_horizons):
             ax = ar[i]
             planning_horizon = str(planning_horizon)
@@ -335,30 +344,38 @@ if __name__ == "__main__":
                     width=0.8,
                     color=[group_colors.get(col, "yellow") for col in data.columns],
                 )
+            
             if a == 2:
-                for col in data.columns:
-                    ax.plot(
-                        data.index,
-                        data[col],
-                        marker="+" if "H" in col else "x" if "C" in col else "o",
-                        markersize=3,
-                        alpha=0.8,
-                        linewidth=0.7,
-                        linestyle=":",
-                        color=group_colors.get(col, "yellow"),
-                        label=col,
+                offset = 0.21
+                for i, col in enumerate(data.columns[::-1]):
+                    marker = "." if "H" in col else "." if "C" in col else "o"
+                    color = group_colors.get(col, "yellow")
+                    x = np.arange(len(data.index)) + (i - len(data.columns)/2) * offset + offset/2
+
+                    stem = ax.stem(
+                        x,
+                        data[col].values,
+                        linefmt=color,
+                        markerfmt=marker,
+                        basefmt=" ",
                     )
-                    for x, y in zip(data.index, data[col]):
-                        if abs(y) >= 0.05:
-                            sign = "+" if y > 0 else "-" if y < 0 else ""
-                            ax.text(
-                                x,
-                                y,
-                                f"{sign}{abs(y):.1f}",
-                                ha="center",
-                                va="bottom" if y >= 0 else "top",
-                                fontsize=subfontsize,
-                            )
+
+                    plt.setp(stem.markerline, markersize=3, alpha=1, zorder=10)
+                    plt.setp(stem.stemlines, linewidth=0.7, alpha=1, linestyle="-")
+
+                    # if toggle_labels:
+                    #     for xi, y in zip(x, data[col].values):
+                    #         if abs(y) >= 0.05:
+                    #             sign = "+" if y > 0 else "-"
+                    #             ax.text(
+                    #                 xi,
+                    #                 y,
+                    #                 f"{sign}{abs(y):.1f}",
+                    #                 ha="center",
+                    #                 va="bottom" if y >= 0 else "top",
+                    #                 fontsize=subfontsize,
+                    #             )
+
 
             # Turn off legend
             ax.legend().remove()
@@ -368,75 +385,103 @@ if __name__ == "__main__":
                 ax.set_xlabel("")
             
             if a == 0:
-                ax.set_ylabel(f"$\Delta$Total system costs\n(bn. € p.a.)", fontsize=fontsize)
+                ax.set_ylabel(f"$\Delta$Total system costs (bn. € p.a.)", fontsize=fontsize)
 
             if a == 1:
-                ax.set_ylabel(f"$\Delta$Capacities\n(GW)", fontsize=fontsize)
+                ax.set_ylabel(f"$\Delta$Capacities (GW)", fontsize=fontsize)
 
             # Set title and labels
             if a == 2:
                 ax.set_xlabel(f"{planning_horizon}", fontsize=fontsize)
-                ax.set_xticklabels(
-                    data.index,
-                    rotation=90,
-                    fontsize=subfontsize,
-                )
+                ax.set_xticklabels(data.index, rotation=90, fontsize=subfontsize)
                 ax.set_ylabel(
-                    "$\Delta$Pipelines\n$(TW_{H_2}km, Mt_{CO_2}h^{-1}km)$",
+                    "$\Delta$CO$_2$ pipelines (Mth$^{-1}$km)",
                     fontsize=fontsize,
                 )
+
+                if planning_horizon == "2050":
+                    # right axis
+                    ax2 = ax.twinx()
+                    ax2.set_ylim(ax.get_ylim())
+                    ax2.set_ylabel(
+                        "$\Delta$H$_2$ pipelines (TWkm)",
+                        fontsize=fontsize,
+                    )
 
             # Remove all grid lines
             ax.grid(False)
 
-            # Remove y ticks in all but the first plot
-            if i > 0:
-                ax.yaxis.set_visible(False)
-
             # Net totals (including negatives)
             totals = data.sum(axis=1)
+            rel_totals = 100 * totals / main_totals.loc[planning_horizon].main.reindex(totals.index)
 
-            # Position for label = top of positive stack
-            positive_tops = data.clip(lower=0).sum(axis=1)
+            # Relative change row 0, axis 2
+            if a == 0:
+                ax2 = ax.twinx()
+                ylim_rel = [v/0.5e1 for v in ax.get_ylim()]
+                ax2.set_ylim(ylim_rel)
+                # Scatter all points
+                ax2.scatter(
+                    range(len(rel_totals)),
+                    rel_totals.values,
+                    facecolor="white",
+                    edgecolor="black",
+                    linewidth=0.2,
+                    s=3,
+                    zorder=5,
+                )
+                if planning_horizon != "2050":
+                    ax2.set_yticks([])
+                    ax2.set_ylabel(None)
+                else:
+                    ax2.set_ylabel("Relative change to pathway (%)", fontsize=fontsize)
+
+                row0_axes2.append(ax2)
+
+            # Relative change row 1, axis 2
+            if a == 1:
+                ax2 = ax.twinx()
+                ylim_rel = [v/0.5e2 for v in ax.get_ylim()]
+                ax2.set_ylim(ylim_rel)
+                # Scatter all points
+                ax2.scatter(
+                    range(len(rel_totals)),
+                    rel_totals.values,
+                    facecolor="white",
+                    edgecolor="black",
+                    linewidth=0.2,
+                    s=3,
+                    zorder=5,
+                )
+                if planning_horizon != "2050":
+                    ax2.set_yticks([])
+                    ax2.set_ylabel(None)
+                else:
+                    ax2.set_ylabel("Relative change to pathway (%)", fontsize=fontsize)
+
+                row1_axes2.append(ax2)
+
 
             # Only for system costs, for capacities it does not make sense
             if a == 0 or a == 1:
+                # Position for label = top of positive stack
+                positive_tops = data.clip(lower=0).sum(axis=1)
                 for j, total in enumerate(totals):
                     if total != 0:
                         sign = "+" if total > 0 else "-"
                         fmt = ".0f" if abs(total) >= 10 else ".1f"
                         y_label = positive_tops[j] if positive_tops[j] > 0 else 0
 
-                        # main value
-                        ax.text(
-                            x=j,
-                            y=y_label,
-                            s=f"{sign}{abs(total):{fmt}}",
-                            ha="center",
-                            va="bottom",
-                            fontsize=subfontsize,
-                        )
-
-                        if a == 0:
-                            # smaller relative value just below
-                            rel_value = abs(total) / main_totals.loc[(planning_horizon, data.index[j]), "main"]
-                            rel_value_str = f"{rel_value:.1%}" #if rel_value >= 0.01 else "<1%"
-
+                        if toggle_labels:
+                            # main value
                             ax.text(
                                 x=j,
-                                y=total-0.03*delta_abs_max,  # adjust vertical offset if needed
-                                s=f"{sign}{rel_value_str}" if rel_value >= 0.0005 else "",
+                                y=y_label,
+                                s=f"{sign}{abs(total):{fmt}}",
                                 ha="center",
-                                va="top",
-                                fontsize=subfontsize * 0.6,
-                            )
-
-                            ax.plot(
-                                j, total,
-                                marker=".",
-                                color="black",
-                                markersize=1,
-                                zorder=5,
+                                va="bottom",
+                                fontsize=subfontsize,
+                                zorder=20,
                             )
 
             # Add 0 axis line
@@ -449,7 +494,7 @@ if __name__ == "__main__":
             ax.tick_params(axis="y", labelsize=subfontsize)
 
         # All borders to 0.5 thickness
-        for ax in ar:
+        for ax in fig.get_axes():
             for spine in ax.spines.values():
                 spine.set_linewidth(0.5)
                 spine.set_color("black")
@@ -458,15 +503,16 @@ if __name__ == "__main__":
         plt.Rectangle((0, 0), 1, 1, color=group_colors[c], label=c) 
         for c in legend_order[::-1]
     ]
-
     handles.append(
         Line2D(
             [0], [0],
             marker="o",
-            color="black",
-            linestyle="",
-            markersize=1,
-            label="Net change",
+            linestyle="",           # marker only
+            markersize=2,           # matches s in scatter (s ≈ markersize^2)
+            markerfacecolor="white",
+            markeredgecolor="black",
+            markeredgewidth=0.2,    # matches linewidth
+            label="Total change",
         )
     )
 
@@ -490,17 +536,41 @@ if __name__ == "__main__":
     for idx, row in enumerate(axes):
         ymin_global = 0
         ymax_global = 0
-        for ax in row:
+        for col, ax in enumerate(row):
             ymin, ymax = ax.get_ylim()
             ymin_global = min(ymin_global, ymin)
             ymax_global = max(ymax_global, ymax)
 
+            if col > 0:
+                ax.yaxis.set_visible(False)
+
         for ax in row:
             ax.set_ylim(1.05*ymin_global, 1.13*ymax_global)
+            # if ax2 is not None:
+            if idx == 2:
+                ax2.set_ylim(1.05*ymin_global, 1.13*ymax_global)
+    
+    # Update ylims of axes2s
+    for ax2 in row0_axes2:
+        ymin, ymax = ax2.get_ylim()
+        ymin_global = min(ymin, 0)
+        ymax_global = max(ymax, 0)
 
+    for ax2 in row0_axes2:
+        ax2.set_ylim(1.05*ymin_global, 1.13*ymax_global)
+    
+    for ax2 in row1_axes2:
+        ymin, ymax = ax2.get_ylim()
+        ymin_global = min(ymin, 0)
+        ymax_global = max(ymax, 0)
+
+    for ax2 in row1_axes2:
+        ax2.set_ylim(1.05*ymin_global, 1.13*ymax_global)
 
     # Tight layout
     plt.tight_layout()
+
+    fig.align_ylabels(fig.axes) 
     
     fig.subplots_adjust(wspace=0.05) 
  
