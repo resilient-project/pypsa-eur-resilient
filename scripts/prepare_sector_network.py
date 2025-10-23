@@ -6049,13 +6049,13 @@ def add_import_options(
         
         # Custom additions for pci-pmi-policy-targets paper
         # Drop far in onshore/continental regions
-        drop_regions = ["BG", "PL8", "RO", "HU", "SK0"]
+        drop_regions = ["BG", "PL8", "RO", "HU", "SK0", "LT0"]
         p_nom = p_nom[~p_nom.index.isin(drop_regions)]
 
         # Add PCI-PMI pipeline endings if pcipmi_projects are enabled
         if pcipmi_projects.get("enable", False):
             logger.info("Adding PCI-PMI H2 pipeline endings to import options.")
-            pcipmi_pipeline_regions = ["PT1", "ES6", "ES5", "FRL", "ITG1", "GR4+1", "BE1+1", "NL3", "NL2", "NL1", "DE9", "DK0", "NO0A", "SE1", "SE3"]
+            pcipmi_pipeline_regions = ["PT1", "ES6", "ES5", "FRL", "ITG1", "GR4+1", "BE1+1", "NL3", "NL2", "NL1", "DE9", "DK0", "NO0A"] # SE1 and SE3 out because Baltic Sea unplausible
 
             # Add if not already present
             p_nom = pd.concat(

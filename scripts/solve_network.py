@@ -1103,7 +1103,7 @@ def add_import_limit_constraint(n: pypsa.Network, sns: pd.DatetimeIndex):
 
     rhs = limit * 1e6
 
-    logger.info(f"Adding constraint to limit imports to {limit} TWh/year.")
+    logger.info(f"Adding constraint imports to {limit} MWh_fuel per year. Sense: {limit_sense}")
 
     n.model.add_constraints(lhs, limit_sense, rhs, name="import_limit")
 
@@ -1475,10 +1475,11 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "solve_sector_network_myopic",
             opts="",
-            clusters="70",
+            clusters="adm",
             sector_opts="",
             planning_horizons="2030",
-            configfiles=["config/dev.config.yaml"]
+            configfiles=["config/old-imports-test.config.yaml"],
+            run="pci-imports"
         )
     configure_logging(snakemake)
     set_scenario_config(snakemake)
