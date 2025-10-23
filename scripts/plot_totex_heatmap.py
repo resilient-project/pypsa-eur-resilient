@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_totex_heatmap",
-            configfiles=["config/postprocess_sensitivities.yaml"],
+            configfiles=["config/pcipmi.config.yaml"],
             )
         
     configure_logging(snakemake)
@@ -95,10 +95,9 @@ if __name__ == "__main__":
     # Rename main runs
     longterm.loc[longterm.prefix=="pcipmi", "name"] = "main"
     
-
     # Filter by name == "main"
-    longterm = longterm[longterm["name"] == "wy2020"].reset_index(drop=True)
-
+    sensitivity = "main"
+    longterm = longterm[longterm["name"] == sensitivity].reset_index(drop=True)
 
     index_cols = ["lt_run", "planning_horizon", "cost"]
 
@@ -154,11 +153,23 @@ if __name__ == "__main__":
     vmin = min(capex.min().min(), opex.min().min())
     vmax = max(capex.max().max(), opex.max().max())
 
+    vmin_totex = totex.min().min() 
+    vmax_totex = totex.max().max()
+
+    # Override vmin and vmax for consistency
+    vmin = 0
+    vmax = 900
+     
+    vmin_totex = 500
+    vmax_totex = 1000
+
+    vmin_npv = totex_pv_sum.min().min()*0.995
+    vmax_npv = totex_pv_sum.max().max()
+
     # Plot 
     logger.info("Plotting heatmap of total system costs.")
     plt.rc("font", **plotting["font"])
-    # fig = plt.figure(figsize=figsize)
-    fig = plt.figure(figsize=(6,3))
+    fig = plt.figure(figsize=figsize)
 
     # Define grid layout with width ratios
     gs = gridspec.GridSpec(1, 4, width_ratios=[7, 7, 7, 3.5], figure=fig)
@@ -186,13 +197,13 @@ if __name__ == "__main__":
     ax2.set_xlabel("Planning horizon", fontsize=fontsize)
     ax2.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis
 
-    sns.heatmap(totex, annot=True, cmap="Purples", fmt=".1f", linewidths=0.5, cbar=False, vmin = totex.min().min(), vmax = totex.max().max(),
+    sns.heatmap(totex, annot=True, cmap="Purples", fmt=".1f", linewidths=0.5, cbar=False, vmin = vmin_totex, vmax = vmax_totex,
                 cbar_kws={"label": "bn. EUR p.a."}, ax=ax3, annot_kws={"fontsize": subfontsize},)
     ax3.set_title("TOTEX (bn. € p.a.)", fontsize=fontsize)
     ax3.set_xlabel("", fontsize=fontsize)
     ax3.set_ylabel("")  # Don't repeat "Scenario" if sharing y-axis
 
-    sns.heatmap(totex_pv_sum, annot=True, cmap="Greys", fmt=".0f", linewidths=0.5, cbar=False, vmin = totex_pv_sum.min().min()*0.997, vmax=totex_pv_sum.max().max(),
+    sns.heatmap(totex_pv_sum, annot=True, cmap="Greys", fmt=".0f", linewidths=0.5, cbar=False, vmin = vmin_npv, vmax=vmax_npv,
                 cbar_kws={"label": "bn. EUR$_{2025}$"}, ax=ax4, annot_kws={"fontsize": subfontsize},)
     ax4.set_title("TOTEX (bn. €)", fontsize=fontsize)
     ax4.set_xlabel("", fontsize=fontsize)
@@ -207,4 +218,11 @@ if __name__ == "__main__":
     ax1.set_yticklabels(ax1.get_yticklabels(), rotation=0, fontsize=subfontsize)
 
     plt.subplots_adjust(wspace=0.1) 
-    # plt.savefig(snakemake.output.plot, bbox_inches="tight", dpi=dpi)
+    plt.savefig(snakemake.output.plot, bbox_inches="tight", dpi=dpi)
+
+    # For sensitivities
+    totex_csv_path = snakemake.output.plot.replace("totex_heatmap.pdf", f"totex_{sensitivity}.csv")
+    totex_npv_csv_path = snakemake.output.plot.replace("totex_heatmap.pdf", f"totex_npv_{sensitivity}.csv")
+
+    totex.to_csv(totex_csv_path)
+    totex_pv_sum.to_csv(totex_npv_csv_path)
