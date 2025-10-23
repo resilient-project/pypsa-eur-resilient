@@ -1103,6 +1103,8 @@ def add_import_limit_constraint(n: pypsa.Network, sns: pd.DatetimeIndex):
 
     rhs = limit * 1e6
 
+    logger.info(f"Adding constraint to limit imports to {limit} TWh/year.")
+
     n.model.add_constraints(lhs, limit_sense, rhs, name="import_limit")
 
 
