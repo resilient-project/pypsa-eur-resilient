@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_regret_matrix",
-            configfiles=["config/run5.config.yaml"],
+            configfiles=["config/pcipmi.config.yaml"],
             )
 
     configure_logging(snakemake)
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     axes[0].set_yticklabels(data.index, fontsize=subfontsize, rotation=0)
     axes[0].tick_params(axis="x", labelsize=subfontsize)
     axes[1].set_xlabel("Planning horizon", fontsize=fontsize)
-    axes[0].set_ylabel("Long-term scenario", fontsize=fontsize)
+    axes[0].set_ylabel("Pathway", fontsize=fontsize)
 
     fig.savefig(
         snakemake.output[0],

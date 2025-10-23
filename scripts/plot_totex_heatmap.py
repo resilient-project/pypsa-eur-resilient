@@ -188,7 +188,7 @@ if __name__ == "__main__":
                 cbar_kws={"label": "bn. EUR p.a."}, ax=ax1, annot_kws={"fontsize": subfontsize},)
     ax1.set_title("CAPEX (bn. € p.a.)", fontsize=fontsize)
     ax1.set_xlabel("", fontsize=fontsize)
-    ax1.set_ylabel("Long-term scenario", fontsize=fontsize)
+    ax1.set_ylabel("Pathway", fontsize=fontsize)
 
     # OPEX
     sns.heatmap(opex, annot=True, cmap="Reds", fmt=".1f", linewidths=0.5, cbar=False, vmin = vmin, vmax = vmax,

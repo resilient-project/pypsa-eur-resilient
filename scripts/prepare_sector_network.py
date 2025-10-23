@@ -6418,9 +6418,9 @@ if __name__ == "__main__":
             opts="",
             clusters="adm",
             sector_opts="",
-            planning_horizons="2050",
-            configfiles=["config/test/config.varying-costs.yaml"],
-            run="low-cost",
+            planning_horizons="2030",
+            configfiles=["config/imports-test.config.yaml"],
+            run="pci-imports",
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606

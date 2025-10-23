@@ -62,8 +62,8 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_delta_balances",
-            configfiles=["config/run5.config.yaml"],
-            carrier="solid biomass for industry CC",
+            configfiles=["config/pcipmi.config.yaml"],
+            carrier="process emissions",
             )
 
     configure_logging(snakemake)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     longterm = pd.DataFrame()
     longterm["path"] = snakemake.input.longterm
     longterm["prefix"] = longterm["path"].apply(lambda x: x.split("/")[-4])
-    longterm["name"] = "Long-term"
+    longterm["name"] = "Pathway"
     longterm["lt_run"] = longterm["path"].apply(lambda x: x.split("/")[-3])
 
     shortterm = pd.DataFrame()
@@ -263,7 +263,7 @@ if __name__ == "__main__":
         ax.set_ylim(vmin*0.95, vmax*1.05)
 
     # Set y label only in first figure
-    axes[1].set_xlabel("Long-term run", fontsize=fontsize)
+    axes[1].set_xlabel("Pathway", fontsize=fontsize)
     axes[0].set_ylabel(f"{bus_carrier_nice_name.get(bus_carr, bus_carr)} ({unit} p.a.)", fontsize=fontsize)
 
     # Add legend below figure once
@@ -273,7 +273,7 @@ if __name__ == "__main__":
         by_label.values(),
         by_label.keys(),
         loc="lower center",
-        bbox_to_anchor=(0.5, -0.11),
+        bbox_to_anchor=(0.5, -0.13),
         ncol=2,
         fontsize=subfontsize,
         frameon=False,
