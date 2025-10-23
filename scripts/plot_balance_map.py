@@ -34,10 +34,10 @@ if __name__ == "__main__":
             clusters="adm",
             opts="",
             sector_opts="",
-            planning_horizons="2050",
+            planning_horizons="2040",
             carrier="H2",
-            configfiles=["config/run5.config.yaml"],
-            run="pcipmi-national-international-expansion",
+            configfiles=["config/pcipmi.config.yaml"],
+            run="pcipmi",
         )
 
     configure_logging(snakemake)
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     
     update_tech_colors(n, config["tech_colors"])
 
-    n.statistics.set_parameters(round=3, drop_zero=True, nice_names=False)
+    n.statistics.set_parameters(round=3, drop_zero=False, nice_names=False)
 
     # fill empty colors or "" with light grey
     mask = n.carriers.color.isna() | n.carriers.color.eq("")

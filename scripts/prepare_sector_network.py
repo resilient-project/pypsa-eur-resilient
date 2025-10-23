@@ -5954,6 +5954,7 @@ def add_import_options(
     costs: pd.DataFrame,
     options: dict,
     gas_input_nodes: pd.DataFrame,
+    pcipmi_projects: dict,
 ):
     """
     Add green energy import options.
@@ -6043,7 +6044,32 @@ def add_import_options(
             )
 
     if "H2" in import_options:
+        logger.info("Adding hydrogen import options.")
         p_nom = gas_input_nodes["pipeline"].dropna()
+        
+        # Custom additions for pci-pmi-policy-targets paper
+        # Drop far in onshore/continental regions
+        drop_regions = ["BG", "PL8", "RO", "HU", "SK0"]
+        p_nom = p_nom[~p_nom.index.isin(drop_regions)]
+
+        # Add PCI-PMI pipeline endings if pcipmi_projects are enabled
+        if pcipmi_projects.get("enable", False):
+            logger.info("Adding PCI-PMI H2 pipeline endings to import options.")
+            pcipmi_pipeline_regions = ["PT1", "ES6", "ES5", "FRL", "ITG1", "GR4+1", "BE1+1", "NL3", "NL2", "NL1", "DE9", "DK0", "NO0A", "SE1", "SE3"]
+
+            # Add if not already present
+            p_nom = pd.concat(
+                [
+                    p_nom, 
+                    pd.Series(
+                        p_nom.max(), index=[region for region in pcipmi_pipeline_regions if region not in p_nom.index]
+                    )
+                ]
+            )
+            # Sort by alphabet
+            p_nom = p_nom.sort_index()
+        # Custom end
+
         p_nom.rename(lambda x: x + " H2", inplace=True)
 
         n.add(
@@ -6419,7 +6445,7 @@ if __name__ == "__main__":
             clusters="adm",
             sector_opts="",
             planning_horizons="2030",
-            configfiles=["config/imports-test.config.yaml"],
+            configfiles=["config/old-imports-test.config.yaml"],
             run="pci-imports",
         )
 
@@ -6759,7 +6785,7 @@ if __name__ == "__main__":
         )
 
     if options["imports"]["enable"]:
-        add_import_options(n, costs, options, gas_input_nodes)
+        add_import_options(n, costs, options, gas_input_nodes, pcipmi_projects)
 
     if options["gas_distribution_grid"]:
         insert_gas_distribution_costs(n, costs, options=options)
