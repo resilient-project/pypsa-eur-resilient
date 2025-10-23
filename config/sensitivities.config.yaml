@@ -69,6 +69,11 @@ run:
   - wy2020___pcipmi-nat
   - wy2020___pcipmi-internat
   - wy2020___central-planning
+  - import-h2-120___decentral-islands
+  - import-h2-120___pcipmi
+  - import-h2-120___pcipmi-nat
+  - import-h2-120___pcipmi-internat
+  - import-h2-120___central-planning
   scenarios:
     enable: true
     file: config/sensitivities.scenarios.yaml
