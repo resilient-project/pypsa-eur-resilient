@@ -11,8 +11,8 @@ logging:
   format: '%(levelname)s:%(name)s:%(message)s'
 
 remote:
-  ssh: 
-  path: 
+  ssh: z1
+  path: scratch/projects/pcipmi-policy-targets/workflow/pypsa-eur-resilient
 
 # PCI-PMI policy paper settings
 pcipmi_policy_paper:
@@ -43,6 +43,10 @@ run:
   - di-imports
   - pci-no-imports
   - pci-imports
+  - pci-in-no-imports
+  - pci-in-imports
+  - cp-no-imports
+  - cp-imports
   scenarios:
     enable: true
     file: config/imports-test.scenarios.yaml
