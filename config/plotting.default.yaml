@@ -56,12 +56,12 @@ plotting:
       figsize: (3.5, 1.6)
       dpi: 300
       custom_markers:
-        Long-term: "o" # Circle
+        Pathway: "o" # Circle
         Reduced targets: "v" # Square
         Delayed pipelines: "P" # Diamond
         No pipelines: "X" # Triangle
       custom_hues:
-        Long-term: "#202020"
+        Pathway: "#202020"
         Reduced targets: "#2ca02c"
         Delayed pipelines: "#ff7f0e"
         No pipelines: "#d62728"
