@@ -2169,7 +2169,7 @@ import-h2-120___decentral-islands:
     imports:
       enable: true
       limit: 333.3 # 10 Mt CO2 in TWh p.a.
-      limit_sense: >=
+      limit_sense: ">="
       price:
         H2: 120 # EUR/MWh
 
@@ -2211,7 +2211,7 @@ import-h2-120___pcipmi:
     imports:
       enable: true
       limit: 333.3 # 10 Mt CO2 in TWh p.a.
-      limit_sense: >=
+      limit_sense: ">="
       price:
         H2: 120 # EUR/MWh
 
@@ -2253,7 +2253,7 @@ import-h2-120___pcipmi-nat:
     imports:
       enable: true
       limit: 333.3 # 10 Mt CO2 in TWh p.a.
-      limit_sense: >=
+      limit_sense: ">="
       price:
         H2: 120 # EUR/MWh
 
@@ -2295,7 +2295,7 @@ import-h2-120___pcipmi-internat:
     imports:
       enable: true
       limit: 333.3 # 10 Mt CO2 in TWh p.a.
-      limit_sense: >=
+      limit_sense: ">="
       price:
         H2: 120 # EUR/MWh
 
@@ -2337,6 +2337,6 @@ import-h2-120___central-planning:
     imports:
       enable: true
       limit: 333.3 # 10 Mt CO2 in TWh p.a.
-      limit_sense: >=
+      limit_sense: ">="
       price:
         H2: 120 # EUR/MWh
