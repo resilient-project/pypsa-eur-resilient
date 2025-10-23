@@ -37,16 +37,18 @@ pcipmi_policy_paper:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: "imports-test"
+  prefix: "pci-imports-test"
   name:
-  - di-no-imports
-  - di-imports
-  - pci-no-imports
-  - pci-imports
-  - pci-in-no-imports
-  - pci-in-imports
-  - cp-no-imports
-  - cp-imports
+  - decentral-islands
+  - pcipmi
+  - pcipmi-nat
+  - pcipmi-internat
+  - central-planning
+  - decentral-islands-imports
+  - pcipmi-imports
+  - pcipmi-nat-imports
+  - pcipmi-internat-imports
+  - central-planning-imports
   scenarios:
     enable: true
     file: config/imports-test.scenarios.yaml
