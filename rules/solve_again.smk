@@ -11,8 +11,11 @@ rule solve_operations_sector_network:
         ),
         custom_extra_functionality=input_custom_extra_functionality,
         solve_operations=config_provider("solve_operations"),
+        carrier_networks=config_provider("carrier_networks"),
+        pcipmi_projects=config_provider("pcipmi_projects"),
     input:
         network=RESULTS + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+        optimal_link_capacities = "data/optimal_link_capacities/{run}/optimal_link_capacities_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
     output:
         network=RESULTS + "networks/{column}/base_s_ops_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
     log:

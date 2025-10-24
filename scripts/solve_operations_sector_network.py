@@ -18,6 +18,7 @@ from _helpers import (
     update_config_from_wildcards,
 )
 from solve_network import solve_network
+from pypsa.optimization.abstract import discretized_capacity
 
 logger = logging.getLogger(__name__)
 
@@ -309,14 +310,16 @@ if __name__ == "__main__":
             clusters="adm",
             sector_opts="",
             planning_horizons="2040",
-            column="ops__delay_pipes",
-            run="pcipmi-national-international-expansion",
-            configfiles=["config/fourth-run.config.yaml"]
+            column="disc",
+            run="central-planning",
+            configfiles=["config/postdiscretised.config.yaml"]
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606
     set_scenario_config(snakemake)
     update_config_from_wildcards(snakemake.config, snakemake.wildcards)
+
+    carrier_networks = snakemake.params["carrier_networks"]
 
     rule_name = snakemake.rule
     params = snakemake.params
@@ -428,9 +431,62 @@ if __name__ == "__main__":
     n.params = params
     n.config = config
 
-    # Run the operational stage of the model
+    # Custom post-discretisation
+    optimal_link_capacities = pd.read_csv(snakemake.input.optimal_link_capacities, index_col=0)
+
+    # Drop DC and select correct year
+    optimal_link_capacities = (
+        optimal_link_capacities
+        .loc[~optimal_link_capacities.carrier.str.contains("DC")]
+    )
+
+    for carrier_name in ["H2", "CO2"]:
+        post_disc = carrier_networks[carrier_name].get("post_discretization", False)
+        pipeline_name = f"{carrier_name} pipeline"
+
+        if pipeline_name in n.links.carrier.unique() and post_disc:
+            logger.info(f"Applying custom post-discretization for {pipeline_name} based on previously solved optimal capacities.")
+            include_pcipmi = post_disc.get("include_pcipmi", False)
+            query_str = (f"carrier == '{pipeline_name}'")
+            optimal_links = optimal_link_capacities.query(query_str, engine="python").copy()
+            threshold = post_disc.get("link_threshold", 0.1)
+            unit_size = post_disc.get("link_unit_size", 2000)
+            logger.info(f"Using unit size of {unit_size} MW and threshold of {threshold} for {pipeline_name}.")
+
+            if not include_pcipmi:
+                subset = optimal_links.loc[~optimal_links.index.str.contains("PCI")].index
+            else:
+                subset = optimal_links.index
+
+            if not optimal_links.empty:
+                optimal_links.loc[subset, "p_nom_discrete"] = optimal_links.loc[subset].apply(
+                    lambda row: discretized_capacity(
+                        nom_opt=row.p_nom_opt,
+                        nom_max=row.p_nom_max,
+                        unit_size=unit_size,
+                        threshold=threshold,
+                        fractional_last_unit_size=False,
+                    ),
+                    axis=1,
+                )
+                # Fill NAs wit p_nom
+                optimal_links["p_nom_discrete"] = optimal_links["p_nom_discrete"].fillna(optimal_links["p_nom"])
+
+                n.links.loc[subset, "p_nom"] = optimal_links.loc[subset, "p_nom_discrete"]
+                n.links.loc[subset, "p_nom_max"] = optimal_links.loc[subset, ["p_nom_discrete", "p_nom_max"]].max(axis=1)
+                n.links.loc[subset, "p_nom_extendable"] = False
+
+                # Set those in the subset with p_nom = 0 to inactive
+                b_to_deactivate = n.links.loc[subset, "p_nom"] == 0
+                # n.links.loc[subset[b_to_deactivate], "active"] = False
+
+                # Remove instead
+                logger.info(f"Removing {b_to_deactivate.sum()} {pipeline_name}s with 0 MW capacity after discretization.")
+                n.remove("Link", n.links.loc[subset[b_to_deactivate]].index)
+
+    # Run the re-optimisation of the model
     logger.info("---")
-    logger.info(f"Running operational optimisation for column ['{column}'] and year ['{planning_horizons}']")
+    logger.info(f"Running re-optimisation for column ['{column}'] and year ['{planning_horizons}']")
 
     logging_frequency = snakemake.config.get("solving", {}).get(
         "mem_logging_frequency", 30
