@@ -1537,11 +1537,9 @@ if __name__ == "__main__":
                 # Fill NAs wit p_nom
                 optimal_links["p_nom_discrete"] = optimal_links["p_nom_discrete"].fillna(optimal_links["p_nom"])
 
-                n.links.loc[optimal_links.index, "p_nom"] = optimal_links["p_nom_discrete"]
-                n.links.loc[optimal_links.index, "p_nom_max"] = optimal_links[
-                    ["p_nom_discrete", "p_nom_max"]
-                ].max(axis=1)
-                n.links.loc[optimal_links.index, "p_nom_extendable"] = False
+                n.links.loc[subset, "p_nom"] = optimal_links.loc[subset, "p_nom_discrete"]
+                n.links.loc[subset, "p_nom_max"] = optimal_links.loc[subset, ["p_nom_discrete", "p_nom_max"]].max(axis=1)
+                n.links.loc[subset, "p_nom_extendable"] = False
 
     prepare_network(
         n,
