@@ -1,0 +1,1441 @@
+Link,carrier,p_nom_opt,p_nom,p_nom_max,p_nom_extendable,active
+BG offshore 0 co2 stored pipeline-2050,CO2 pipeline,6.894792148841721,0.0,inf,True,True
+GBD offshore 0 co2 stored pipeline-2050,CO2 pipeline,360.12661489916115,0.0,inf,True,True
+GBE offshore 0 co2 stored pipeline-2050,CO2 pipeline,0.7844157031067488,0.0,inf,True,True
+GBE offshore 1 co2 stored pipeline-2050,CO2 pipeline,0.0011727746956242797,0.0,inf,True,True
+GBF offshore 0 co2 stored pipeline-2050,CO2 pipeline,0.007349202869479252,0.0,inf,True,True
+GBH offshore 0 co2 stored pipeline-2050,CO2 pipeline,0.0017996393664836327,0.0,inf,True,True
+GBL offshore 0 co2 stored pipeline-2050,CO2 pipeline,0.0022896886992323957,0.0,inf,True,True
+GBM offshore 0 co2 stored pipeline-2050,CO2 pipeline,0.0005113876377050484,0.0,inf,True,True
+GR5 offshore 0 co2 stored pipeline-2050,CO2 pipeline,0.0005450340817072479,0.0,inf,True,True
+NL3 offshore 0 co2 stored pipeline-2050,CO2 pipeline,0.0026111353602321324,0.0,inf,True,True
+NL3 offshore 1 co2 stored pipeline-2050,CO2 pipeline,0.0005177101062840453,0.0,inf,True,True
+NO0A offshore 0 co2 stored pipeline-2050,CO2 pipeline,5.534553197020919,0.0,inf,True,True
+H2 pipeline AL0 -> GR5-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> ME0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> MK0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> XK-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CH0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CZ0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> DE1-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> HU-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> SI0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> HR-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> ME0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> RS-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> FRE-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> GBJ-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> FRF-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> LU0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> MK0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RO-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RS-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> DE1-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRC-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRF-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRK-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> ITC-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL5-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE1 -> DE2-2050,H2 pipeline,2074.8295244387573,0.0,inf,True,True
+H2 pipeline DE1 -> DE9-2050,H2 pipeline,0.007443796145264583,0.0,inf,True,True
+H2 pipeline DE1 -> DEA-2050,H2 pipeline,0.006853684678444434,0.0,inf,True,True
+H2 pipeline DE1 -> DEF-2050,H2 pipeline,0.0047737920091363096,0.0,inf,True,True
+H2 pipeline DE2 -> DE8-2050,H2 pipeline,0.00856671348737086,0.0,inf,True,True
+H2 pipeline DE2 -> DED-2050,H2 pipeline,13.319617807687711,0.0,inf,True,True
+H2 pipeline DE2 -> DEE-2050,H2 pipeline,51.336724644946564,0.0,inf,True,True
+H2 pipeline DE2 -> DEF-2050,H2 pipeline,0.015057996756859746,0.0,inf,True,True
+H2 pipeline DE2 -> DEG-2050,H2 pipeline,0.077193339344489,0.0,inf,True,True
+H2 pipeline DE4 -> DEE-2050,H2 pipeline,0.08659768709531568,0.0,inf,True,True
+H2 pipeline DE7 -> DE9-2050,H2 pipeline,2609.7192048151983,0.0,inf,True,True
+H2 pipeline DE7 -> DEA-2050,H2 pipeline,0.024932019565553673,0.0,inf,True,True
+H2 pipeline DE7 -> DEG-2050,H2 pipeline,0.17209621242786446,0.0,inf,True,True
+H2 pipeline DE8 -> DEE-2050,H2 pipeline,0.013618985261841727,0.0,inf,True,True
+H2 pipeline DE8 -> DEF-2050,H2 pipeline,0.05327548929541255,0.0,inf,True,True
+H2 pipeline DE8 -> DK0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> SE2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE9 -> DED-2050,H2 pipeline,0.24736871856697176,0.0,inf,True,True
+H2 pipeline DE9 -> DEE-2050,H2 pipeline,89.20679647631997,0.0,inf,True,True
+H2 pipeline DE9 -> GBJ-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> DEF-2050,H2 pipeline,0.012702602452576098,0.0,inf,True,True
+H2 pipeline DEA -> FRF-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> NL2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEB -> LU0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DED -> DEG-2050,H2 pipeline,0.13909746185043365,0.0,inf,True,True
+H2 pipeline DED -> PL5-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEE -> DEG-2050,H2 pipeline,0.25469251487673616,0.0,inf,True,True
+H2 pipeline DEF -> NO09-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> SE2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> GBF-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NL1-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NO09-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> SE2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline EE0 -> FI1C-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES1 -> PT1-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRI-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRJ-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES4 -> ES5-2050,H2 pipeline,0.0040379467465225345,0.0,inf,True,True
+H2 pipeline ES5 -> FRJ-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES6 -> PT1-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> FI1B-2050,H2 pipeline,0.026169398482776645,0.0,inf,True,True
+H2 pipeline FI19 -> SE1-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE3-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI1C -> FI1D-2050,H2 pipeline,0.003513295308123923,0.0,inf,True,True
+H2 pipeline FI1D -> NO07-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FR1 -> FRB-2050,H2 pipeline,0.04588726899857679,0.0,inf,True,True
+H2 pipeline FR1 -> FRC-2050,H2 pipeline,0.08639961409420442,0.0,inf,True,True
+H2 pipeline FR1 -> FRD-2050,H2 pipeline,734.8047546274998,0.0,inf,True,True
+H2 pipeline FR1 -> FRF-2050,H2 pipeline,101.00666233780711,0.0,inf,True,True
+H2 pipeline FRB -> FRC-2050,H2 pipeline,0.02965586895130702,0.0,inf,True,True
+H2 pipeline FRB -> FRG-2050,H2 pipeline,0.7793189419930977,0.0,inf,True,True
+H2 pipeline FRB -> FRI-2050,H2 pipeline,2.2773088054252586,0.0,inf,True,True
+H2 pipeline FRB -> FRJ-2050,H2 pipeline,0.03249850391707474,0.0,inf,True,True
+H2 pipeline FRB -> FRK-2050,H2 pipeline,4.614336732926724,0.0,inf,True,True
+H2 pipeline FRD -> FRE-2050,H2 pipeline,57.19278327715803,0.0,inf,True,True
+H2 pipeline FRD -> FRG-2050,H2 pipeline,0.042815625409813825,0.0,inf,True,True
+H2 pipeline FRD -> FRH-2050,H2 pipeline,0.046703754636687383,0.0,inf,True,True
+H2 pipeline FRD -> GBJ-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRE -> GBJ-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRF -> LU0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRG -> FRH-2050,H2 pipeline,824.373387195745,0.0,inf,True,True
+H2 pipeline FRG -> FRI-2050,H2 pipeline,823.6762379600067,0.0,inf,True,True
+H2 pipeline FRH -> IE0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRI -> FRJ-2050,H2 pipeline,825.7665957602328,0.0,inf,True,True
+H2 pipeline FRI -> FRK-2050,H2 pipeline,0.018812957397048188,0.0,inf,True,True
+H2 pipeline FRJ -> FRK-2050,H2 pipeline,0.07158044480381108,0.0,inf,True,True
+H2 pipeline FRJ -> FRL-2050,H2 pipeline,825.8003622948967,0.0,inf,True,True
+H2 pipeline FRK -> ITC-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRL -> ITC-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITG2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITI-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBC -> GBD-2050,H2 pipeline,0.1482594573146971,0.0,inf,True,True
+H2 pipeline GBC -> GBE-2050,H2 pipeline,0.03305615421665756,0.0,inf,True,True
+H2 pipeline GBC -> GBM-2050,H2 pipeline,288.42923315282644,0.0,inf,True,True
+H2 pipeline GBC -> NO0A-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBD -> GBE-2050,H2 pipeline,0.5178899227202148,0.0,inf,True,True
+H2 pipeline GBD -> GBG-2050,H2 pipeline,0.024149923830009076,0.0,inf,True,True
+H2 pipeline GBD -> GBL-2050,H2 pipeline,0.03373083313593552,0.0,inf,True,True
+H2 pipeline GBD -> GBM-2050,H2 pipeline,267.80640563924084,0.0,inf,True,True
+H2 pipeline GBE -> GBF-2050,H2 pipeline,0.03831068429425895,0.0,inf,True,True
+H2 pipeline GBE -> GBH-2050,H2 pipeline,0.0316610218956201,0.0,inf,True,True
+H2 pipeline GBF -> GBG-2050,H2 pipeline,0.17247531181511172,0.0,inf,True,True
+H2 pipeline GBF -> GBH-2050,H2 pipeline,33.34695980517596,0.0,inf,True,True
+H2 pipeline GBF -> GBJ-2050,H2 pipeline,0.17892706702900674,0.0,inf,True,True
+H2 pipeline GBG -> GBK-2050,H2 pipeline,0.24094558213159953,0.0,inf,True,True
+H2 pipeline GBG -> GBL-2050,H2 pipeline,0.32909444961327255,0.0,inf,True,True
+H2 pipeline GBH -> GBJ-2050,H2 pipeline,0.08228098052869684,0.0,inf,True,True
+H2 pipeline GBJ -> GBK-2050,H2 pipeline,0.2122489632306506,0.0,inf,True,True
+H2 pipeline GBJ -> NL3-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBK -> GBL-2050,H2 pipeline,0.10410059477922565,0.0,inf,True,True
+H2 pipeline GBL -> GBM-2050,H2 pipeline,0.017743133173053774,0.0,inf,True,True
+H2 pipeline GBL -> IE0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBM -> GBN-2050,H2 pipeline,359.9692287093959,0.0,inf,True,True
+H2 pipeline GBN -> IE0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> ITF-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> MK0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> HU-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> RS-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> SI0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RO-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RS-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SI0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SK0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITC -> ITH-2050,H2 pipeline,3399.9444316619765,0.0,inf,True,True
+H2 pipeline ITC -> ITI-2050,H2 pipeline,0.026829914901739735,0.0,inf,True,True
+H2 pipeline ITF -> ME0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITG2 -> ITI-2050,H2 pipeline,672.4221826069369,0.0,inf,True,True
+H2 pipeline ITH -> SI0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> PL6-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> SE2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> RS-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> XK-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> RS-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> XK-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL1 -> NO09-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL2 -> NL3-2050,H2 pipeline,3143.3543236532823,0.0,inf,True,True
+H2 pipeline NO02 -> NO08-2050,H2 pipeline,0.04669094634349227,0.0,inf,True,True
+H2 pipeline NO02 -> NO0A-2050,H2 pipeline,12.239499839745724,0.0,inf,True,True
+H2 pipeline NO06 -> NO07-2050,H2 pipeline,0.04820461915021067,0.0,inf,True,True
+H2 pipeline NO06 -> NO0A-2050,H2 pipeline,382.19329810983464,0.0,inf,True,True
+H2 pipeline NO06 -> SE3-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO07 -> SE3-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> NO09-2050,H2 pipeline,0.023659117965915712,0.0,inf,True,True
+H2 pipeline NO08 -> NO0A-2050,H2 pipeline,127.28742884235719,0.0,inf,True,True
+H2 pipeline NO08 -> SE2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE3-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO09 -> NO0A-2050,H2 pipeline,691.5836490783964,0.0,inf,True,True
+H2 pipeline PL2 -> PL5-2050,H2 pipeline,0.07535121940568341,0.0,inf,True,True
+H2 pipeline PL2 -> PL7-2050,H2 pipeline,0.1243065336310932,0.0,inf,True,True
+H2 pipeline PL2 -> PL8-2050,H2 pipeline,231.96758580071693,0.0,inf,True,True
+H2 pipeline PL4 -> PL5-2050,H2 pipeline,0.04246381985806309,0.0,inf,True,True
+H2 pipeline PL4 -> PL7-2050,H2 pipeline,0.04384638539438188,0.0,inf,True,True
+H2 pipeline PL4 -> PL9-2050,H2 pipeline,0.006742319359493843,0.0,inf,True,True
+H2 pipeline PL6 -> PL8-2050,H2 pipeline,0.005665226669494985,0.0,inf,True,True
+H2 pipeline PL6 -> SE2-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL7 -> PL8-2050,H2 pipeline,0.023514667354466962,0.0,inf,True,True
+H2 pipeline PL7 -> PL9-2050,H2 pipeline,190.07750263222366,0.0,inf,True,True
+H2 pipeline PL8 -> SK0-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RO -> RS-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RS -> XK-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline SE1 -> SE2-2050,H2 pipeline,1315.466597307336,0.0,inf,True,True
+H2 pipeline SE1 -> SE3-2050,H2 pipeline,0.004957761761220317,0.0,inf,True,True
+H2 pipeline SE2 -> SE3-2050,H2 pipeline,0.002844600613716704,0.0,inf,True,True
+PCI-10.1.3,H2 pipeline,6261.0,6261.0,inf,False,True
+PCI-10.1.2,H2 pipeline,7001.0,7001.0,inf,False,True
+PCI-10.4-01,H2 pipeline,6267.0,6267.0,inf,False,True
+PCI-9.5-01,H2 pipeline,3805.0,3805.0,inf,False,True
+PCI-9.6-01,H2 pipeline,4003.0,4003.0,inf,False,True
+PCI-9.5-02,H2 pipeline,3805.0,3805.0,inf,False,True
+PCI-9.4-01,H2 pipeline,3778.0,3778.0,inf,False,True
+PCI-9.5-03,H2 pipeline,3805.0,3805.0,inf,False,True
+PCI-10.3.1-01,H2 pipeline,3424.0,3424.0,inf,False,True
+PCI-10.2.1+1,H2 pipeline,12262.0,12262.0,inf,False,True
+PCI-10.2.1,H2 pipeline,5995.0,5995.0,inf,False,True
+PCI-10.4-02,H2 pipeline,6267.0,6267.0,inf,False,True
+PCI-9.4-02,H2 pipeline,3778.0,3778.0,inf,False,True
+PCI-9.4-03,H2 pipeline,3778.0,3778.0,inf,False,True
+PCI-9.2.1,H2 pipeline,507.0,507.0,inf,False,True
+PCI-9.1.6-01,H2 pipeline,8057.0,8057.0,inf,False,True
+PCI-10.2.2-01,H2 pipeline,10056.0,10056.0,inf,False,True
+PCI-10.2.2-02,H2 pipeline,10056.0,10056.0,inf,False,True
+PCI-11.2-01,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-9.1.6+1-01,H2 pipeline,11835.0,11835.0,inf,False,True
+PCI-11.3-01,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-9.7.1+1,H2 pipeline,3532.0,3532.0,inf,False,True
+PCI-9.9.1,H2 pipeline,10146.0,10146.0,inf,False,True
+PCI-9.6+1-01,H2 pipeline,5297.0,5297.0,inf,False,True
+PCI-9.25-01,H2 pipeline,15219.0,15219.0,inf,False,True
+PCI-9.4+1,H2 pipeline,13536.0,13536.0,inf,False,True
+PCI-9.7.3,H2 pipeline,9758.0,9758.0,inf,False,True
+PCI-9.1.6-02,H2 pipeline,8057.0,8057.0,inf,False,True
+PCI-9.1.6+1-02,H2 pipeline,8818.0,8818.0,inf,False,True
+PCI-9.9.2,H2 pipeline,2489.0,2489.0,inf,False,True
+PCI-11.2-02,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-03,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-9.1.3-01,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-02,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-03,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-04,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-05,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.2,H2 pipeline,3357.0,3357.0,inf,False,True
+PCI-9.1.3-06,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.4,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-11.2-04,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.1-01,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-11.2-05,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.3-02,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.1-02,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-9.3-01,H2 pipeline,5073.0,5073.0,inf,False,True
+PCI-9.1.5-01,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-9.1.5-02,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-9.3-02,H2 pipeline,5073.0,5073.0,inf,False,True
+PCI-9.1.5-03,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-10.3.1-02,H2 pipeline,3424.0,3424.0,inf,False,True
+PCI-10.3.1-03,H2 pipeline,3424.0,3424.0,inf,False,True
+PCI-10.1.1-01,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-10.1.1-02,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-10.1.1-03,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-11.2-06,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-07,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-9.6-02,H2 pipeline,4003.0,4003.0,inf,False,True
+PCI-9.6-03,H2 pipeline,4003.0,4003.0,inf,False,True
+PCI-9.6+1-02,H2 pipeline,13761.0,13761.0,inf,False,True
+PCI-9.25-02,H2 pipeline,15219.0,15219.0,inf,False,True
+PCI-11.3-03,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.3-04,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.3-05,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.2-08,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-10,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-11,H2 pipeline,8281.0,8281.0,inf,False,True
+CO2 pipeline AL0 -> GR5-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> ME0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> MK0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> XK-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> CH0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> CZ0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> DE1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> DE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> HU-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> ITH-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> SI0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> HR-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> ME0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> RS-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> FRE-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> GBJ-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> NL4-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> DEA-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> FRF-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> LU0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> GR5-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> MK0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> RO-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> RS-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> DE1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRC-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRF-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRK-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> ITC-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> DE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> DED-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> PL2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> PL5-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> SK0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE1 -> DE2-2050,CO2 pipeline,104.8204728104034,0.0,inf,True,True
+CO2 pipeline DE1 -> DE7-2050,CO2 pipeline,0.0012469053591758633,0.0,inf,True,True
+CO2 pipeline DE1 -> DE9-2050,CO2 pipeline,0.0008003481913054456,0.0,inf,True,True
+CO2 pipeline DE1 -> DEA-2050,CO2 pipeline,0.0012663431125856128,0.0,inf,True,True
+CO2 pipeline DE1 -> DEB-2050,CO2 pipeline,269.6767461205561,0.0,inf,True,True
+CO2 pipeline DE1 -> DEF-2050,CO2 pipeline,0.0004873317687009802,0.0,inf,True,True
+CO2 pipeline DE1 -> FRF-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE2 -> DE7-2050,CO2 pipeline,0.030370211350732177,0.0,inf,True,True
+CO2 pipeline DE2 -> DE8-2050,CO2 pipeline,0.0006180063376887762,0.0,inf,True,True
+CO2 pipeline DE2 -> DED-2050,CO2 pipeline,0.002246622988759643,0.0,inf,True,True
+CO2 pipeline DE2 -> DEE-2050,CO2 pipeline,15.035949977718932,0.0,inf,True,True
+CO2 pipeline DE2 -> DEF-2050,CO2 pipeline,0.0014281452606904987,0.0,inf,True,True
+CO2 pipeline DE2 -> DEG-2050,CO2 pipeline,31.091934112242853,0.0,inf,True,True
+CO2 pipeline DE4 -> DE8-2050,CO2 pipeline,0.002266156507313067,0.0,inf,True,True
+CO2 pipeline DE4 -> DED-2050,CO2 pipeline,0.013264659836854403,0.0,inf,True,True
+CO2 pipeline DE4 -> DEE-2050,CO2 pipeline,0.0022602062349498233,0.0,inf,True,True
+CO2 pipeline DE4 -> PL4-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE7 -> DE9-2050,CO2 pipeline,0.006386640113212996,0.0,inf,True,True
+CO2 pipeline DE7 -> DEA-2050,CO2 pipeline,141.6855127653751,0.0,inf,True,True
+CO2 pipeline DE7 -> DEB-2050,CO2 pipeline,0.039271261605331995,0.0,inf,True,True
+CO2 pipeline DE7 -> DEG-2050,CO2 pipeline,0.00278645309420628,0.0,inf,True,True
+CO2 pipeline DE8 -> DEE-2050,CO2 pipeline,0.0012737157779088473,0.0,inf,True,True
+CO2 pipeline DE8 -> DEF-2050,CO2 pipeline,11.948931793983714,0.0,inf,True,True
+CO2 pipeline DE8 -> DK0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE8 -> SE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE9 -> DEA-2050,CO2 pipeline,0.00152763767394227,0.0,inf,True,True
+CO2 pipeline DE9 -> DED-2050,CO2 pipeline,20.95340175086188,0.0,inf,True,True
+CO2 pipeline DE9 -> GBJ-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE9 -> NL1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> DEF-2050,CO2 pipeline,0.000756451169885061,0.0,inf,True,True
+CO2 pipeline DEA -> FRF-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> NL2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> NL4-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEB -> DEC-2050,CO2 pipeline,0.004792290847188764,0.0,inf,True,True
+CO2 pipeline DEB -> LU0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEC -> FRF-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DED -> DEG-2050,CO2 pipeline,0.0020558305393443403,0.0,inf,True,True
+CO2 pipeline DED -> PL5-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEE -> DEG-2050,CO2 pipeline,0.01024842476515411,0.0,inf,True,True
+CO2 pipeline DEF -> NO09-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEF -> SE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> GBF-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> NL1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> NO09-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> SE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> FI1B-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> FI1C-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> LV0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES1 -> ES2-2050,CO2 pipeline,0.00226035467075812,0.0,inf,True,True
+CO2 pipeline ES1 -> ES4-2050,CO2 pipeline,0.0009591761587041382,0.0,inf,True,True
+CO2 pipeline ES1 -> PT1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES2 -> ES4-2050,CO2 pipeline,2.518889044398676,0.0,inf,True,True
+CO2 pipeline ES2 -> ES5-2050,CO2 pipeline,162.72110671906037,0.0,inf,True,True
+CO2 pipeline ES2 -> FRJ-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES4 -> ES5-2050,CO2 pipeline,0.0010661460343292576,0.0,inf,True,True
+CO2 pipeline ES4 -> ES6-2050,CO2 pipeline,2.51747376582621,0.0,inf,True,True
+CO2 pipeline ES4 -> PT1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES5 -> ES6-2050,CO2 pipeline,0.002220566776369974,0.0,inf,True,True
+CO2 pipeline ES5 -> FRJ-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES6 -> PT1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI19 -> FI1B-2050,CO2 pipeline,0.022918620363492435,0.0,inf,True,True
+CO2 pipeline FI19 -> FI1C-2050,CO2 pipeline,0.004464347317213539,0.0,inf,True,True
+CO2 pipeline FI19 -> FI1D-2050,CO2 pipeline,0.0005248781098876765,0.0,inf,True,True
+CO2 pipeline FI19 -> SE1-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI19 -> SE3-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI1B -> FI1C-2050,CO2 pipeline,0.03708722975776651,0.0,inf,True,True
+CO2 pipeline FI1C -> FI1D-2050,CO2 pipeline,0.0004076241831576632,0.0,inf,True,True
+CO2 pipeline FI1D -> NO07-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI1D -> SE3-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FR1 -> FRB-2050,CO2 pipeline,0.022835193746049372,0.0,inf,True,True
+CO2 pipeline FR1 -> FRC-2050,CO2 pipeline,0.0035213668574494436,0.0,inf,True,True
+CO2 pipeline FR1 -> FRD-2050,CO2 pipeline,0.015332292791018606,0.0,inf,True,True
+CO2 pipeline FR1 -> FRE-2050,CO2 pipeline,0.003539997896953193,0.0,inf,True,True
+CO2 pipeline FR1 -> FRF-2050,CO2 pipeline,0.016066012421832622,0.0,inf,True,True
+CO2 pipeline FRB -> FRC-2050,CO2 pipeline,0.003565284531009145,0.0,inf,True,True
+CO2 pipeline FRB -> FRG-2050,CO2 pipeline,0.12599833480553266,0.0,inf,True,True
+CO2 pipeline FRB -> FRI-2050,CO2 pipeline,31.905222180991363,0.0,inf,True,True
+CO2 pipeline FRB -> FRJ-2050,CO2 pipeline,0.0009845477232082686,0.0,inf,True,True
+CO2 pipeline FRB -> FRK-2050,CO2 pipeline,0.0010713744981230764,0.0,inf,True,True
+CO2 pipeline FRC -> FRF-2050,CO2 pipeline,81.50418744917954,0.0,inf,True,True
+CO2 pipeline FRC -> FRK-2050,CO2 pipeline,107.72534260013552,0.0,inf,True,True
+CO2 pipeline FRD -> FRE-2050,CO2 pipeline,284.22687056718036,0.0,inf,True,True
+CO2 pipeline FRD -> FRG-2050,CO2 pipeline,503.72185647680857,0.0,inf,True,True
+CO2 pipeline FRD -> FRH-2050,CO2 pipeline,0.003977956990994339,0.0,inf,True,True
+CO2 pipeline FRD -> GBJ-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRE -> FRF-2050,CO2 pipeline,0.002474631554060378,0.0,inf,True,True
+CO2 pipeline FRE -> GBJ-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRF -> LU0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRG -> FRH-2050,CO2 pipeline,0.002046769554737324,0.0,inf,True,True
+CO2 pipeline FRG -> FRI-2050,CO2 pipeline,0.0013551560581655311,0.0,inf,True,True
+CO2 pipeline FRH -> IE0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRI -> FRK-2050,CO2 pipeline,0.0017519423207585667,0.0,inf,True,True
+CO2 pipeline FRJ -> FRK-2050,CO2 pipeline,0.003794544009423958,0.0,inf,True,True
+CO2 pipeline FRJ -> FRL-2050,CO2 pipeline,0.001580912606098087,0.0,inf,True,True
+CO2 pipeline FRK -> ITC-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRL -> ITC-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRM -> ITG2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRM -> ITI-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBC -> GBD-2050,CO2 pipeline,257.45728669786,0.0,inf,True,True
+CO2 pipeline GBC -> GBE-2050,CO2 pipeline,0.0028659559923923375,0.0,inf,True,True
+CO2 pipeline GBC -> GBM-2050,CO2 pipeline,0.0018990063771038542,0.0,inf,True,True
+CO2 pipeline GBC -> NO0A-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBD -> GBE-2050,CO2 pipeline,0.06264317279673996,0.0,inf,True,True
+CO2 pipeline GBD -> GBG-2050,CO2 pipeline,40.22563156943698,0.0,inf,True,True
+CO2 pipeline GBD -> GBL-2050,CO2 pipeline,28.648499013255215,0.0,inf,True,True
+CO2 pipeline GBD -> GBM-2050,CO2 pipeline,0.001020260523168663,0.0,inf,True,True
+CO2 pipeline GBE -> GBF-2050,CO2 pipeline,0.09180719589864993,0.0,inf,True,True
+CO2 pipeline GBE -> GBH-2050,CO2 pipeline,0.0020941615276794767,0.0,inf,True,True
+CO2 pipeline GBF -> GBG-2050,CO2 pipeline,0.10390170150309234,0.0,inf,True,True
+CO2 pipeline GBF -> GBH-2050,CO2 pipeline,31.68678041127387,0.0,inf,True,True
+CO2 pipeline GBF -> GBJ-2050,CO2 pipeline,0.0027349532256129346,0.0,inf,True,True
+CO2 pipeline GBG -> GBK-2050,CO2 pipeline,0.00455486021745253,0.0,inf,True,True
+CO2 pipeline GBG -> GBL-2050,CO2 pipeline,0.0047456596473725715,0.0,inf,True,True
+CO2 pipeline GBH -> GBJ-2050,CO2 pipeline,479.05242210880044,0.0,inf,True,True
+CO2 pipeline GBJ -> GBK-2050,CO2 pipeline,270.7430804765534,0.0,inf,True,True
+CO2 pipeline GBJ -> NL3-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBK -> GBL-2050,CO2 pipeline,0.013412336897761744,0.0,inf,True,True
+CO2 pipeline GBL -> GBM-2050,CO2 pipeline,0.0002008190110785062,0.0,inf,True,True
+CO2 pipeline GBL -> IE0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBM -> GBN-2050,CO2 pipeline,7.00491629990637,0.0,inf,True,True
+CO2 pipeline GBN -> IE0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GR4+1 -> GR5-2050,CO2 pipeline,0.002307599474568293,0.0,inf,True,True
+CO2 pipeline GR5 -> ITF-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GR5 -> MK0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HR -> RS-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HR -> SI0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> RO-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> RS-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> SI0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> SK0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ITC -> ITH-2050,CO2 pipeline,0.0030233282177996746,0.0,inf,True,True
+CO2 pipeline ITC -> ITI-2050,CO2 pipeline,0.004063913466392017,0.0,inf,True,True
+CO2 pipeline ITF -> ITG1-2050,CO2 pipeline,0.23477072223996706,0.0,inf,True,True
+CO2 pipeline ITF -> ITI-2050,CO2 pipeline,22.906714785486134,0.0,inf,True,True
+CO2 pipeline ITF -> ME0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ITG2 -> ITI-2050,CO2 pipeline,5.857538247959988,0.0,inf,True,True
+CO2 pipeline ITH -> ITI-2050,CO2 pipeline,0.0009339349510723846,0.0,inf,True,True
+CO2 pipeline ITH -> SI0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> LV0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> PL6-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> SE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ME0 -> RS-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ME0 -> XK-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline MK0 -> RS-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline MK0 -> XK-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NL1 -> NL2-2050,CO2 pipeline,35.6101247185156,0.0,inf,True,True
+CO2 pipeline NL1 -> NO09-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NL2 -> NL3-2050,CO2 pipeline,314.47496677364666,0.0,inf,True,True
+CO2 pipeline NL2 -> NL4-2050,CO2 pipeline,0.0036145911948784124,0.0,inf,True,True
+CO2 pipeline NO02 -> NO08-2050,CO2 pipeline,0.007539597937743869,0.0,inf,True,True
+CO2 pipeline NO02 -> NO0A-2050,CO2 pipeline,5.671950964470913,0.0,inf,True,True
+CO2 pipeline NO06 -> NO07-2050,CO2 pipeline,0.00025993661081705866,0.0,inf,True,True
+CO2 pipeline NO06 -> NO0A-2050,CO2 pipeline,0.00042258717597112974,0.0,inf,True,True
+CO2 pipeline NO06 -> SE3-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO07 -> SE3-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO08 -> NO09-2050,CO2 pipeline,0.0030967453221090167,0.0,inf,True,True
+CO2 pipeline NO08 -> NO0A-2050,CO2 pipeline,41.893393872820795,0.0,inf,True,True
+CO2 pipeline NO08 -> SE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO08 -> SE3-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO09 -> NO0A-2050,CO2 pipeline,136.55286576691057,0.0,inf,True,True
+CO2 pipeline PL2 -> PL5-2050,CO2 pipeline,0.0014875974574599167,0.0,inf,True,True
+CO2 pipeline PL2 -> PL7-2050,CO2 pipeline,0.003405860849836174,0.0,inf,True,True
+CO2 pipeline PL2 -> PL8-2050,CO2 pipeline,0.0013844780874558997,0.0,inf,True,True
+CO2 pipeline PL4 -> PL5-2050,CO2 pipeline,37.81949464011672,0.0,inf,True,True
+CO2 pipeline PL4 -> PL6-2050,CO2 pipeline,0.0019117365315451296,0.0,inf,True,True
+CO2 pipeline PL4 -> PL7-2050,CO2 pipeline,50.15910104008077,0.0,inf,True,True
+CO2 pipeline PL4 -> PL9-2050,CO2 pipeline,0.0010532422893511104,0.0,inf,True,True
+CO2 pipeline PL6 -> PL8-2050,CO2 pipeline,0.0006724736195317916,0.0,inf,True,True
+CO2 pipeline PL6 -> PL9-2050,CO2 pipeline,0.004587136508715446,0.0,inf,True,True
+CO2 pipeline PL6 -> SE2-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline PL7 -> PL8-2050,CO2 pipeline,0.004075330543796375,0.0,inf,True,True
+CO2 pipeline PL7 -> PL9-2050,CO2 pipeline,0.00695270753261166,0.0,inf,True,True
+CO2 pipeline PL8 -> PL9-2050,CO2 pipeline,0.001599118895948936,0.0,inf,True,True
+CO2 pipeline PL8 -> SK0-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline RO -> RS-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline RS -> XK-2050,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline SE1 -> SE2-2050,CO2 pipeline,88.22556781730896,0.0,inf,True,True
+CO2 pipeline SE1 -> SE3-2050,CO2 pipeline,0.0028814421789314817,0.0,inf,True,True
+CO2 pipeline SE2 -> SE3-2050,CO2 pipeline,0.0006505974755556984,0.0,inf,True,True
+PCI-13.8-01,CO2 pipeline,3567.0,3567.0,inf,False,True
+PCI-13.1-01,CO2 pipeline,713.0,713.0,inf,False,True
+PCI-13.8-02,CO2 pipeline,3567.0,3567.0,inf,False,True
+PCI-13.4-01,CO2 pipeline,1498.0,1498.0,inf,False,True
+PCI-13.4-02,CO2 pipeline,1498.0,1498.0,inf,False,True
+PCI-13.8-03,CO2 pipeline,3567.0,3567.0,inf,False,True
+PCI-13.7,CO2 pipeline,3139.0,3139.0,inf,False,True
+PCI-13.4-03,CO2 pipeline,1498.0,1498.0,inf,False,True
+PCI-13.4-04,CO2 pipeline,1498.0,1498.0,inf,False,True
+PCI-13.12-01,CO2 pipeline,856.0,856.0,inf,False,True
+PCI-13.12-02,CO2 pipeline,856.0,856.0,inf,False,True
+PCI-13.5-01,CO2 pipeline,913.0,913.0,inf,False,True
+PCI-13.11,CO2 pipeline,1427.0,1427.0,inf,False,True
+PCI-13.9,CO2 pipeline,90.0,90.0,inf,False,True
+PCI-13.5-02,CO2 pipeline,913.0,913.0,inf,False,True
+PCI-13.1-02,CO2 pipeline,713.0,713.0,inf,False,True
+PCI-13.1+1-01,CO2 pipeline,3852.0,3852.0,inf,False,True
+PCI-13.13,CO2 pipeline,713.0,713.0,inf,False,True
+PCI-13.1+1-02,CO2 pipeline,3852.0,3852.0,inf,False,True
+PCI-13.8-04,CO2 pipeline,3567.0,3567.0,inf,False,True
+H2 pipeline AL0 -> GR5-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> ME0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> MK0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> XK-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CH0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CZ0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> DE1-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> HU-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> SI0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> HR-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> ME0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> RS-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> FRE-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> GBJ-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> FRF-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> LU0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> MK0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RO-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RS-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> DE1-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRC-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRF-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRK-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> ITC-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL5-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE1 -> DE2-reversed-2050,H2 pipeline,2074.8295244387573,0.0,inf,True,True
+H2 pipeline DE1 -> DE9-reversed-2050,H2 pipeline,0.007443796145264583,0.0,inf,True,True
+H2 pipeline DE1 -> DEA-reversed-2050,H2 pipeline,0.006853684678444434,0.0,inf,True,True
+H2 pipeline DE1 -> DEF-reversed-2050,H2 pipeline,0.0047737920091363096,0.0,inf,True,True
+H2 pipeline DE2 -> DE8-reversed-2050,H2 pipeline,0.00856671348737086,0.0,inf,True,True
+H2 pipeline DE2 -> DED-reversed-2050,H2 pipeline,13.319617807687711,0.0,inf,True,True
+H2 pipeline DE2 -> DEE-reversed-2050,H2 pipeline,51.336724644946564,0.0,inf,True,True
+H2 pipeline DE2 -> DEF-reversed-2050,H2 pipeline,0.015057996756859746,0.0,inf,True,True
+H2 pipeline DE2 -> DEG-reversed-2050,H2 pipeline,0.077193339344489,0.0,inf,True,True
+H2 pipeline DE4 -> DEE-reversed-2050,H2 pipeline,0.08659768709531568,0.0,inf,True,True
+H2 pipeline DE7 -> DE9-reversed-2050,H2 pipeline,2609.7192048151983,0.0,inf,True,True
+H2 pipeline DE7 -> DEA-reversed-2050,H2 pipeline,0.024932019565553673,0.0,inf,True,True
+H2 pipeline DE7 -> DEG-reversed-2050,H2 pipeline,0.17209621242786446,0.0,inf,True,True
+H2 pipeline DE8 -> DEE-reversed-2050,H2 pipeline,0.013618985261841727,0.0,inf,True,True
+H2 pipeline DE8 -> DEF-reversed-2050,H2 pipeline,0.05327548929541255,0.0,inf,True,True
+H2 pipeline DE8 -> DK0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> SE2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE9 -> DED-reversed-2050,H2 pipeline,0.24736871856697176,0.0,inf,True,True
+H2 pipeline DE9 -> DEE-reversed-2050,H2 pipeline,89.20679647631997,0.0,inf,True,True
+H2 pipeline DE9 -> GBJ-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> DEF-reversed-2050,H2 pipeline,0.012702602452576098,0.0,inf,True,True
+H2 pipeline DEA -> FRF-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> NL2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEB -> LU0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DED -> DEG-reversed-2050,H2 pipeline,0.13909746185043365,0.0,inf,True,True
+H2 pipeline DED -> PL5-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEE -> DEG-reversed-2050,H2 pipeline,0.25469251487673616,0.0,inf,True,True
+H2 pipeline DEF -> NO09-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> SE2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> GBF-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NL1-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NO09-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> SE2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline EE0 -> FI1C-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES1 -> PT1-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRI-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRJ-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES4 -> ES5-reversed-2050,H2 pipeline,0.0040379467465225345,0.0,inf,True,True
+H2 pipeline ES5 -> FRJ-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES6 -> PT1-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> FI1B-reversed-2050,H2 pipeline,0.026169398482776645,0.0,inf,True,True
+H2 pipeline FI19 -> SE1-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE3-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI1C -> FI1D-reversed-2050,H2 pipeline,0.003513295308123923,0.0,inf,True,True
+H2 pipeline FI1D -> NO07-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FR1 -> FRB-reversed-2050,H2 pipeline,0.04588726899857679,0.0,inf,True,True
+H2 pipeline FR1 -> FRC-reversed-2050,H2 pipeline,0.08639961409420442,0.0,inf,True,True
+H2 pipeline FR1 -> FRD-reversed-2050,H2 pipeline,734.8047546274998,0.0,inf,True,True
+H2 pipeline FR1 -> FRF-reversed-2050,H2 pipeline,101.00666233780711,0.0,inf,True,True
+H2 pipeline FRB -> FRC-reversed-2050,H2 pipeline,0.02965586895130702,0.0,inf,True,True
+H2 pipeline FRB -> FRG-reversed-2050,H2 pipeline,0.7793189419930977,0.0,inf,True,True
+H2 pipeline FRB -> FRI-reversed-2050,H2 pipeline,2.2773088054252586,0.0,inf,True,True
+H2 pipeline FRB -> FRJ-reversed-2050,H2 pipeline,0.03249850391707474,0.0,inf,True,True
+H2 pipeline FRB -> FRK-reversed-2050,H2 pipeline,4.614336732926724,0.0,inf,True,True
+H2 pipeline FRD -> FRE-reversed-2050,H2 pipeline,57.19278327715803,0.0,inf,True,True
+H2 pipeline FRD -> FRG-reversed-2050,H2 pipeline,0.042815625409813825,0.0,inf,True,True
+H2 pipeline FRD -> FRH-reversed-2050,H2 pipeline,0.046703754636687383,0.0,inf,True,True
+H2 pipeline FRD -> GBJ-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRE -> GBJ-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRF -> LU0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRG -> FRH-reversed-2050,H2 pipeline,824.373387195745,0.0,inf,True,True
+H2 pipeline FRG -> FRI-reversed-2050,H2 pipeline,823.6762379600067,0.0,inf,True,True
+H2 pipeline FRH -> IE0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRI -> FRJ-reversed-2050,H2 pipeline,825.7665957602328,0.0,inf,True,True
+H2 pipeline FRI -> FRK-reversed-2050,H2 pipeline,0.018812957397048188,0.0,inf,True,True
+H2 pipeline FRJ -> FRK-reversed-2050,H2 pipeline,0.07158044480381108,0.0,inf,True,True
+H2 pipeline FRJ -> FRL-reversed-2050,H2 pipeline,825.8003622948967,0.0,inf,True,True
+H2 pipeline FRK -> ITC-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRL -> ITC-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITG2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITI-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBC -> GBD-reversed-2050,H2 pipeline,0.1482594573146971,0.0,inf,True,True
+H2 pipeline GBC -> GBE-reversed-2050,H2 pipeline,0.03305615421665756,0.0,inf,True,True
+H2 pipeline GBC -> GBM-reversed-2050,H2 pipeline,288.42923315282644,0.0,inf,True,True
+H2 pipeline GBC -> NO0A-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBD -> GBE-reversed-2050,H2 pipeline,0.5178899227202148,0.0,inf,True,True
+H2 pipeline GBD -> GBG-reversed-2050,H2 pipeline,0.024149923830009076,0.0,inf,True,True
+H2 pipeline GBD -> GBL-reversed-2050,H2 pipeline,0.03373083313593552,0.0,inf,True,True
+H2 pipeline GBD -> GBM-reversed-2050,H2 pipeline,267.80640563924084,0.0,inf,True,True
+H2 pipeline GBE -> GBF-reversed-2050,H2 pipeline,0.03831068429425895,0.0,inf,True,True
+H2 pipeline GBE -> GBH-reversed-2050,H2 pipeline,0.0316610218956201,0.0,inf,True,True
+H2 pipeline GBF -> GBG-reversed-2050,H2 pipeline,0.17247531181511172,0.0,inf,True,True
+H2 pipeline GBF -> GBH-reversed-2050,H2 pipeline,33.34695980517596,0.0,inf,True,True
+H2 pipeline GBF -> GBJ-reversed-2050,H2 pipeline,0.17892706702900674,0.0,inf,True,True
+H2 pipeline GBG -> GBK-reversed-2050,H2 pipeline,0.24094558213159953,0.0,inf,True,True
+H2 pipeline GBG -> GBL-reversed-2050,H2 pipeline,0.32909444961327255,0.0,inf,True,True
+H2 pipeline GBH -> GBJ-reversed-2050,H2 pipeline,0.08228098052869684,0.0,inf,True,True
+H2 pipeline GBJ -> GBK-reversed-2050,H2 pipeline,0.2122489632306506,0.0,inf,True,True
+H2 pipeline GBJ -> NL3-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBK -> GBL-reversed-2050,H2 pipeline,0.10410059477922565,0.0,inf,True,True
+H2 pipeline GBL -> GBM-reversed-2050,H2 pipeline,0.017743133173053774,0.0,inf,True,True
+H2 pipeline GBL -> IE0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBM -> GBN-reversed-2050,H2 pipeline,359.9692287093959,0.0,inf,True,True
+H2 pipeline GBN -> IE0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> ITF-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> MK0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> HU-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> RS-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> SI0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RO-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RS-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SI0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SK0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITC -> ITH-reversed-2050,H2 pipeline,3399.9444316619765,0.0,inf,True,True
+H2 pipeline ITC -> ITI-reversed-2050,H2 pipeline,0.026829914901739735,0.0,inf,True,True
+H2 pipeline ITF -> ME0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITG2 -> ITI-reversed-2050,H2 pipeline,672.4221826069369,0.0,inf,True,True
+H2 pipeline ITH -> SI0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> PL6-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> SE2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> RS-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> XK-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> RS-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> XK-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL1 -> NO09-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL2 -> NL3-reversed-2050,H2 pipeline,3143.3543236532823,0.0,inf,True,True
+H2 pipeline NO02 -> NO08-reversed-2050,H2 pipeline,0.04669094634349227,0.0,inf,True,True
+H2 pipeline NO02 -> NO0A-reversed-2050,H2 pipeline,12.239499839745724,0.0,inf,True,True
+H2 pipeline NO06 -> NO07-reversed-2050,H2 pipeline,0.04820461915021067,0.0,inf,True,True
+H2 pipeline NO06 -> NO0A-reversed-2050,H2 pipeline,382.19329810983464,0.0,inf,True,True
+H2 pipeline NO06 -> SE3-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO07 -> SE3-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> NO09-reversed-2050,H2 pipeline,0.023659117965915712,0.0,inf,True,True
+H2 pipeline NO08 -> NO0A-reversed-2050,H2 pipeline,127.28742884235719,0.0,inf,True,True
+H2 pipeline NO08 -> SE2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE3-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO09 -> NO0A-reversed-2050,H2 pipeline,691.5836490783964,0.0,inf,True,True
+H2 pipeline PL2 -> PL5-reversed-2050,H2 pipeline,0.07535121940568341,0.0,inf,True,True
+H2 pipeline PL2 -> PL7-reversed-2050,H2 pipeline,0.1243065336310932,0.0,inf,True,True
+H2 pipeline PL2 -> PL8-reversed-2050,H2 pipeline,231.96758580071693,0.0,inf,True,True
+H2 pipeline PL4 -> PL5-reversed-2050,H2 pipeline,0.04246381985806309,0.0,inf,True,True
+H2 pipeline PL4 -> PL7-reversed-2050,H2 pipeline,0.04384638539438188,0.0,inf,True,True
+H2 pipeline PL4 -> PL9-reversed-2050,H2 pipeline,0.006742319359493843,0.0,inf,True,True
+H2 pipeline PL6 -> PL8-reversed-2050,H2 pipeline,0.005665226669494985,0.0,inf,True,True
+H2 pipeline PL6 -> SE2-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL7 -> PL8-reversed-2050,H2 pipeline,0.023514667354466962,0.0,inf,True,True
+H2 pipeline PL7 -> PL9-reversed-2050,H2 pipeline,190.07750263222366,0.0,inf,True,True
+H2 pipeline PL8 -> SK0-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RO -> RS-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RS -> XK-reversed-2050,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline SE1 -> SE2-reversed-2050,H2 pipeline,1315.466597307336,0.0,inf,True,True
+H2 pipeline SE1 -> SE3-reversed-2050,H2 pipeline,0.004957761761220317,0.0,inf,True,True
+H2 pipeline SE2 -> SE3-reversed-2050,H2 pipeline,0.002844600613716704,0.0,inf,True,True
+PCI-10.1.3-reversed,H2 pipeline,6261.0,6261.0,inf,False,True
+PCI-10.1.2-reversed,H2 pipeline,7001.0,7001.0,inf,False,True
+PCI-10.4-01-reversed,H2 pipeline,6267.0,6267.0,inf,False,True
+PCI-9.5-01-reversed,H2 pipeline,3805.0,3805.0,inf,False,True
+PCI-9.6-01-reversed,H2 pipeline,4003.0,4003.0,inf,False,True
+PCI-9.5-02-reversed,H2 pipeline,3805.0,3805.0,inf,False,True
+PCI-9.4-01-reversed,H2 pipeline,3778.0,3778.0,inf,False,True
+PCI-9.5-03-reversed,H2 pipeline,3805.0,3805.0,inf,False,True
+PCI-10.3.1-01-reversed,H2 pipeline,3424.0,3424.0,inf,False,True
+PCI-10.2.1+1-reversed,H2 pipeline,12262.0,12262.0,inf,False,True
+PCI-10.2.1-reversed,H2 pipeline,5995.0,5995.0,inf,False,True
+PCI-10.4-02-reversed,H2 pipeline,6267.0,6267.0,inf,False,True
+PCI-9.4-02-reversed,H2 pipeline,3778.0,3778.0,inf,False,True
+PCI-9.4-03-reversed,H2 pipeline,3778.0,3778.0,inf,False,True
+PCI-9.2.1-reversed,H2 pipeline,507.0,507.0,inf,False,True
+PCI-9.1.6-01-reversed,H2 pipeline,8057.0,8057.0,inf,False,True
+PCI-10.2.2-01-reversed,H2 pipeline,10056.0,10056.0,inf,False,True
+PCI-10.2.2-02-reversed,H2 pipeline,10056.0,10056.0,inf,False,True
+PCI-11.2-01-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-9.1.6+1-01-reversed,H2 pipeline,11835.0,11835.0,inf,False,True
+PCI-11.3-01-reversed,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-9.7.1+1-reversed,H2 pipeline,3532.0,3532.0,inf,False,True
+PCI-9.9.1-reversed,H2 pipeline,10146.0,10146.0,inf,False,True
+PCI-9.6+1-01-reversed,H2 pipeline,5297.0,5297.0,inf,False,True
+PCI-9.25-01-reversed,H2 pipeline,15219.0,15219.0,inf,False,True
+PCI-9.4+1-reversed,H2 pipeline,13536.0,13536.0,inf,False,True
+PCI-9.7.3-reversed,H2 pipeline,9758.0,9758.0,inf,False,True
+PCI-9.1.6-02-reversed,H2 pipeline,8057.0,8057.0,inf,False,True
+PCI-9.1.6+1-02-reversed,H2 pipeline,8818.0,8818.0,inf,False,True
+PCI-9.9.2-reversed,H2 pipeline,2489.0,2489.0,inf,False,True
+PCI-11.2-02-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-03-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-9.1.3-01-reversed,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-02-reversed,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-03-reversed,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-04-reversed,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.3-05-reversed,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.2-reversed,H2 pipeline,3357.0,3357.0,inf,False,True
+PCI-9.1.3-06-reversed,H2 pipeline,13429.0,13429.0,inf,False,True
+PCI-9.1.4-reversed,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-11.2-04-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.1-01-reversed,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-11.2-05-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.3-02-reversed,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.1-02-reversed,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-9.3-01-reversed,H2 pipeline,5073.0,5073.0,inf,False,True
+PCI-9.1.5-01-reversed,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-9.1.5-02-reversed,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-9.3-02-reversed,H2 pipeline,5073.0,5073.0,inf,False,True
+PCI-9.1.5-03-reversed,H2 pipeline,8952.0,8952.0,inf,False,True
+PCI-10.3.1-02-reversed,H2 pipeline,3424.0,3424.0,inf,False,True
+PCI-10.3.1-03-reversed,H2 pipeline,3424.0,3424.0,inf,False,True
+PCI-10.1.1-01-reversed,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-10.1.1-02-reversed,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-10.1.1-03-reversed,H2 pipeline,18601.0,18601.0,inf,False,True
+PCI-11.2-06-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-07-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-9.6-02-reversed,H2 pipeline,4003.0,4003.0,inf,False,True
+PCI-9.6-03-reversed,H2 pipeline,4003.0,4003.0,inf,False,True
+PCI-9.6+1-02-reversed,H2 pipeline,13761.0,13761.0,inf,False,True
+PCI-9.25-02-reversed,H2 pipeline,15219.0,15219.0,inf,False,True
+PCI-11.3-03-reversed,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.3-04-reversed,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.3-05-reversed,H2 pipeline,20546.0,20546.0,inf,False,True
+PCI-11.2-08-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-10-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+PCI-11.2-11-reversed,H2 pipeline,8281.0,8281.0,inf,False,True
+BG offshore 0 co2 stored pipeline-2040,CO2 pipeline,17.33542132252689,17.33542132252689,inf,False,True
+GBD offshore 0 co2 stored pipeline-2040,CO2 pipeline,4893.0079844220745,4893.0079844220745,inf,False,True
+GBE offshore 0 co2 stored pipeline-2040,CO2 pipeline,641.6783169444274,641.6783169444274,inf,False,True
+GBE offshore 1 co2 stored pipeline-2040,CO2 pipeline,711.2569616349915,711.2569616349915,inf,False,True
+GBF offshore 0 co2 stored pipeline-2040,CO2 pipeline,1602.0586622722185,1602.0586622722185,inf,False,True
+GBH offshore 0 co2 stored pipeline-2040,CO2 pipeline,12484.117352583697,12484.117352583697,inf,False,True
+GBL offshore 0 co2 stored pipeline-2040,CO2 pipeline,134.5626159083366,134.5626159083366,inf,False,True
+GBM offshore 0 co2 stored pipeline-2040,CO2 pipeline,13189.538416204661,13189.538416204661,inf,False,True
+GR5 offshore 0 co2 stored pipeline-2040,CO2 pipeline,24.550980581023765,24.550980581023765,inf,False,True
+NL3 offshore 1 co2 stored pipeline-2040,CO2 pipeline,16.360833183975892,16.360833183975892,inf,False,True
+NO0A offshore 0 co2 stored pipeline-2040,CO2 pipeline,410.1416411825836,410.1416411825836,inf,False,True
+H2 pipeline AL0 -> GR5-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> ME0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> MK0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> XK-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CH0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CZ0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> DE1-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> HU-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> SI0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> HR-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> ME0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> RS-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> FRE-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> GBJ-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> FRF-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> LU0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> MK0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RO-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RS-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> DE1-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRC-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRF-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRK-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> ITC-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL5-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE7 -> DE9-2040,H2 pipeline,1284.9260118083464,1284.9260118083464,inf,False,True
+H2 pipeline DE8 -> DEF-2040,H2 pipeline,8342.522512570924,8342.522512570924,inf,False,True
+H2 pipeline DE8 -> DK0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> SE2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE9 -> DED-2040,H2 pipeline,5632.939904072397,5632.939904072397,inf,False,True
+H2 pipeline DE9 -> DEE-2040,H2 pipeline,42.357989565588326,42.357989565588326,inf,False,True
+H2 pipeline DE9 -> GBJ-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> FRF-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> NL2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEB -> LU0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DED -> PL5-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> NO09-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> SE2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> GBF-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NL1-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NO09-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> SE2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline EE0 -> FI1C-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES1 -> PT1-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRI-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRJ-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES5 -> FRJ-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES6 -> PT1-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE1-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE3-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI1D -> NO07-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FR1 -> FRC-2040,H2 pipeline,3440.3724210069577,3440.3724210069577,inf,False,True
+H2 pipeline FR1 -> FRD-2040,H2 pipeline,5914.642228060096,5914.642228060096,inf,False,True
+H2 pipeline FR1 -> FRF-2040,H2 pipeline,1009.9605185190964,1009.9605185190964,inf,False,True
+H2 pipeline FRB -> FRC-2040,H2 pipeline,5218.4452066197555,5218.4452066197555,inf,False,True
+H2 pipeline FRB -> FRG-2040,H2 pipeline,5220.03997398799,5220.03997398799,inf,False,True
+H2 pipeline FRD -> FRH-2040,H2 pipeline,1823.3865306251396,1823.3865306251396,inf,False,True
+H2 pipeline FRD -> GBJ-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRE -> GBJ-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRF -> LU0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRG -> FRH-2040,H2 pipeline,5551.417765620081,5551.417765620081,inf,False,True
+H2 pipeline FRG -> FRI-2040,H2 pipeline,331.3273433860114,331.3273433860114,inf,False,True
+H2 pipeline FRH -> IE0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRI -> FRJ-2040,H2 pipeline,329.2230585733808,329.2230585733808,inf,False,True
+H2 pipeline FRJ -> FRL-2040,H2 pipeline,554.5913206953213,554.5913206953213,inf,False,True
+H2 pipeline FRK -> ITC-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRL -> ITC-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITG2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITI-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBC -> GBD-2040,H2 pipeline,390.909663357401,390.909663357401,inf,False,True
+H2 pipeline GBC -> GBE-2040,H2 pipeline,498.34726846349656,498.34726846349656,inf,False,True
+H2 pipeline GBC -> GBM-2040,H2 pipeline,145.80764674511352,145.80764674511352,inf,False,True
+H2 pipeline GBC -> NO0A-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBD -> GBE-2040,H2 pipeline,27.933282126191806,27.933282126191806,inf,False,True
+H2 pipeline GBD -> GBG-2040,H2 pipeline,14.029714594620895,14.029714594620895,inf,False,True
+H2 pipeline GBD -> GBL-2040,H2 pipeline,354.57007582067826,354.57007582067826,inf,False,True
+H2 pipeline GBD -> GBM-2040,H2 pipeline,540.5577691303221,540.5577691303221,inf,False,True
+H2 pipeline GBE -> GBF-2040,H2 pipeline,282.36120780556007,282.36120780556007,inf,False,True
+H2 pipeline GBF -> GBG-2040,H2 pipeline,42.659448847857746,42.659448847857746,inf,False,True
+H2 pipeline GBF -> GBH-2040,H2 pipeline,351.35286674940676,351.35286674940676,inf,False,True
+H2 pipeline GBG -> GBL-2040,H2 pipeline,27.58784083911165,27.58784083911165,inf,False,True
+H2 pipeline GBH -> GBJ-2040,H2 pipeline,287.0253821122052,287.0253821122052,inf,False,True
+H2 pipeline GBJ -> GBK-2040,H2 pipeline,1476.8066757687045,1476.8066757687045,inf,False,True
+H2 pipeline GBJ -> NL3-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBK -> GBL-2040,H2 pipeline,630.9218100866512,630.9218100866512,inf,False,True
+H2 pipeline GBL -> IE0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBM -> GBN-2040,H2 pipeline,535.0468345169803,535.0468345169803,inf,False,True
+H2 pipeline GBN -> IE0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> ITF-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> MK0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> HU-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> RS-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> SI0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RO-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RS-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SI0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SK0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITF -> ME0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITG2 -> ITI-2040,H2 pipeline,1556.2985739007518,1556.2985739007518,inf,False,True
+H2 pipeline ITH -> SI0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> PL6-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> SE2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> RS-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> XK-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> RS-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> XK-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL1 -> NO09-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL2 -> NL3-2040,H2 pipeline,3871.0368970940985,3871.0368970940985,inf,False,True
+H2 pipeline NO02 -> NO0A-2040,H2 pipeline,62.958448205051916,62.958448205051916,inf,False,True
+H2 pipeline NO06 -> NO07-2040,H2 pipeline,86.85898248740916,86.85898248740916,inf,False,True
+H2 pipeline NO06 -> NO0A-2040,H2 pipeline,723.1904001635634,723.1904001635634,inf,False,True
+H2 pipeline NO06 -> SE3-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO07 -> SE3-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> NO0A-2040,H2 pipeline,127.39468055038577,127.39468055038577,inf,False,True
+H2 pipeline NO08 -> SE2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE3-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO09 -> NO0A-2040,H2 pipeline,688.1648204347406,688.1648204347406,inf,False,True
+H2 pipeline PL2 -> PL8-2040,H2 pipeline,504.026616766908,504.026616766908,inf,False,True
+H2 pipeline PL4 -> PL5-2040,H2 pipeline,1418.5497233535884,1418.5497233535884,inf,False,True
+H2 pipeline PL6 -> SE2-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL8 -> SK0-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RO -> RS-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RS -> XK-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline SE1 -> SE2-2040,H2 pipeline,1861.092039720758,1861.092039720758,inf,False,True
+CO2 pipeline AL0 -> GR5-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> ME0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> MK0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> XK-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> CH0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> CZ0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> DE1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> DE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> HU-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> ITH-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> SI0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> HR-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> ME0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> RS-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> FRE-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> GBJ-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> NL4-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> DEA-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> FRF-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> LU0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> GR5-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> MK0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> RO-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> RS-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> DE1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRC-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRF-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRK-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> ITC-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> DE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> DED-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> PL2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> PL5-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> SK0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE1 -> DE2-2040,CO2 pipeline,176.24894082398959,176.24894082398959,inf,False,True
+CO2 pipeline DE1 -> FRF-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE2 -> DEE-2040,CO2 pipeline,301.50668199530395,301.50668199530395,inf,False,True
+CO2 pipeline DE2 -> DEG-2040,CO2 pipeline,21.407240362935887,21.407240362935887,inf,False,True
+CO2 pipeline DE4 -> PL4-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE8 -> DEF-2040,CO2 pipeline,16.511533034306726,16.511533034306726,inf,False,True
+CO2 pipeline DE8 -> DK0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE8 -> SE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE9 -> GBJ-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE9 -> NL1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> FRF-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> NL2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> NL4-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEB -> LU0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEC -> FRF-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DED -> PL5-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEF -> NO09-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEF -> SE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> GBF-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> NL1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> NO09-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> SE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> FI1B-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> FI1C-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> LV0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES1 -> PT1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES2 -> ES5-2040,CO2 pipeline,149.6736861856575,149.6736861856575,inf,False,True
+CO2 pipeline ES2 -> FRJ-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES4 -> PT1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES5 -> FRJ-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES6 -> PT1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI19 -> SE1-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI19 -> SE3-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI1B -> FI1C-2040,CO2 pipeline,16.35611936584932,16.35611936584932,inf,False,True
+CO2 pipeline FI1D -> NO07-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI1D -> SE3-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRB -> FRC-2040,CO2 pipeline,82.62391328805946,82.62391328805946,inf,False,True
+CO2 pipeline FRB -> FRG-2040,CO2 pipeline,194.59278453356131,194.59278453356131,inf,False,True
+CO2 pipeline FRD -> FRE-2040,CO2 pipeline,14.671663292917357,14.671663292917357,inf,False,True
+CO2 pipeline FRD -> FRH-2040,CO2 pipeline,144.1538407615087,144.1538407615087,inf,False,True
+CO2 pipeline FRD -> GBJ-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRE -> GBJ-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRF -> LU0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRG -> FRH-2040,CO2 pipeline,775.927212921514,775.927212921514,inf,False,True
+CO2 pipeline FRG -> FRI-2040,CO2 pipeline,520.9705383752785,520.9705383752785,inf,False,True
+CO2 pipeline FRH -> IE0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRK -> ITC-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRL -> ITC-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRM -> ITG2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRM -> ITI-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBC -> GBD-2040,CO2 pipeline,386.2720578740943,386.2720578740943,inf,False,True
+CO2 pipeline GBC -> NO0A-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBD -> GBE-2040,CO2 pipeline,151.02272011230465,151.02272011230465,inf,False,True
+CO2 pipeline GBF -> GBG-2040,CO2 pipeline,510.5883794314535,510.5883794314535,inf,False,True
+CO2 pipeline GBH -> GBJ-2040,CO2 pipeline,2599.9230241841465,2599.9230241841465,inf,False,True
+CO2 pipeline GBJ -> GBK-2040,CO2 pipeline,267.7549737658578,267.7549737658578,inf,False,True
+CO2 pipeline GBJ -> NL3-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBK -> GBL-2040,CO2 pipeline,14.71749686765714,14.71749686765714,inf,False,True
+CO2 pipeline GBL -> IE0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBN -> IE0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GR4+1 -> GR5-2040,CO2 pipeline,41.71328504461077,41.71328504461077,inf,False,True
+CO2 pipeline GR5 -> ITF-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GR5 -> MK0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HR -> RS-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HR -> SI0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> RO-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> RS-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> SI0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> SK0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ITC -> ITH-2040,CO2 pipeline,444.70903888716447,444.70903888716447,inf,False,True
+CO2 pipeline ITF -> ITI-2040,CO2 pipeline,155.05113852668603,155.05113852668603,inf,False,True
+CO2 pipeline ITF -> ME0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ITH -> ITI-2040,CO2 pipeline,152.35194113698228,152.35194113698228,inf,False,True
+CO2 pipeline ITH -> SI0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> LV0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> PL6-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> SE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ME0 -> RS-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ME0 -> XK-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline MK0 -> RS-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline MK0 -> XK-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NL1 -> NL2-2040,CO2 pipeline,599.9372261444722,599.9372261444722,inf,False,True
+CO2 pipeline NL1 -> NO09-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NL2 -> NL3-2040,CO2 pipeline,572.1197998788568,572.1197998788568,inf,False,True
+CO2 pipeline NL2 -> NL4-2040,CO2 pipeline,239.5218619124624,239.5218619124624,inf,False,True
+CO2 pipeline NO02 -> NO0A-2040,CO2 pipeline,10.61290973614614,10.61290973614614,inf,False,True
+CO2 pipeline NO06 -> NO07-2040,CO2 pipeline,284.9655454447602,284.9655454447602,inf,False,True
+CO2 pipeline NO06 -> NO0A-2040,CO2 pipeline,357.5986555201661,357.5986555201661,inf,False,True
+CO2 pipeline NO06 -> SE3-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO07 -> SE3-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO08 -> NO0A-2040,CO2 pipeline,226.59446118769702,226.59446118769702,inf,False,True
+CO2 pipeline NO08 -> SE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO08 -> SE3-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO09 -> NO0A-2040,CO2 pipeline,140.63984858551845,140.63984858551845,inf,False,True
+CO2 pipeline PL2 -> PL5-2040,CO2 pipeline,216.94921762898946,216.94921762898946,inf,False,True
+CO2 pipeline PL2 -> PL8-2040,CO2 pipeline,39.40974454886912,39.40974454886912,inf,False,True
+CO2 pipeline PL4 -> PL5-2040,CO2 pipeline,198.2296628166522,198.2296628166522,inf,False,True
+CO2 pipeline PL6 -> PL9-2040,CO2 pipeline,74.41054053076982,74.41054053076982,inf,False,True
+CO2 pipeline PL6 -> SE2-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline PL7 -> PL9-2040,CO2 pipeline,539.7781351605255,539.7781351605255,inf,False,True
+CO2 pipeline PL8 -> SK0-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline RO -> RS-2040,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline RS -> XK-2040,CO2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> GR5-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> ME0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> MK0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> XK-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CH0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CZ0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> DE1-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> HU-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> SI0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> HR-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> ME0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> RS-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> FRE-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> GBJ-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> FRF-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> LU0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> MK0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RO-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RS-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> DE1-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRC-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRF-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRK-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> ITC-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL5-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE7 -> DE9-reversed-2040,H2 pipeline,1284.9260118083464,1284.9260118083464,inf,False,True
+H2 pipeline DE8 -> DEF-reversed-2040,H2 pipeline,8342.522512570924,8342.522512570924,inf,False,True
+H2 pipeline DE8 -> DK0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> SE2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE9 -> DED-reversed-2040,H2 pipeline,5632.939904072397,5632.939904072397,inf,False,True
+H2 pipeline DE9 -> DEE-reversed-2040,H2 pipeline,42.357989565588326,42.357989565588326,inf,False,True
+H2 pipeline DE9 -> GBJ-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> FRF-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> NL2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEB -> LU0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DED -> PL5-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> NO09-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> SE2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> GBF-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NL1-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NO09-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> SE2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline EE0 -> FI1C-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES1 -> PT1-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRI-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRJ-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES5 -> FRJ-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES6 -> PT1-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE1-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE3-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI1D -> NO07-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FR1 -> FRC-reversed-2040,H2 pipeline,3440.3724210069577,3440.3724210069577,inf,False,True
+H2 pipeline FR1 -> FRD-reversed-2040,H2 pipeline,5914.642228060096,5914.642228060096,inf,False,True
+H2 pipeline FR1 -> FRF-reversed-2040,H2 pipeline,1009.9605185190964,1009.9605185190964,inf,False,True
+H2 pipeline FRB -> FRC-reversed-2040,H2 pipeline,5218.4452066197555,5218.4452066197555,inf,False,True
+H2 pipeline FRB -> FRG-reversed-2040,H2 pipeline,5220.03997398799,5220.03997398799,inf,False,True
+H2 pipeline FRD -> FRH-reversed-2040,H2 pipeline,1823.3865306251396,1823.3865306251396,inf,False,True
+H2 pipeline FRD -> GBJ-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRE -> GBJ-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRF -> LU0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRG -> FRH-reversed-2040,H2 pipeline,5551.417765620081,5551.417765620081,inf,False,True
+H2 pipeline FRG -> FRI-reversed-2040,H2 pipeline,331.3273433860114,331.3273433860114,inf,False,True
+H2 pipeline FRH -> IE0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRI -> FRJ-reversed-2040,H2 pipeline,329.2230585733808,329.2230585733808,inf,False,True
+H2 pipeline FRJ -> FRL-reversed-2040,H2 pipeline,554.5913206953213,554.5913206953213,inf,False,True
+H2 pipeline FRK -> ITC-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRL -> ITC-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITG2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITI-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBC -> GBD-reversed-2040,H2 pipeline,390.909663357401,390.909663357401,inf,False,True
+H2 pipeline GBC -> GBE-reversed-2040,H2 pipeline,498.34726846349656,498.34726846349656,inf,False,True
+H2 pipeline GBC -> GBM-reversed-2040,H2 pipeline,145.80764674511352,145.80764674511352,inf,False,True
+H2 pipeline GBC -> NO0A-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBD -> GBE-reversed-2040,H2 pipeline,27.933282126191806,27.933282126191806,inf,False,True
+H2 pipeline GBD -> GBG-reversed-2040,H2 pipeline,14.029714594620895,14.029714594620895,inf,False,True
+H2 pipeline GBD -> GBL-reversed-2040,H2 pipeline,354.57007582067826,354.57007582067826,inf,False,True
+H2 pipeline GBD -> GBM-reversed-2040,H2 pipeline,540.5577691303221,540.5577691303221,inf,False,True
+H2 pipeline GBE -> GBF-reversed-2040,H2 pipeline,282.36120780556007,282.36120780556007,inf,False,True
+H2 pipeline GBF -> GBG-reversed-2040,H2 pipeline,42.659448847857746,42.659448847857746,inf,False,True
+H2 pipeline GBF -> GBH-reversed-2040,H2 pipeline,351.35286674940676,351.35286674940676,inf,False,True
+H2 pipeline GBG -> GBL-reversed-2040,H2 pipeline,27.58784083911165,27.58784083911165,inf,False,True
+H2 pipeline GBH -> GBJ-reversed-2040,H2 pipeline,287.0253821122052,287.0253821122052,inf,False,True
+H2 pipeline GBJ -> GBK-reversed-2040,H2 pipeline,1476.8066757687045,1476.8066757687045,inf,False,True
+H2 pipeline GBJ -> NL3-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBK -> GBL-reversed-2040,H2 pipeline,630.9218100866512,630.9218100866512,inf,False,True
+H2 pipeline GBL -> IE0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBM -> GBN-reversed-2040,H2 pipeline,535.0468345169803,535.0468345169803,inf,False,True
+H2 pipeline GBN -> IE0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> ITF-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> MK0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> HU-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> RS-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> SI0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RO-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RS-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SI0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SK0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITF -> ME0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITG2 -> ITI-reversed-2040,H2 pipeline,1556.2985739007518,1556.2985739007518,inf,False,True
+H2 pipeline ITH -> SI0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> PL6-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> SE2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> RS-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> XK-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> RS-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> XK-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL1 -> NO09-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL2 -> NL3-reversed-2040,H2 pipeline,3871.0368970940985,3871.0368970940985,inf,False,True
+H2 pipeline NO02 -> NO0A-reversed-2040,H2 pipeline,62.958448205051916,62.958448205051916,inf,False,True
+H2 pipeline NO06 -> NO07-reversed-2040,H2 pipeline,86.85898248740916,86.85898248740916,inf,False,True
+H2 pipeline NO06 -> NO0A-reversed-2040,H2 pipeline,723.1904001635634,723.1904001635634,inf,False,True
+H2 pipeline NO06 -> SE3-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO07 -> SE3-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> NO0A-reversed-2040,H2 pipeline,127.39468055038577,127.39468055038577,inf,False,True
+H2 pipeline NO08 -> SE2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE3-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO09 -> NO0A-reversed-2040,H2 pipeline,688.1648204347406,688.1648204347406,inf,False,True
+H2 pipeline PL2 -> PL8-reversed-2040,H2 pipeline,504.026616766908,504.026616766908,inf,False,True
+H2 pipeline PL4 -> PL5-reversed-2040,H2 pipeline,1418.5497233535884,1418.5497233535884,inf,False,True
+H2 pipeline PL6 -> SE2-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL8 -> SK0-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RO -> RS-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RS -> XK-reversed-2040,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline SE1 -> SE2-reversed-2040,H2 pipeline,1861.092039720758,1861.092039720758,inf,False,True
+BG offshore 0 co2 stored pipeline-2030,CO2 pipeline,18.264885891939556,18.264885891939556,inf,False,True
+GBD offshore 0 co2 stored pipeline-2030,CO2 pipeline,50.267338439363485,50.267338439363485,inf,False,True
+GR5 offshore 0 co2 stored pipeline-2030,CO2 pipeline,123.85113923778007,123.85113923778007,inf,False,True
+NL3 offshore 0 co2 stored pipeline-2030,CO2 pipeline,44.74910602168484,44.74910602168484,inf,False,True
+H2 pipeline AL0 -> GR5-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> ME0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> MK0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> XK-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CH0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CZ0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> DE1-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> HU-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> SI0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> HR-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> ME0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> RS-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> FRE-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> GBJ-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> FRF-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> LU0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> MK0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RO-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RS-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> DE1-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRC-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRF-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRK-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> ITC-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL5-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> DEF-2030,H2 pipeline,614.6634087213306,614.6634087213306,inf,False,True
+H2 pipeline DE8 -> DK0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> SE2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE9 -> GBJ-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> FRF-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> NL2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEB -> LU0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DED -> PL5-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> NO09-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> SE2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> GBF-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NL1-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NO09-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> SE2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline EE0 -> FI1C-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES1 -> PT1-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRI-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRJ-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES5 -> FRJ-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES6 -> PT1-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE1-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE3-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI1D -> NO07-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRD -> FRE-2030,H2 pipeline,929.290592857242,929.290592857242,inf,False,True
+H2 pipeline FRD -> FRH-2030,H2 pipeline,1714.7572097017407,1714.7572097017407,inf,False,True
+H2 pipeline FRD -> GBJ-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRE -> GBJ-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRF -> LU0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRH -> IE0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRK -> ITC-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRL -> ITC-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITG2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITI-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBC -> GBD-2030,H2 pipeline,179.46581632612035,179.46581632612035,inf,False,True
+H2 pipeline GBC -> NO0A-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBD -> GBG-2030,H2 pipeline,14.178116274231776,14.178116274231776,inf,False,True
+H2 pipeline GBD -> GBM-2030,H2 pipeline,147.5302631304361,147.5302631304361,inf,False,True
+H2 pipeline GBG -> GBK-2030,H2 pipeline,28.271138170041137,28.271138170041137,inf,False,True
+H2 pipeline GBJ -> NL3-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBL -> IE0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBN -> IE0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> ITF-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> MK0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> HU-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> RS-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> SI0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RO-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RS-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SI0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SK0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITF -> ME0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITH -> SI0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> PL6-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> SE2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> RS-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> XK-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> RS-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> XK-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL1 -> NO09-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO02 -> NO08-2030,H2 pipeline,254.62365384654584,254.62365384654584,inf,False,True
+H2 pipeline NO02 -> NO0A-2030,H2 pipeline,70.67909929956667,70.67909929956667,inf,False,True
+H2 pipeline NO06 -> SE3-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO07 -> SE3-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE3-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL2 -> PL8-2030,H2 pipeline,38.06205916660757,38.06205916660757,inf,False,True
+H2 pipeline PL6 -> SE2-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL8 -> SK0-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RO -> RS-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RS -> XK-2030,H2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> GR5-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> ME0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> MK0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AL0 -> XK-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> CH0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> CZ0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> DE1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> DE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> HU-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> ITH-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline AT -> SI0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> HR-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> ME0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BA -> RS-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> FRE-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> GBJ-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE1+1 -> NL4-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> DEA-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> FRF-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BE3 -> LU0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> GR5-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> MK0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> RO-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline BG -> RS-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> DE1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRC-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRF-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> FRK-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CH0 -> ITC-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> DE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> DED-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> PL2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> PL5-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline CZ0 -> SK0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE1 -> DEB-2030,CO2 pipeline,270.2228375433809,270.2228375433809,inf,False,True
+CO2 pipeline DE1 -> FRF-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE2 -> DEE-2030,CO2 pipeline,412.8333733935493,412.8333733935493,inf,False,True
+CO2 pipeline DE4 -> DEE-2030,CO2 pipeline,412.3005332285077,412.3005332285077,inf,False,True
+CO2 pipeline DE4 -> PL4-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE7 -> DEG-2030,CO2 pipeline,51.58319946605407,51.58319946605407,inf,False,True
+CO2 pipeline DE8 -> DEF-2030,CO2 pipeline,37.1440636705206,37.1440636705206,inf,False,True
+CO2 pipeline DE8 -> DK0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE8 -> SE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE9 -> DEA-2030,CO2 pipeline,2581.401124213325,2581.401124213325,inf,False,True
+CO2 pipeline DE9 -> GBJ-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DE9 -> NL1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> FRF-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> NL2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEA -> NL4-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEB -> DEC-2030,CO2 pipeline,333.38018206808545,333.38018206808545,inf,False,True
+CO2 pipeline DEB -> LU0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEC -> FRF-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DED -> DEG-2030,CO2 pipeline,61.210792343009494,61.210792343009494,inf,False,True
+CO2 pipeline DED -> PL5-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEE -> DEG-2030,CO2 pipeline,264.95649943983244,264.95649943983244,inf,False,True
+CO2 pipeline DEF -> NO09-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DEF -> SE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> GBF-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> NL1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> NO09-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline DK0 -> SE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> FI1B-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> FI1C-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline EE0 -> LV0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES1 -> PT1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES2 -> FRJ-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES4 -> PT1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES5 -> FRJ-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ES6 -> PT1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI19 -> SE1-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI19 -> SE3-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI1D -> NO07-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FI1D -> SE3-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FR1 -> FRD-2030,CO2 pipeline,82.27023176461402,82.27023176461402,inf,False,True
+CO2 pipeline FRB -> FRG-2030,CO2 pipeline,57.049566412612386,57.049566412612386,inf,False,True
+CO2 pipeline FRD -> FRE-2030,CO2 pipeline,117.0493569346235,117.0493569346235,inf,False,True
+CO2 pipeline FRD -> FRH-2030,CO2 pipeline,152.39546369777443,152.39546369777443,inf,False,True
+CO2 pipeline FRD -> GBJ-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRE -> GBJ-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRF -> LU0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRG -> FRH-2030,CO2 pipeline,467.05000357621213,467.05000357621213,inf,False,True
+CO2 pipeline FRG -> FRI-2030,CO2 pipeline,238.23225030963224,238.23225030963224,inf,False,True
+CO2 pipeline FRH -> IE0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRK -> ITC-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRL -> ITC-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRM -> ITG2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline FRM -> ITI-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBC -> GBD-2030,CO2 pipeline,64.40226012697312,64.40226012697312,inf,False,True
+CO2 pipeline GBC -> GBE-2030,CO2 pipeline,79.8996635008036,79.8996635008036,inf,False,True
+CO2 pipeline GBC -> NO0A-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBD -> GBM-2030,CO2 pipeline,167.27701085663676,167.27701085663676,inf,False,True
+CO2 pipeline GBF -> GBG-2030,CO2 pipeline,120.62896686165851,120.62896686165851,inf,False,True
+CO2 pipeline GBG -> GBK-2030,CO2 pipeline,122.88426755213673,122.88426755213673,inf,False,True
+CO2 pipeline GBG -> GBL-2030,CO2 pipeline,138.83286381465635,138.83286381465635,inf,False,True
+CO2 pipeline GBH -> GBJ-2030,CO2 pipeline,112.49039068511044,112.49039068511044,inf,False,True
+CO2 pipeline GBJ -> GBK-2030,CO2 pipeline,427.8574394183957,427.8574394183957,inf,False,True
+CO2 pipeline GBJ -> NL3-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBL -> IE0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GBN -> IE0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GR4+1 -> GR5-2030,CO2 pipeline,400.48547114188705,400.48547114188705,inf,False,True
+CO2 pipeline GR5 -> ITF-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline GR5 -> MK0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HR -> RS-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HR -> SI0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> RO-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> RS-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> SI0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline HU -> SK0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ITF -> ME0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ITH -> SI0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> LV0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> PL6-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline LT0 -> SE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ME0 -> RS-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline ME0 -> XK-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline MK0 -> RS-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline MK0 -> XK-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NL1 -> NL2-2030,CO2 pipeline,37.99136724275833,37.99136724275833,inf,False,True
+CO2 pipeline NL1 -> NO09-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NL2 -> NL4-2030,CO2 pipeline,49.535527711343796,49.535527711343796,inf,False,True
+CO2 pipeline NO06 -> SE3-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO07 -> SE3-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO08 -> SE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO08 -> SE3-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline NO09 -> NO0A-2030,CO2 pipeline,180.08626064115674,180.08626064115674,inf,False,True
+CO2 pipeline PL6 -> SE2-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline PL8 -> SK0-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline RO -> RS-2030,CO2 pipeline,0.0,0.0,inf,False,True
+CO2 pipeline RS -> XK-2030,CO2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> GR5-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> ME0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> MK0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AL0 -> XK-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CH0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> CZ0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> DE1-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> HU-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline AT -> SI0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> HR-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> ME0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BA -> RS-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> FRE-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE1+1 -> GBJ-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> FRF-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BE3 -> LU0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> MK0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RO-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline BG -> RS-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> DE1-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRC-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRF-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> FRK-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CH0 -> ITC-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline CZ0 -> PL5-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> DEF-reversed-2030,H2 pipeline,614.6634087213306,614.6634087213306,inf,False,True
+H2 pipeline DE8 -> DK0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE8 -> SE2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DE9 -> GBJ-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> FRF-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEA -> NL2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEB -> LU0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DED -> PL5-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> NO09-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DEF -> SE2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> GBF-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NL1-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> NO09-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline DK0 -> SE2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline EE0 -> FI1C-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES1 -> PT1-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRI-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES2 -> FRJ-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES5 -> FRJ-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ES6 -> PT1-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE1-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI19 -> SE3-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FI1D -> NO07-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRD -> FRE-reversed-2030,H2 pipeline,929.290592857242,929.290592857242,inf,False,True
+H2 pipeline FRD -> FRH-reversed-2030,H2 pipeline,1714.7572097017407,1714.7572097017407,inf,False,True
+H2 pipeline FRD -> GBJ-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRE -> GBJ-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRF -> LU0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRH -> IE0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRK -> ITC-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRL -> ITC-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITG2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline FRM -> ITI-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBC -> GBD-reversed-2030,H2 pipeline,179.46581632612035,179.46581632612035,inf,False,True
+H2 pipeline GBC -> NO0A-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBD -> GBG-reversed-2030,H2 pipeline,14.178116274231776,14.178116274231776,inf,False,True
+H2 pipeline GBD -> GBM-reversed-2030,H2 pipeline,147.5302631304361,147.5302631304361,inf,False,True
+H2 pipeline GBG -> GBK-reversed-2030,H2 pipeline,28.271138170041137,28.271138170041137,inf,False,True
+H2 pipeline GBJ -> NL3-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBL -> IE0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GBN -> IE0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> ITF-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline GR5 -> MK0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> HU-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> RS-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HR -> SI0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RO-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> RS-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SI0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline HU -> SK0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITF -> ME0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ITH -> SI0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> PL6-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline LT0 -> SE2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> RS-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline ME0 -> XK-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> RS-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline MK0 -> XK-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NL1 -> NO09-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO02 -> NO08-reversed-2030,H2 pipeline,254.62365384654584,254.62365384654584,inf,False,True
+H2 pipeline NO02 -> NO0A-reversed-2030,H2 pipeline,70.67909929956667,70.67909929956667,inf,False,True
+H2 pipeline NO06 -> SE3-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO07 -> SE3-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline NO08 -> SE3-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL2 -> PL8-reversed-2030,H2 pipeline,38.06205916660757,38.06205916660757,inf,False,True
+H2 pipeline PL6 -> SE2-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline PL8 -> SK0-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RO -> RS-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
+H2 pipeline RS -> XK-reversed-2030,H2 pipeline,0.0,0.0,inf,False,True
