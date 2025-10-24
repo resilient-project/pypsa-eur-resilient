@@ -94,3 +94,15 @@ rule plot_capacity_maps:
             run=config["run"]["name"],
             carrier=config_provider("plotting", "capacity_map", "bus_carriers")(w),
         ),
+
+
+rule extract_all_optimal_link_capacities:
+    input:
+        lambda w: expand(
+            (
+                RESULTS
+                + "other/optimal_link_capacities_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv"
+            ),
+            **config["scenario"],
+            run=config["run"]["name"],
+        ),

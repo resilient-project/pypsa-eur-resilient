@@ -498,3 +498,27 @@ rule plot_base_statistics:
         + "figures/.statistics_plots_base_s_{clusters}_elec_{opts}",
     script:
         "../scripts/plot_statistics.py"
+
+
+rule extract_optimal_link_capacities:
+    input:
+        network=RESULTS
+        + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",
+    output:
+        RESULTS
+        + "other/optimal_link_capacities_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
+    threads: 1
+    resources:
+        mem_mb=8000,
+    log:
+        RESULTS
+        + "logs/optimal_link_capacities_{clusters}_{opts}_{sector_opts}_{planning_horizons}.log",
+    benchmark:
+        (
+            RESULTS
+            + "benchmarks/optimal_link_capacities_{clusters}_{opts}_{sector_opts}_{planning_horizons}"
+        )
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/extract_optimal_link_capacities.py"
