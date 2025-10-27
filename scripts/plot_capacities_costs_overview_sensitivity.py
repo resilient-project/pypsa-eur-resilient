@@ -71,7 +71,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "plot_capacities_costs_overview_sensitivity",
             configfiles=["config/postprocess_sensitivities.config.yaml"],
-            sensitivity="pipelines0.9",
+            sensitivity="wy2010",
             )
 
     configure_logging(snakemake)
@@ -241,6 +241,9 @@ if __name__ == "__main__":
         values="value",
     ).reset_index()
 
+    # Fill NAs with 0
+    costs = costs.fillna(0)
+
 
     ### BRANCH VOLUMES
     branch_volumes = pd.DataFrame()
@@ -304,10 +307,13 @@ if __name__ == "__main__":
     for a, ar in enumerate(axes):
         if a == 0:
             df = costs.copy()
+            print("Plotting costs...")
         if a == 1:
             df = capacities.copy()
+            print("Plotting capacities...")
         if a == 2:
             df = branch_volumes.copy()
+            print("Plotting branch volumes...")
 
         main_totals = df[["planning_horizon", "run", "main"]].groupby(["planning_horizon", "run"]).sum()
 
@@ -320,7 +326,6 @@ if __name__ == "__main__":
         if "Load shedding" in delta_to_main.group.values:
             delta_to_main = delta_to_main[delta_to_main["group"] != "Load shedding"]
 
-
         row2_axes2 = []
         for i, planning_horizon in enumerate(planning_horizons):
             ax = ar[i]
@@ -330,6 +335,15 @@ if __name__ == "__main__":
                 columns="group",
                 values=sensitivity,
             )
+
+            # Relative changes
+            # if a == 2:
+            #     data_main = delta_to_main.query("planning_horizon == @planning_horizon").copy().pivot(
+            #         index="run",
+            #         columns="group",
+            #         values="main",
+            #     )
+            #     data = data.divide(data_main).fillna(0)*100
 
             data_order = [col for col in legend_order if col in data.columns]
             data = data[data_order]
@@ -414,6 +428,8 @@ if __name__ == "__main__":
             # Net totals (including negatives)
             totals = data.sum(axis=1)
             rel_totals = 100 * totals / main_totals.loc[planning_horizon].main.reindex(totals.index)
+
+            print(rel_totals)
 
             # Relative change row 0, axis 2
             if a == 0:
@@ -501,7 +517,7 @@ if __name__ == "__main__":
 
     handles = [
         plt.Rectangle((0, 0), 1, 1, color=group_colors[c], label=c) 
-        for c in legend_order[::-1]
+        for c in legend_order[::-1] if c in list(costs.group.unique())
     ]
     handles.append(
         Line2D(
@@ -546,23 +562,27 @@ if __name__ == "__main__":
 
         for ax in row:
             ax.set_ylim(1.05*ymin_global, 1.13*ymax_global)
-            # if ax2 is not None:
-            if idx == 2:
-                ax2.set_ylim(1.05*ymin_global, 1.13*ymax_global)
+            if ax2 is not None:
+                if idx == 2:
+                    ax2.set_ylim(1.05*ymin_global, 1.13*ymax_global)
     
+    ymin_global = 0
+    ymax_global = 0
     # Update ylims of axes2s
     for ax2 in row0_axes2:
         ymin, ymax = ax2.get_ylim()
-        ymin_global = min(ymin, 0)
-        ymax_global = max(ymax, 0)
+        ymin_global = min(ymin, ymin_global)
+        ymax_global = max(ymax, ymax_global)
 
     for ax2 in row0_axes2:
         ax2.set_ylim(1.05*ymin_global, 1.13*ymax_global)
     
+    ymin_global = 0
+    ymax_global = 0
     for ax2 in row1_axes2:
         ymin, ymax = ax2.get_ylim()
-        ymin_global = min(ymin, 0)
-        ymax_global = max(ymax, 0)
+        ymin_global = min(ymin, ymin_global)
+        ymax_global = max(ymax, ymax_global)
 
     for ax2 in row1_axes2:
         ax2.set_ylim(1.05*ymin_global, 1.13*ymax_global)
@@ -573,7 +593,7 @@ if __name__ == "__main__":
     fig.align_ylabels(fig.axes) 
     
     fig.subplots_adjust(wspace=0.05) 
- 
+
     fig.savefig(
         snakemake.output[0],
         dpi=dpi,

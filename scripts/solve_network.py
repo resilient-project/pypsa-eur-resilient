@@ -1487,7 +1487,6 @@ if __name__ == "__main__":
     update_config_from_wildcards(snakemake.config, snakemake.wildcards)
 
     pcipmi_policy_paper = snakemake.params["pcipmi_policy_paper"]
-    carrier_networks = snakemake.params["carrier_networks"]
 
     solve_opts = snakemake.params.solving["options"]
 
@@ -1495,51 +1494,6 @@ if __name__ == "__main__":
 
     n = pypsa.Network(snakemake.input.network)
     planning_horizons = snakemake.wildcards.get("planning_horizons", None)
-
-    # Custom post-discretisation
-    optimal_link_capacities = pd.read_csv(snakemake.input.optimal_link_capacities, index_col=0)
-
-    # Drop DC and select correct year
-    optimal_link_capacities = (
-        optimal_link_capacities
-        .loc[~optimal_link_capacities.carrier.str.contains("DC")]
-    )
-
-    for carrier_name in ["H2", "CO2"]:
-        post_disc = carrier_networks[carrier_name].get("post_discretization", False)
-        pipeline_name = f"{carrier_name} pipeline"
-
-        if pipeline_name in n.links.carrier.unique() and post_disc:
-            logger.info(f"Applying custom post-discretization for {pipeline_name} based on previously solved optimal capacities.")
-            include_pcipmi = post_disc.get("include_pcipmi", False)
-            query_str = (f"carrier == '{pipeline_name}'")
-            optimal_links = optimal_link_capacities.query(query_str, engine="python").copy()
-            threshold = post_disc.get("link_threshold", 0.1)
-            unit_size = post_disc.get("link_unit_size", 2000)
-            logger.info(f"Using unit size of {unit_size} MW and threshold of {threshold} for {pipeline_name}.")
-
-            if not include_pcipmi:
-                subset = optimal_links.loc[~optimal_links.index.str.contains("PCI")].index
-            else:
-                subset = optimal_links.index
-
-            if not optimal_links.empty:
-                optimal_links.loc[subset, "p_nom_discrete"] = optimal_links.loc[subset].apply(
-                    lambda row: discretized_capacity(
-                        nom_opt=row.p_nom_opt,
-                        nom_max=row.p_nom_max,
-                        unit_size=unit_size,
-                        threshold=threshold,
-                        fractional_last_unit_size=False,
-                    ),
-                    axis=1,
-                )
-                # Fill NAs wit p_nom
-                optimal_links["p_nom_discrete"] = optimal_links["p_nom_discrete"].fillna(optimal_links["p_nom"])
-
-                n.links.loc[subset, "p_nom"] = optimal_links.loc[subset, "p_nom_discrete"]
-                n.links.loc[subset, "p_nom_max"] = optimal_links.loc[subset, ["p_nom_discrete", "p_nom_max"]].max(axis=1)
-                n.links.loc[subset, "p_nom_extendable"] = False
 
     prepare_network(
         n,

@@ -35,9 +35,9 @@ if __name__ == "__main__":
             opts="",
             sector_opts="",
             planning_horizons="2040",
-            carrier="H2",
-            configfiles=["config/pcipmi.config.yaml"],
-            run="pcipmi",
+            carrier="co2_stored",
+            configfiles=["config/sensitivities.config.yaml"],
+            run="pipelines1.1___pcipmi-internat",
         )
 
     configure_logging(snakemake)
@@ -269,6 +269,7 @@ if __name__ == "__main__":
         aspect=50,
         orientation="horizontal",
     )
+    cbr.set_label(f"Demand-weighted price ({price_unit})")
     cbr.outline.set_edgecolor("None")
     cbr.ax.tick_params(labelsize=font["size"] - 1)
     cbr.ax.xaxis.label.set_size(font["size"])
@@ -399,8 +400,29 @@ if __name__ == "__main__":
     labels_nn = [config["nice_names"].get(label, label) for label in labels]
     ax.legend(handles, labels_nn)
 
+    # --- enforce sans-serif fonts for legends and mathtext ---
+    plt.rcParams.update({
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Roboto", "DejaVu Sans", "Arial", "Liberation Sans"],
+        "mathtext.fontset": "dejavusans",
+        "text.usetex": False,
+    })
+
+    # ensure legend text uses same family
+    leg = ax.get_legend()
+    if leg:
+        for text in leg.get_texts():
+            text.set_fontfamily("sans-serif")
+
     fig.savefig(
         snakemake.output[0],
-        dpi=400,
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    # Create jpg version
+    fig.savefig(
+        snakemake.output[0].replace(".pdf", ".jpg"),
+        dpi=600,
         bbox_inches="tight",
     )

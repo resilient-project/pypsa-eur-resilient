@@ -45,12 +45,14 @@ rule plot_pcipmi_map:
     params:
         plotting_all=config_provider("plotting", "all"),
         plotting_fig=config_provider("plotting", "figures", "plot_pcipmi_map"),
+        salt_cavern_settings=config_provider("sector", "hydrogen_underground_storage_locations"),
     input:
         regions_onshore = resources("regions_onshore_base_s_{clusters}.geojson"),
         regions_offshore = resources("regions_offshore_base_s_{clusters}.geojson"),
         sequestration_potential=resources(
             "co2_sequestration_potential_base_s_{clusters}.geojson"
         ),
+        salt_caverns="data/bundle/h2_salt_caverns_GWh_per_sqkm.geojson",
         links_co2_pipeline = "data/pcipmi_projects/links_co2_pipeline.geojson",
         links_h2_pipeline = "data/pcipmi_projects/links_h2_pipeline.geojson",
         stores_co2 = "data/pcipmi_projects/stores_co2.geojson",

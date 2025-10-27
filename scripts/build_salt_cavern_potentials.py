@@ -76,7 +76,12 @@ if __name__ == "__main__":
     if "snakemake" not in globals():
         from _helpers import mock_snakemake
 
-        snakemake = mock_snakemake("build_salt_cavern_potentials", clusters="37")
+        snakemake = mock_snakemake(
+            "build_salt_cavern_potentials", 
+            clusters="adm",
+            configfiles=["config/pcipmi.config.yaml"],
+            run="central-planning",
+            )
 
     configure_logging(snakemake)
     set_scenario_config(snakemake)

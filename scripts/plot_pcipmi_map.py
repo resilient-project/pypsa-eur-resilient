@@ -26,7 +26,7 @@ if __name__ == "__main__":
         snakemake = mock_snakemake(
             "plot_pcipmi_map",
             clusters="adm",
-            configfiles=["config/run5.config.yaml"],
+            configfiles=["config/pcipmi.config.yaml"],
             run="pcipmi",
             )
 
@@ -43,6 +43,8 @@ if __name__ == "__main__":
     titlesize = fontsize
     dpi = plotting["dpi"]
 
+    salt_cavern_settings = snakemake.params.salt_cavern_settings
+
     # Read input files
     regions_onshore = gpd.read_file(snakemake.input.regions_onshore)
     regions_offshore = gpd.read_file(snakemake.input.regions_offshore)
@@ -51,19 +53,25 @@ if __name__ == "__main__":
     links_h2_pipeline = gpd.read_file(snakemake.input.links_h2_pipeline)
     stores_co2 = gpd.read_file(snakemake.input.stores_co2)
     stores_h2 = gpd.read_file(snakemake.input.stores_h2)
+    salt_caverns = gpd.read_file(snakemake.input.salt_caverns)
+
+    if salt_cavern_settings:
+        # only keep salt_caverns with storage_type in salt_cavern_settings
+        salt_caverns = salt_caverns[salt_caverns["storage_type"].isin(salt_cavern_settings)]
 
     alpha_regions = 0.3
     alpha_links = 0.8
     alpha_stores = 0.8
-    alpha_seq = 1
+    alpha_seq_salt = 0.8
     alpha_gridlines = 0.5
 
     # Create map
     crs = ccrs.EqualEarth()
 
     color_h2 = "steelblue"
-    color_co2 = "indigo"
-    color_seq = "darkred"
+    color_co2 = "darkred"
+    color_seq = "#6B0F0F"
+    color_salt_caverns = "#1E4E72"
 
     fig, ax = plt.subplots(1, 1, figsize=figsize, subplot_kw={'projection': crs})
 
@@ -102,46 +110,90 @@ if __name__ == "__main__":
     gl.ylocator = plt.FixedLocator(range(-90, 91, 5)) 
 
     # Add projects
+    sequestration_potential.to_crs(crs.proj4_init).buffer(8000).plot(ax=ax, color=color_seq, edgecolor=None, linewidth=0.5, alpha=alpha_seq_salt, zorder=5)
+    salt_caverns.to_crs(crs.proj4_init).buffer(6000).plot(ax=ax, color=color_salt_caverns, edgecolor=None, linewidth=0.5, alpha=alpha_stores, zorder=20, markersize=10)
+
     links_co2_pipeline.to_crs(crs.proj4_init).plot(ax=ax, color=color_co2, linewidth=1, alpha=alpha_links, zorder=10)
     links_h2_pipeline.to_crs(crs.proj4_init).plot(ax=ax, color=color_h2, linewidth=1, alpha=alpha_links, zorder=10)
     stores_co2.to_crs(crs.proj4_init).plot(ax=ax, color=color_co2, edgecolor=None, linewidth=0.5, alpha=alpha_stores, zorder=20, markersize=20)
     stores_h2.to_crs(crs.proj4_init).plot(ax=ax, color=color_h2, edgecolor=None, linewidth=0.5, alpha=alpha_stores, zorder=20, markersize=20)
-    sequestration_potential.to_crs(crs.proj4_init).buffer(7000).plot(ax=ax, color=color_seq, edgecolor=None, linewidth=0.5, alpha=alpha_seq, zorder=5)
-
     # Create a legend for the pipelines
+    # Legend handles
+    # Legend handles
     legend_links_co2 = plt.Line2D([0], [0], color=color_co2, linewidth=1.5, alpha=alpha_links)
     legend_links_h2 = plt.Line2D([0], [0], color=color_h2, linewidth=1.5, alpha=alpha_links)
-    legend_stores_h2 = plt.Line2D([0], [0], marker="o", linewidth=0, color=color_h2, markersize=5, alpha=alpha_stores)
-    legend_stores_co2 = plt.Line2D([0], [0], marker="o", linewidth=0, color=color_co2, markersize=5, alpha=alpha_stores)
-    legend_seq = plt.Line2D([0], [0], marker="o", linewidth=0, color=color_seq, markersize=3, alpha=alpha_seq)
 
+    legend_stores_h2 = plt.Line2D(
+        [0], [0],
+        marker="o",
+        linewidth=0,
+        color=color_h2,
+        markersize=5,
+        alpha=alpha_stores,
+        markeredgewidth=0
+    )
+    legend_stores_co2 = plt.Line2D(
+        [0], [0],
+        marker="o",
+        linewidth=0,
+        color=color_co2,
+        markersize=5,
+        alpha=alpha_stores,
+        markeredgewidth=0
+    )
+    legend_seq = plt.Line2D(
+        [0], [0],
+        marker="s",
+        linewidth=0,
+        color=color_seq,
+        markersize=5,
+        alpha=alpha_seq_salt,
+        markeredgewidth=0
+    )
+    legend_salt_caverns = plt.Line2D(
+        [0], [0],
+        marker="s",
+        linewidth=0,
+        color=color_salt_caverns,
+        markersize=5,
+        alpha=alpha_seq_salt,
+        markeredgewidth=0
+    )
+
+    # Legend labels
     name_links_co2 = "PCI-PMI CO$_2$ pipelines"
     name_links_h2 = "PCI-PMI H$_2$ pipelines"
     name_stores_co2 = "PCI-PMI CO$_2$ sequestration"
     name_stores_h2 = "PCI-PMI H$_2$ storage"
     name_seq = "Depleted oil & gas fields"
-   
-    # Add legend with border set to none
+    name_salt_caverns = "Salt caverns"
+
+    # Add legend
     ax.legend(
-        [   
+        [
+            legend_seq,
             legend_stores_co2,
+            legend_links_co2,
+            legend_salt_caverns,
             legend_stores_h2,
-            legend_seq, 
-            legend_links_co2, 
-            legend_links_h2, 
-        ], 
-        [   
-            name_stores_co2,
-            name_stores_h2,  
+            legend_links_h2,
+        ],
+        [
             name_seq,
+            name_stores_co2,
             name_links_co2,
-            name_links_h2,    
-        ], 
-        loc='upper center',
+            name_salt_caverns,
+            name_stores_h2,
+            name_links_h2,
+        ],
+        loc="upper center",
         bbox_to_anchor=(0.5, -0.01),
         ncol=2,
         fontsize=fontsize,
-        frameon=False
+        frameon=False,
+        handlelength=1.2,   # shorter line length
+        # handletextpad=0.4,  # smaller space between symbol and label
+        # columnspacing=0.8,  # compact column spacing
     )
 
     boundaries = [-11, 30, 34, 71]

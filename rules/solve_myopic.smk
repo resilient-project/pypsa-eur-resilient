@@ -118,14 +118,11 @@ rule solve_sector_network_myopic:
             "sector", "co2_sequestration_potential", default=200
         ),
         custom_extra_functionality=input_custom_extra_functionality,
-        carrier_networks=config_provider("carrier_networks"),
-        pcipmi_projects=config_provider("pcipmi_projects"),
     input:
         network=resources(
             "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}_brownfield.nc"
         ),
         costs=resources("costs_{planning_horizons}.csv"),
-        optimal_link_capacities = "data/optimal_link_capacities/{run}/optimal_link_capacities_{clusters}_{opts}_{sector_opts}_{planning_horizons}.csv",
     output:
         network=RESULTS
         + "networks/base_s_{clusters}_{opts}_{sector_opts}_{planning_horizons}.nc",

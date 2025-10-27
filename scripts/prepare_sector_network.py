@@ -6444,9 +6444,9 @@ if __name__ == "__main__":
             opts="",
             clusters="adm",
             sector_opts="",
-            planning_horizons="2030",
-            configfiles=["config/old-imports-test.config.yaml"],
-            run="pci-imports",
+            planning_horizons="2040",
+            configfiles=["config/pcipmi.config.yaml"],
+            run="central-planning",
         )
 
     configure_logging(snakemake)  # pylint: disable=E0606

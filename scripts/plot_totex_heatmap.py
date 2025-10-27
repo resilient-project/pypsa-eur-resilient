@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
         snakemake = mock_snakemake(
             "plot_totex_heatmap",
-            configfiles=["config/pcipmi.config.yaml"],
+            configfiles=["config/postdiscretised.config.yaml"],
             )
         
     configure_logging(snakemake)
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     longterm.loc[longterm.prefix=="pcipmi", "name"] = "main"
     
     # Filter by name == "main"
-    sensitivity = "main"
+    sensitivity = "postdiscretised"  # Options: import-h2-120, postdiscretised
     longterm = longterm[longterm["name"] == sensitivity].reset_index(drop=True)
 
     index_cols = ["lt_run", "planning_horizon", "cost"]

@@ -46,41 +46,11 @@ run:
   - pcipmi/pcipmi-nat
   - pcipmi/pcipmi-internat
   - pcipmi/central-planning
-  - sensitivities/pipelines1.3___decentral-islands
-  - sensitivities/pipelines1.3___pcipmi
-  - sensitivities/pipelines1.3___pcipmi-nat
-  - sensitivities/pipelines1.3___pcipmi-internat
-  - sensitivities/pipelines1.3___central-planning
-  - sensitivities/pipelines1.2___decentral-islands
-  - sensitivities/pipelines1.2___pcipmi
-  - sensitivities/pipelines1.2___pcipmi-nat
-  - sensitivities/pipelines1.2___pcipmi-internat
-  - sensitivities/pipelines1.2___central-planning
-  - sensitivities/pipelines1.1___decentral-islands
-  - sensitivities/pipelines1.1___pcipmi
-  - sensitivities/pipelines1.1___pcipmi-nat
-  - sensitivities/pipelines1.1___pcipmi-internat
-  - sensitivities/pipelines1.1___central-planning
-  - sensitivities/pipelines0.9___decentral-islands
-  - sensitivities/pipelines0.9___pcipmi
-  - sensitivities/pipelines0.9___pcipmi-nat
-  - sensitivities/pipelines0.9___pcipmi-internat
-  - sensitivities/pipelines0.9___central-planning
-  - sensitivities/wy2010___decentral-islands
-  - sensitivities/wy2010___pcipmi
-  - sensitivities/wy2010___pcipmi-nat
-  - sensitivities/wy2010___pcipmi-internat
-  - sensitivities/wy2010___central-planning
-  - sensitivities/wy2020___decentral-islands
-  - sensitivities/wy2020___pcipmi
-  - sensitivities/wy2020___pcipmi-nat
-  - sensitivities/wy2020___pcipmi-internat
-  - sensitivities/wy2020___central-planning
-  - sensitivities/import-h2-120___decentral-islands
-  - sensitivities/import-h2-120___pcipmi
-  - sensitivities/import-h2-120___pcipmi-nat
-  - sensitivities/import-h2-120___pcipmi-internat
-  - sensitivities/import-h2-120___central-planning
+  - sensitivities/postdiscretised___decentral-islands
+  - sensitivities/postdiscretised___pcipmi
+  - sensitivities/postdiscretised___pcipmi-nat
+  - sensitivities/postdiscretised___pcipmi-internat
+  - sensitivities/postdiscretised___central-planning
   scenarios:
     enable: true
     file: config/postprocess_sensitivities.scenarios.yaml
